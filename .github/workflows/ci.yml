@@ -20,7 +20,7 @@ jobs:
     timeout-minutes: 10
     strategy:
       matrix:
-        java: [ '21', '22', '23', '24', '25', '26-ea' ]
+        java: [ '25', '26-ea' ]
         architecture: [ 'x64' ]
     name: Build with JDK ${{ matrix.java }} on ${{ matrix.architecture }}
     steps:
@@ -32,9 +32,30 @@ jobs:
           java-version: ${{ matrix.java }}
           architecture: ${{ matrix.architecture }}
           cache: 'maven'
-               
+
       - name: Build with Maven
         run: mvn package -Djunit.jupiter.execution.parallel.enabled=false
+
+      - name: Verify class file versions
+        run: |
+          VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+          echo "Project version: $VERSION"
+          
+          JAR_FILE="target/for-comprehension4j-$VERSION.jar"
+          
+          jar tf "$JAR_FILE" | grep '\.class$' | grep -vE 'module-info|package-info' | while read -r f; do
+            class_name="${f%.class}"
+            class_name="${class_name//\//.}"  # replace / with .
+          
+            major=$(javap -verbose -cp "$JAR_FILE" "$class_name" | grep "major version" | awk '{print $3}')
+          
+            echo "$f -> major version $major"
+          
+            if [ "$major" -gt 52 ]; then
+              echo "ERROR: $f compiled with Java version $major (incompatible with Java 8)"
+              exit 1
+            fi
+          done
 
   deploy-snapshot:
     runs-on: ubuntu-latest
@@ -47,7 +68,7 @@ jobs:
         uses: actions/setup-java@v5
         with:
           distribution: 'temurin'
-          java-version: '21'
+          java-version: '25'
           cache: 'maven'
           server-id: central
           server-username: CENTRAL_USERNAME
