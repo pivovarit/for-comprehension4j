@@ -37,25 +37,9 @@ jobs:
         run: mvn -B package -Djunit.jupiter.execution.parallel.enabled=false
 
       - name: Verify class file versions
-        run: |
-          VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
-          echo "Project version: $VERSION"
-          
-          JAR_FILE="target/for-comprehension4j-$VERSION.jar"
-          
-          jar tf "$JAR_FILE" | grep '\.class$' | grep -vE 'module-info|package-info' | while read -r f; do
-            class_name="${f%.class}"
-            class_name="${class_name//\//.}"  # replace / with .
-          
-            major=$(javap -verbose -cp "$JAR_FILE" "$class_name" | grep "major version" | awk '{print $3}')
-          
-            echo "$f -> major version $major"
-          
-            if [ "$major" -gt 52 ]; then
-              echo "ERROR: $f compiled with Java version $major (incompatible with Java 8)"
-              exit 1
-            fi
-          done
+        uses: pivovarit/verify-jar-action@main
+        with:
+          bytecode-version: '52'
 
   deploy-snapshot:
     runs-on: ubuntu-latest
