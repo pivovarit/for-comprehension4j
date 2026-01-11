@@ -17,8 +17,6 @@ package com.pivovarit.forc;
 
 import java.util.Objects;
 import java.util.Optional;
-import java.util.function.BiFunction;
-import java.util.function.Function;
 
 /**
  * Provides a fluent for-comprehension API for Java, inspired by Scala's for-expressions.
@@ -79,7 +77,7 @@ public final class ForComprehension {
          *         or {@link Optional#empty()} if any input optional is empty
          * @throws NullPointerException if the function is {@code null}
          */
-        public <R> Optional<R> yield(BiFunction<? super T1, ? super T2, ? extends R> f) {
+        public <R> Optional<R> yield(Function2<? super T1, ? super T2, ? extends R> f) {
             Objects.requireNonNull(f, "f is null");
 
             return o1.flatMap(t1 -> o2.map(t2 -> f.apply(t1, t2)));
@@ -99,7 +97,7 @@ public final class ForComprehension {
      * @return a lazy for-comprehension over two optional values
      * @throws NullPointerException if any argument is {@code null}
      */
-    public static <T1, T2> ForLazy2Optional<T1, T2> forc(Optional<T1> o1, Function<? super T1, Optional<T2>> o2) {
+    public static <T1, T2> ForLazy2Optional<T1, T2> forc(Optional<T1> o1, Function1<? super T1, Optional<T2>> o2) {
         Objects.requireNonNull(o1, "o1 is null");
         Objects.requireNonNull(o2, "o2 is null");
         return new ForLazy2Optional<>(o1, o2);
@@ -115,9 +113,9 @@ public final class ForComprehension {
     public static final class ForLazy2Optional<T1, T2> {
 
         private final Optional<T1> o1;
-        private final Function<? super T1, Optional<T2>> o2;
+        private final Function1<? super T1, Optional<T2>> o2;
 
-        private ForLazy2Optional(Optional<T1> o1, Function<? super T1, Optional<T2>> o2) {
+        private ForLazy2Optional(Optional<T1> o1, Function1<? super T1, Optional<T2>> o2) {
             this.o1 = o1;
             this.o2 = o2;
         }
@@ -134,7 +132,7 @@ public final class ForComprehension {
          *         or {@link Optional#empty()} if any step yields an empty optional
          * @throws NullPointerException if the function is {@code null}
          */
-        public <R> Optional<R> yield(BiFunction<? super T1, ? super T2, ? extends R> f) {
+        public <R> Optional<R> yield(Function2<? super T1, ? super T2, ? extends R> f) {
             Objects.requireNonNull(f, "f is null");
 
             return o1.flatMap(t1 -> o2.apply(t1).map(t2 -> f.apply(t1, t2)));
