@@ -31,16 +31,14 @@ public final class ForComprehension {
     }
 
     /**
-     * Creates a strict (eager) for-comprehension over two {@link Optional} values.
+     * Creates a strict (eager) for-comprehension over 2 {@link Optional} values.
      * <p>
-     * Both optionals are evaluated eagerly, and the resulting comprehension
-     * yields a value only if both optionals are present.
+     * All optionals are evaluated eagerly, and the resulting comprehension
+     * yields a value only if all optionals are present.
      *
      * @param o1 the first optional value
      * @param o2 the second optional value
-     * @param <T1> the type of the first optional value
-     * @param <T2> the type of the second optional value
-     * @return a for-comprehension over two optional values
+     * @return a for-comprehension over 2 optional values
      * @throws NullPointerException if any argument is {@code null}
      */
     public static <T1, T2> For2Optional<T1, T2> forc(Optional<T1> o1, Optional<T2> o2) {
@@ -50,7 +48,7 @@ public final class ForComprehension {
     }
 
     /**
-     * Represents a for-comprehension over two eagerly evaluated {@link Optional} values.
+     * Represents a for-comprehension over 2 eagerly evaluated {@link Optional} values.
      *
      * @param <T1> the type of the first optional value
      * @param <T2> the type of the second optional value
@@ -69,7 +67,7 @@ public final class ForComprehension {
          * Produces the result of the for-comprehension by applying the given function
          * to the contained values.
          * <p>
-         * The function is invoked only if both optionals are present.
+         * The function is invoked only if all optionals are present.
          *
          * @param f the combining function
          * @param <R> the result type
