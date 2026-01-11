@@ -1,8 +1,9 @@
 # for-comprehension4j
 
-[![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
+[![ci](https://github.com/pivovarit/for-comprehension4j/actions/workflows/ci.yml/badge.svg)](https://github.com/pivovarit/for-comprehension4j/actions/workflows/ci.yml)
+[![pitest](https://github.com/pivovarit/for-comprehension4j/actions/workflows/pitest.yml/badge.svg)](https://pivovarit.github.io/for-comprehension4j/)
 
-A fluent for-comprehension API for Java, inspired by Scala’s for-expressions. It allows composition of multiple monadic
+A fluent for-comprehension API for Java, inspired by Scala’s for-expressions. It allows the composition of multiple monadic
 or collection-like types in a type-safe and readable manner.
 
 > **Note:** This project is a **proof of concept (PoC)** under active development. The current implementation focuses on `Optional` values, with
