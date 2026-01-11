@@ -10,6 +10,8 @@ or collection-like types in a type-safe and readable manner.
 
 ### Example
 
+Instead of nesting multiple `flatMap` and `map` calls, you can use the `forc` method that simulates a _for-comprehension_:
+
 ```java
 Optional<Integer> width = Optional.of(3);
 Optional<Integer> height = Optional.of(4);
@@ -22,10 +24,10 @@ Optional<Integer> area = forc(
 // area -> Optional[12]
 ```
 
-```
+```java
 Optional<Integer> width = Optional.of(3);
 
-Optional<Integer> area = ForComprehension.forc(
+Optional<Integer> area = forc(
     width, 
     w -> Optional.of(w + 1)
   ).yield((w, h) -> w * h);
