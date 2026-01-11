@@ -11,7 +11,7 @@ public class Generator {
     private static final String PACKAGE_NAME = "com/pivovarit/forc";
     private static final int ARITY = 2;
 
-    void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException {
         var dir = Files.createDirectories(Path.of(args[0], PACKAGE_NAME));
 
         for (int i = 1; i <= ARITY; i++) {

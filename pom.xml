@@ -57,10 +57,6 @@
                         <arg>-Xlint:-processing</arg>
                         <arg>-Xlint:-options</arg>
                     </compilerArgs>
-                    <compileSourceRoots>
-                        <compileSourceRoot>${project.basedir}/src/main/java</compileSourceRoot>
-                        <compileSourceRoot>${project.basedir}/src/main/java-generated</compileSourceRoot>
-                    </compileSourceRoots>
                 </configuration>
                 <executions>
                     <execution>
@@ -70,7 +66,7 @@
                             <goal>compile</goal>
                         </goals>
                         <configuration>
-                            <release>25</release>
+                            <release>17</release>
                             <compileSourceRoots>
                                 <compileSourceRoot>${project.basedir}/src/codegen/java</compileSourceRoot>
                             </compileSourceRoots>
@@ -147,19 +143,6 @@
                 <artifactId>build-helper-maven-plugin</artifactId>
                 <version>3.6.1</version>
                 <executions>
-                    <execution>
-                        <id>add-codegen</id>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>add-source</goal>
-                        </goals>
-                        <configuration>
-                            <sources>
-                                <source>${project.basedir}/src/codegen/java</source>
-                            </sources>
-                        </configuration>
-                    </execution>
-
                     <execution>
                         <id>add-generated</id>
                         <phase>generate-sources</phase>
