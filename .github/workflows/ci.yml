@@ -37,8 +37,9 @@ jobs:
         run: mvn -B package -Djunit.jupiter.execution.parallel.enabled=false
 
       - name: Verify class file versions
-        uses: pivovarit/verify-jar-action@v1
+        uses: pivovarit/verify-jar-action@fail-on-empty
         with:
+          directory: 'foo'
           bytecode-version: '52'
 
   deploy-snapshot:
