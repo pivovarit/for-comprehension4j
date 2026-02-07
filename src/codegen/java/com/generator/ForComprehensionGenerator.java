@@ -8,10 +8,13 @@ class ForComprehensionGenerator {
     static String generate(int arity) {
         return """
           package com.pivovarit.forc;
-          
+
+          import java.util.List;
           import java.util.Objects;
           import java.util.Optional;
-          
+          import java.util.stream.Collectors;
+          import java.util.stream.Stream;
+
           /**
            * Provides a fluent for-comprehension API for Java, inspired by Scala's for-expressions.
            * <p>
@@ -20,16 +23,23 @@ class ForComprehensionGenerator {
            */
           @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
           public final class ForComprehension {
-          
+
               private ForComprehension() {
               }
-          
+
           %s
-          
+
+          %s
+
+          %s
+
           %s
           }
           """.formatted(indent(IntStream.rangeClosed(2, arity)
             .mapToObj(ForComprehensionGenerator::generateEagerOptional)
+            .collect(Collectors.joining("\n")), 4),
+          indent(IntStream.rangeClosed(2, arity)
+            .mapToObj(ForComprehensionGenerator::generateEagerStream)
             .collect(Collectors.joining("\n")), 4),
           indent("""
               /**
@@ -50,7 +60,7 @@ class ForComprehensionGenerator {
                   Objects.requireNonNull(o2, "o2 is null");
                   return new ForLazy2Optional<>(o1, o2);
               }
-            
+
               /**
                * Represents a for-comprehension where the second {@link Optional} value
                * is computed lazily based on the first value.
@@ -59,15 +69,15 @@ class ForComprehensionGenerator {
                * @param <T2> the type of the second optional value
                */
               public static final class ForLazy2Optional<T1, T2> {
-            
+
                   private final Optional<T1> o1;
                   private final Function1<? super T1, Optional<T2>> o2;
-            
+
                   private ForLazy2Optional(Optional<T1> o1, Function1<? super T1, Optional<T2>> o2) {
                       this.o1 = o1;
                       this.o2 = o2;
                   }
-            
+
                   /**
                    * Produces the result of the for-comprehension by applying the given function
                    * to the contained values.
@@ -82,8 +92,63 @@ class ForComprehensionGenerator {
                    */
                   public <R> Optional<R> yield(Function2<? super T1, ? super T2, ? extends R> f) {
                       Objects.requireNonNull(f, "f is null");
-            
+
                       return o1.flatMap(t1 -> o2.apply(t1).map(t2 -> f.apply(t1, t2)));
+                  }
+              }
+            """, 2),
+          indent("""
+              /**
+               * Creates a lazy for-comprehension over two {@link Stream} values.
+               * <p>
+               * The second stream is computed lazily and depends on the elements of the first.
+               * This enables dependent sequencing similar to Scala's for-expressions.
+               *
+               * @param s1 the first stream
+               * @param s2 a function producing the second stream based on elements of the first
+               * @param <T1> the element type of the first stream
+               * @param <T2> the element type of the second stream
+               * @return a lazy for-comprehension over two streams
+               * @throws NullPointerException if any argument is {@code null}
+               */
+              public static <T1, T2> ForLazy2Stream<T1, T2> forc(Stream<T1> s1, Function1<? super T1, Stream<T2>> s2) {
+                  Objects.requireNonNull(s1, "s1 is null");
+                  Objects.requireNonNull(s2, "s2 is null");
+                  return new ForLazy2Stream<>(s1, s2);
+              }
+
+              /**
+               * Represents a for-comprehension where the second {@link Stream}
+               * is computed lazily based on elements of the first stream.
+               *
+               * @param <T1> the element type of the first stream
+               * @param <T2> the element type of the second stream
+               */
+              public static final class ForLazy2Stream<T1, T2> {
+
+                  private final Stream<T1> s1;
+                  private final Function1<? super T1, Stream<T2>> s2;
+
+                  private ForLazy2Stream(Stream<T1> s1, Function1<? super T1, Stream<T2>> s2) {
+                      this.s1 = s1;
+                      this.s2 = s2;
+                  }
+
+                  /**
+                   * Produces the result of the for-comprehension by applying the given function
+                   * to the combined stream elements.
+                   * <p>
+                   * The second stream is evaluated for each element of the first stream.
+                   *
+                   * @param f the combining function
+                   * @param <R> the result type
+                   * @return a stream containing the results of applying the function to all combinations
+                   * @throws NullPointerException if the function is {@code null}
+                   */
+                  public <R> Stream<R> yield(Function2<? super T1, ? super T2, ? extends R> f) {
+                      Objects.requireNonNull(f, "f is null");
+
+                      return s1.flatMap(t1 -> s2.apply(t1).map(t2 -> f.apply(t1, t2)));
                   }
               }
             """, 2));
@@ -92,10 +157,10 @@ class ForComprehensionGenerator {
     private static String generateEagerOptional(int arity) {
         var tparams = typeParams(arity);
         var methodParams = optionalParams(arity);
-        var ctorArgs = argNamesPrefixed(arity);
+        var ctorArgs = argNamesPrefixed(arity, "o");
         var fields = optionalFields(arity);
         var ctorParams = optionalCtorParams(arity);
-        var nnp = nullChecks(arity);
+        var nnp = nullChecks(arity, "o");
         var yield = yieldOptionalChain(arity);
 
         return """
@@ -113,20 +178,20 @@ class ForComprehensionGenerator {
           %s
               return new For%dOptional<>(%s);
           }
-          
+
           /**
            * Represents a for-comprehension over %d eagerly evaluated {@link Optional} value%s.
            *
            * %s
            */
           public static final class For%dOptional<%s> {
-          
+
           %s
-          
+
               private For%dOptional(%s) {
           %s
               }
-          
+
               /**
                * Produces the result of the for-comprehension by applying the given function
                * to the contained values.
@@ -141,13 +206,13 @@ class ForComprehensionGenerator {
                */
               public <R> Optional<R> yield(Function%d<%s> f) {
                   Objects.requireNonNull(f, "f is null");
-          
+
           %s
               }
           }
           """.formatted(
           arity, "s",
-          javadocParams(arity),
+          javadocParams(arity, "o", "optional value"),
           arity, "s",
           typeParams(arity),
           arity, tparams,
@@ -155,11 +220,84 @@ class ForComprehensionGenerator {
           indent(nnp, 4),
           arity, ctorArgs,
           arity, "s",
-          javadocTypeParams(arity),
+          javadocTypeParams(arity, "optional value"),
           arity, tparams,
           indent(fields, 4),
           arity, ctorParams,
-          indent(assignFields(arity), 8),
+          indent(assignFields(arity, "o"), 8),
+          arity, tparamsWithRWildcard(arity),
+          indent(yield, 8)
+        );
+    }
+
+    private static String generateEagerStream(int arity) {
+        var tparams = typeParams(arity);
+        var methodParams = streamParams(arity);
+        var ctorArgs = argNamesPrefixed(arity, "s");
+        var fields = streamFields(arity);
+        var ctorParams = streamParams(arity);
+        var nnp = nullChecks(arity, "s");
+        var yield = yieldStreamChain(arity);
+
+        return """
+          /**
+           * Creates a strict (eager) for-comprehension over %d {@link Stream} value%s.
+           * <p>
+           * All streams are evaluated eagerly. The resulting comprehension yields
+           * the cartesian product of all streams, transformed by the yield function.
+           *
+           * %s
+           * @return a for-comprehension over %d stream value%s
+           * @throws NullPointerException if any argument is {@code null}
+           */
+          public static <%s> For%dStream<%s> forc(%s) {
+          %s
+              return new For%dStream<>(%s);
+          }
+
+          /**
+           * Represents a for-comprehension over %d eagerly evaluated {@link Stream} value%s.
+           *
+           * %s
+           */
+          public static final class For%dStream<%s> {
+
+          %s
+
+              private For%dStream(%s) {
+          %s
+              }
+
+              /**
+               * Produces the result of the for-comprehension by applying the given function
+               * to the cartesian product of the stream elements.
+               *
+               * @param f the combining function
+               * @param <R> the result type
+               * @return a stream containing the results of applying the function to all combinations
+               * @throws NullPointerException if the function is {@code null}
+               */
+              public <R> Stream<R> yield(Function%d<%s> f) {
+                  Objects.requireNonNull(f, "f is null");
+
+          %s
+              }
+          }
+          """.formatted(
+          arity, "s",
+          javadocParams(arity, "s", "stream"),
+          arity, "s",
+          typeParams(arity),
+          arity, tparams,
+          methodParams,
+          indent(nnp, 4),
+          arity, ctorArgs,
+          arity, "s",
+          javadocTypeParams(arity, "stream"),
+          arity, tparams,
+          indent(fields, 4),
+          arity, ctorParams,
+          indent(assignFields(arity, "s"), 8),
           arity, tparamsWithRWildcard(arity),
           indent(yield, 8)
         );
@@ -180,6 +318,29 @@ class ForComprehensionGenerator {
           .reduce("o%d.map(t%d -> f.apply(%s))".formatted(arity, arity, args), (i, w) -> w.formatted(i));
 
         return "return " + chain + ";";
+    }
+
+    private static String yieldStreamChain(int arity) {
+        if (arity == 1) {
+            return "return s1.map(t1 -> f.apply(t1));";
+        }
+
+        var args = IntStream.rangeClosed(1, arity)
+          .mapToObj(i -> "t" + i)
+          .collect(Collectors.joining(", "));
+
+        var collections = IntStream.rangeClosed(2, arity)
+          .mapToObj(i -> "List<T%d> l%d = s%d.collect(Collectors.toList());".formatted(i, i, i))
+          .collect(Collectors.joining("\n"));
+
+        var chain = IntStream.range(1, arity)
+          .map(i -> arity - i)
+          .mapToObj(i -> i == 1
+              ? "s1.flatMap(t1 -> %s)"
+              : "l%d.stream().flatMap(t%d -> %%s)".formatted(i, i))
+          .reduce("l%d.stream().map(t%d -> f.apply(%s))".formatted(arity, arity, args), (i, w) -> w.formatted(i));
+
+        return collections + "\n\nreturn " + chain + ";";
     }
 
     private static String typeParams(int arity) {
@@ -211,33 +372,45 @@ class ForComprehensionGenerator {
           .collect(Collectors.joining("\n"));
     }
 
-    private static String assignFields(int arity) {
+    private static String streamParams(int arity) {
         return IntStream.rangeClosed(1, arity)
-          .mapToObj(i -> "this.o%d = o%d;".formatted(i, i))
-          .collect(Collectors.joining("\n"));
-    }
-
-    private static String nullChecks(int arity) {
-        return IntStream.rangeClosed(1, arity)
-          .mapToObj(i -> "Objects.requireNonNull(%s%d, \"%s\");".formatted("o", i, "o%d is null".formatted(i)))
-          .collect(Collectors.joining("\n"));
-    }
-
-    private static String argNamesPrefixed(int arity) {
-        return IntStream.rangeClosed(1, arity)
-          .mapToObj(i -> "o" + i)
+          .mapToObj(i -> "Stream<T%d> s%d".formatted(i, i))
           .collect(Collectors.joining(", "));
     }
 
-    private static String javadocParams(int arity) {
+    private static String streamFields(int arity) {
         return IntStream.rangeClosed(1, arity)
-          .mapToObj(i -> "@param %s%d %s".formatted("o", i, "the %s optional value".formatted(ordinal(i))))
+          .mapToObj(i -> "private final Stream<T%d> s%d;".formatted(i, i))
+          .collect(Collectors.joining("\n"));
+    }
+
+    private static String assignFields(int arity, String prefix) {
+        return IntStream.rangeClosed(1, arity)
+          .mapToObj(i -> "this.%s%d = %s%d;".formatted(prefix, i, prefix, i))
+          .collect(Collectors.joining("\n"));
+    }
+
+    private static String nullChecks(int arity, String prefix) {
+        return IntStream.rangeClosed(1, arity)
+          .mapToObj(i -> "Objects.requireNonNull(%s%d, \"%s%d is null\");".formatted(prefix, i, prefix, i))
+          .collect(Collectors.joining("\n"));
+    }
+
+    private static String argNamesPrefixed(int arity, String prefix) {
+        return IntStream.rangeClosed(1, arity)
+          .mapToObj(i -> prefix + i)
+          .collect(Collectors.joining(", "));
+    }
+
+    private static String javadocParams(int arity, String prefix, String description) {
+        return IntStream.rangeClosed(1, arity)
+          .mapToObj(i -> "@param %s%d the %s %s".formatted(prefix, i, ordinal(i), description))
           .collect(Collectors.joining("\n * "));
     }
 
-    private static String javadocTypeParams(int arity) {
+    private static String javadocTypeParams(int arity, String description) {
         return IntStream.rangeClosed(1, arity)
-          .mapToObj(i -> "@param <T%d> the type of the %s optional value".formatted(i, ordinal(i)))
+          .mapToObj(i -> "@param <T%d> the type of the %s %s".formatted(i, ordinal(i), description))
           .collect(Collectors.joining("\n * "));
     }
 
