@@ -15,8 +15,11 @@
  */
 package com.pivovarit.forc;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Provides a fluent for-comprehension API for Java, inspired by Scala's for-expressions.
@@ -83,6 +86,57 @@ public final class ForComprehension {
     }
 
     /**
+     * Creates a strict (eager) for-comprehension over 2 {@link Stream} values.
+     * <p>
+     * All streams are evaluated eagerly. The resulting comprehension yields
+     * the cartesian product of all streams, transformed by the yield function.
+     *
+     * @param s1 the first stream
+     * @param s2 the second stream
+     * @return a for-comprehension over 2 stream values
+     * @throws NullPointerException if any argument is {@code null}
+     */
+    public static <T1, T2> For2Stream<T1, T2> forc(Stream<T1> s1, Stream<T2> s2) {
+        Objects.requireNonNull(s1, "s1 is null");
+        Objects.requireNonNull(s2, "s2 is null");
+        return new For2Stream<>(s1, s2);
+    }
+
+    /**
+     * Represents a for-comprehension over 2 eagerly evaluated {@link Stream} values.
+     *
+     * @param <T1> the type of the first stream
+     * @param <T2> the type of the second stream
+     */
+    public static final class For2Stream<T1, T2> {
+
+        private final Stream<T1> s1;
+        private final Stream<T2> s2;
+
+        private For2Stream(Stream<T1> s1, Stream<T2> s2) {
+            this.s1 = s1;
+            this.s2 = s2;
+        }
+
+        /**
+         * Produces the result of the for-comprehension by applying the given function
+         * to the cartesian product of the stream elements.
+         *
+         * @param f the combining function
+         * @param <R> the result type
+         * @return a stream containing the results of applying the function to all combinations
+         * @throws NullPointerException if the function is {@code null}
+         */
+        public <R> Stream<R> yield(Function2<? super T1, ? super T2, ? extends R> f) {
+            Objects.requireNonNull(f, "f is null");
+
+            List<T2> l2 = s2.collect(Collectors.toList());
+
+            return s1.flatMap(t1 -> l2.stream().map(t2 -> f.apply(t1, t2)));
+        }
+    }
+
+    /**
      * Creates a lazy for-comprehension over two {@link Optional} values.
      * <p>
      * The second optional is computed lazily and depends on the value of the first.
@@ -134,6 +188,60 @@ public final class ForComprehension {
             Objects.requireNonNull(f, "f is null");
 
             return o1.flatMap(t1 -> o2.apply(t1).map(t2 -> f.apply(t1, t2)));
+        }
+    }
+
+    /**
+     * Creates a lazy for-comprehension over two {@link Stream} values.
+     * <p>
+     * The second stream is computed lazily and depends on the elements of the first.
+     * This enables dependent sequencing similar to Scala's for-expressions.
+     *
+     * @param s1 the first stream
+     * @param s2 a function producing the second stream based on elements of the first
+     * @param <T1> the element type of the first stream
+     * @param <T2> the element type of the second stream
+     * @return a lazy for-comprehension over two streams
+     * @throws NullPointerException if any argument is {@code null}
+     */
+    public static <T1, T2> ForLazy2Stream<T1, T2> forc(Stream<T1> s1, Function1<? super T1, Stream<T2>> s2) {
+        Objects.requireNonNull(s1, "s1 is null");
+        Objects.requireNonNull(s2, "s2 is null");
+        return new ForLazy2Stream<>(s1, s2);
+    }
+
+    /**
+     * Represents a for-comprehension where the second {@link Stream}
+     * is computed lazily based on elements of the first stream.
+     *
+     * @param <T1> the element type of the first stream
+     * @param <T2> the element type of the second stream
+     */
+    public static final class ForLazy2Stream<T1, T2> {
+
+        private final Stream<T1> s1;
+        private final Function1<? super T1, Stream<T2>> s2;
+
+        private ForLazy2Stream(Stream<T1> s1, Function1<? super T1, Stream<T2>> s2) {
+            this.s1 = s1;
+            this.s2 = s2;
+        }
+
+        /**
+         * Produces the result of the for-comprehension by applying the given function
+         * to the combined stream elements.
+         * <p>
+         * The second stream is evaluated for each element of the first stream.
+         *
+         * @param f the combining function
+         * @param <R> the result type
+         * @return a stream containing the results of applying the function to all combinations
+         * @throws NullPointerException if the function is {@code null}
+         */
+        public <R> Stream<R> yield(Function2<? super T1, ? super T2, ? extends R> f) {
+            Objects.requireNonNull(f, "f is null");
+
+            return s1.flatMap(t1 -> s2.apply(t1).map(t2 -> f.apply(t1, t2)));
         }
     }
 }
