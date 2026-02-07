@@ -15,6 +15,7 @@
  */
 package com.pivovarit.forc;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -137,6 +138,62 @@ public final class ForComprehension {
     }
 
     /**
+     * Creates a strict (eager) for-comprehension over 2 {@link Iterable} values.
+     * <p>
+     * All iterables are evaluated eagerly. The resulting comprehension yields
+     * the cartesian product of all iterables, transformed by the yield function.
+     *
+     * @param i1 the first iterable
+     * @param i2 the second iterable
+     * @return a for-comprehension over 2 iterable values
+     * @throws NullPointerException if any argument is {@code null}
+     */
+    public static <T1, T2> For2Iterable<T1, T2> forc(Iterable<T1> i1, Iterable<T2> i2) {
+        Objects.requireNonNull(i1, "i1 is null");
+        Objects.requireNonNull(i2, "i2 is null");
+        return new For2Iterable<>(i1, i2);
+    }
+
+    /**
+     * Represents a for-comprehension over 2 eagerly evaluated {@link Iterable} values.
+     *
+     * @param <T1> the type of the first iterable
+     * @param <T2> the type of the second iterable
+     */
+    public static final class For2Iterable<T1, T2> {
+
+        private final Iterable<T1> i1;
+        private final Iterable<T2> i2;
+
+        private For2Iterable(Iterable<T1> i1, Iterable<T2> i2) {
+            this.i1 = i1;
+            this.i2 = i2;
+        }
+
+        /**
+         * Produces the result of the for-comprehension by applying the given function
+         * to the cartesian product of the iterable elements.
+         *
+         * @param f the combining function
+         * @param <R> the result type
+         * @return a list containing the results of applying the function to all combinations
+         * @throws NullPointerException if the function is {@code null}
+         */
+        public <R> List<R> yield(Function2<? super T1, ? super T2, ? extends R> f) {
+            Objects.requireNonNull(f, "f is null");
+
+            List<T2> l2 = new ArrayList<>();
+            i2.forEach(l2::add);
+            List<R> result = new ArrayList<>();
+            for (T1 t1 : i1) {
+            for (T2 t2 : l2) {
+                result.add(f.apply(t1, t2));
+            }}
+            return result;
+        }
+    }
+
+    /**
      * Creates a lazy for-comprehension over two {@link Optional} values.
      * <p>
      * The second optional is computed lazily and depends on the value of the first.
@@ -242,6 +299,66 @@ public final class ForComprehension {
             Objects.requireNonNull(f, "f is null");
 
             return s1.flatMap(t1 -> s2.apply(t1).map(t2 -> f.apply(t1, t2)));
+        }
+    }
+
+    /**
+     * Creates a lazy for-comprehension over two {@link Iterable} values.
+     * <p>
+     * The second iterable is computed lazily and depends on the elements of the first.
+     * This enables dependent sequencing similar to Scala's for-expressions.
+     *
+     * @param i1 the first iterable
+     * @param i2 a function producing the second iterable based on elements of the first
+     * @param <T1> the element type of the first iterable
+     * @param <T2> the element type of the second iterable
+     * @return a lazy for-comprehension over two iterables
+     * @throws NullPointerException if any argument is {@code null}
+     */
+    public static <T1, T2> ForLazy2Iterable<T1, T2> forc(Iterable<T1> i1, Function1<? super T1, Iterable<T2>> i2) {
+        Objects.requireNonNull(i1, "i1 is null");
+        Objects.requireNonNull(i2, "i2 is null");
+        return new ForLazy2Iterable<>(i1, i2);
+    }
+
+    /**
+     * Represents a for-comprehension where the second {@link Iterable}
+     * is computed lazily based on elements of the first iterable.
+     *
+     * @param <T1> the element type of the first iterable
+     * @param <T2> the element type of the second iterable
+     */
+    public static final class ForLazy2Iterable<T1, T2> {
+
+        private final Iterable<T1> i1;
+        private final Function1<? super T1, Iterable<T2>> i2;
+
+        private ForLazy2Iterable(Iterable<T1> i1, Function1<? super T1, Iterable<T2>> i2) {
+            this.i1 = i1;
+            this.i2 = i2;
+        }
+
+        /**
+         * Produces the result of the for-comprehension by applying the given function
+         * to the combined iterable elements.
+         * <p>
+         * The second iterable is evaluated for each element of the first iterable.
+         *
+         * @param f the combining function
+         * @param <R> the result type
+         * @return a list containing the results of applying the function to all combinations
+         * @throws NullPointerException if the function is {@code null}
+         */
+        public <R> List<R> yield(Function2<? super T1, ? super T2, ? extends R> f) {
+            Objects.requireNonNull(f, "f is null");
+
+            List<R> result = new ArrayList<>();
+            for (T1 t1 : i1) {
+                for (T2 t2 : i2.apply(t1)) {
+                    result.add(f.apply(t1, t2));
+                }
+            }
+            return result;
         }
     }
 }

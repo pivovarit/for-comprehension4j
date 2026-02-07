@@ -2,6 +2,8 @@ package com.pivovarit.forc;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -60,6 +62,37 @@ class ForComprehensionTest {
         assertThat(ForComprehension.forc(Stream.<Integer>empty(), v1 -> Stream.of(v1)).yield(Integer::sum))
             .isEmpty();
         assertThat(ForComprehension.forc(Stream.of(1, 2), v1 -> Stream.<Integer>empty()).yield(Integer::sum))
+            .isEmpty();
+    }
+
+    @Test
+    void shouldTestEagerIterable() {
+        Iterable<Integer> i1 = List.of(1, 2);
+        Iterable<Integer> i2 = List.of(10, 20);
+
+        assertThat(ForComprehension.forc(i1, i2).yield(Integer::sum))
+            .containsExactly(11, 21, 12, 22);
+    }
+
+    @Test
+    void shouldTestEagerIterableWithEmptyIterable() {
+        assertThat(ForComprehension.forc(Collections.<Integer>emptyList(), List.of(1, 2)).yield(Integer::sum))
+            .isEmpty();
+        assertThat(ForComprehension.forc(List.of(1, 2), Collections.<Integer>emptyList()).yield(Integer::sum))
+            .isEmpty();
+    }
+
+    @Test
+    void shouldTestLazyIterable() {
+        assertThat(ForComprehension.forc(List.of(1, 2), v1 -> List.of(v1 * 10, v1 * 20)).yield(Integer::sum))
+            .containsExactly(11, 21, 22, 42);
+    }
+
+    @Test
+    void shouldTestLazyIterableWithEmptyIterable() {
+        assertThat(ForComprehension.forc(Collections.<Integer>emptyList(), v1 -> List.of(v1)).yield(Integer::sum))
+            .isEmpty();
+        assertThat(ForComprehension.forc(List.of(1, 2), v1 -> Collections.<Integer>emptyList()).yield(Integer::sum))
             .isEmpty();
     }
 }
