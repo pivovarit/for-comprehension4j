@@ -43,6 +43,8 @@ public final class ForComprehension {
      *
      * @param o1 the first optional value
      * @param o2 the second optional value
+     * @param <T1> the type of the first optional value
+     * @param <T2> the type of the second optional value
      * @return a for-comprehension over 2 optional values
      * @throws NullPointerException if any argument is {@code null}
      */
@@ -96,6 +98,8 @@ public final class ForComprehension {
      *
      * @param s1 the first stream
      * @param s2 the second stream
+     * @param <T1> the type of the first stream
+     * @param <T2> the type of the second stream
      * @return a for-comprehension over 2 stream values
      * @throws NullPointerException if any argument is {@code null}
      */
@@ -148,6 +152,8 @@ public final class ForComprehension {
      *
      * @param i1 the first iterable
      * @param i2 the second iterable
+     * @param <T1> the type of the first iterable
+     * @param <T2> the type of the second iterable
      * @return a for-comprehension over 2 iterable values
      * @throws NullPointerException if any argument is {@code null}
      */

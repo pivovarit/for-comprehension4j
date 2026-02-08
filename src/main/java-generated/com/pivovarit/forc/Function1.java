@@ -19,12 +19,30 @@ import java.util.Objects;
 
 /**
  * Represents a function with 1 argument.
+ *
+ * @param <T1> the type of the first argument
+ * @param <R> the type of the result
  */
 @FunctionalInterface
 public interface Function1<T1, R> {
 
+    /**
+     * Applies this function to the given argument.
+     *
+     * @param t1 the first argument
+     * @return the function result
+     */
     R apply(T1 t1);
 
+    /**
+     * Returns a composed function that first applies this function to its input,
+     * and then applies the {@code after} function to the result.
+     *
+     * @param after the function to apply after this function is applied
+     * @param <V> the type of the output of the {@code after} function
+     * @return a composed function
+     * @throws NullPointerException if after is {@code null}
+     */
     default <V> Function1<T1, V> andThen(Function1<? super R, ? extends V> after) {
         Objects.requireNonNull(after);
         return (t1) -> after.apply(apply(t1));

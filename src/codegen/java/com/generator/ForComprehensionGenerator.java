@@ -241,6 +241,7 @@ class ForComprehensionGenerator {
            * yields a value only if all optionals are present.
            *
            * %s
+           * %s
            * @return a for-comprehension over %d optional value%s
            * @throws NullPointerException if any argument is {@code null}
            */
@@ -283,6 +284,7 @@ class ForComprehensionGenerator {
           """.formatted(
           arity, "s",
           javadocParams(arity, "o", "optional value"),
+          javadocTypeParams(arity, "optional value"),
           arity, "s",
           typeParams(arity),
           arity, tparams,
@@ -316,6 +318,7 @@ class ForComprehensionGenerator {
            * All streams are evaluated eagerly. The resulting comprehension yields
            * the cartesian product of all streams, transformed by the yield function.
            *
+           * %s
            * %s
            * @return a for-comprehension over %d stream value%s
            * @throws NullPointerException if any argument is {@code null}
@@ -356,6 +359,7 @@ class ForComprehensionGenerator {
           """.formatted(
           arity, "s",
           javadocParams(arity, "s", "stream"),
+          javadocTypeParams(arity, "stream"),
           arity, "s",
           typeParams(arity),
           arity, tparams,
@@ -389,6 +393,7 @@ class ForComprehensionGenerator {
            * All iterables are evaluated eagerly. The resulting comprehension yields
            * the cartesian product of all iterables, transformed by the yield function.
            *
+           * %s
            * %s
            * @return a for-comprehension over %d iterable value%s
            * @throws NullPointerException if any argument is {@code null}
@@ -429,6 +434,7 @@ class ForComprehensionGenerator {
           """.formatted(
           arity, "s",
           javadocParams(arity, "i", "iterable"),
+          javadocTypeParams(arity, "iterable"),
           arity, "s",
           typeParams(arity),
           arity, tparams,
