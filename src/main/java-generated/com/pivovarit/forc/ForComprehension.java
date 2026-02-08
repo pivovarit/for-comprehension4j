@@ -83,7 +83,8 @@ public final class ForComprehension {
         public <R> Optional<R> yield(Function2<? super T1, ? super T2, ? extends R> f) {
             Objects.requireNonNull(f, "f is null");
 
-            return o1.flatMap(t1 -> o2.map(t2 -> f.apply(t1, t2)));
+            return o1.flatMap(t1 ->
+                o2.map(t2 -> f.apply(t1, t2)));
         }
     }
 
@@ -134,7 +135,8 @@ public final class ForComprehension {
 
             List<T2> l2 = s2.collect(Collectors.toList());
 
-            return s1.flatMap(t1 -> l2.stream().map(t2 -> f.apply(t1, t2)));
+            return s1.flatMap(t1 ->
+                l2.stream().map(t2 -> f.apply(t1, t2)));
         }
     }
 
@@ -187,9 +189,10 @@ public final class ForComprehension {
             i2.forEach(l2::add);
             List<R> result = new ArrayList<>();
             for (T1 t1 : i1) {
-            for (T2 t2 : l2) {
-                result.add(f.apply(t1, t2));
-            }}
+                for (T2 t2 : l2) {
+                    result.add(f.apply(t1, t2));
+                }
+            }
             return result;
         }
     }
