@@ -455,12 +455,17 @@ class ForComprehensionGenerator {
           .mapToObj(i -> "t" + i)
           .collect(Collectors.joining(", "));
 
-        var chain = IntStream.range(1, arity)
-          .map(i -> arity - i)
-          .mapToObj(i -> "o%d.flatMap(t%d -> %%s)".formatted(i, i))
-          .reduce("o%d.map(t%d -> f.apply(%s))".formatted(arity, arity, args), (i, w) -> w.formatted(i));
+        var sb = new StringBuilder("return o1.flatMap(t1 ->\n");
+        for (int i = 2; i < arity; i++) {
+            sb.append(" ".repeat((i - 1) * 4));
+            sb.append("o%d.flatMap(t%d ->\n".formatted(i, i));
+        }
+        sb.append(" ".repeat((arity - 1) * 4));
+        sb.append("o%d.map(t%d -> f.apply(%s))".formatted(arity, arity, args));
+        sb.append(")".repeat(arity - 1));
+        sb.append(";");
 
-        return "return " + chain + ";";
+        return sb.toString();
     }
 
     private static String yieldStreamChain(int arity) {
@@ -476,14 +481,17 @@ class ForComprehensionGenerator {
           .mapToObj(i -> "List<T%d> l%d = s%d.collect(Collectors.toList());".formatted(i, i, i))
           .collect(Collectors.joining("\n"));
 
-        var chain = IntStream.range(1, arity)
-          .map(i -> arity - i)
-          .mapToObj(i -> i == 1
-              ? "s1.flatMap(t1 -> %s)"
-              : "l%d.stream().flatMap(t%d -> %%s)".formatted(i, i))
-          .reduce("l%d.stream().map(t%d -> f.apply(%s))".formatted(arity, arity, args), (i, w) -> w.formatted(i));
+        var sb = new StringBuilder("return s1.flatMap(t1 ->\n");
+        for (int i = 2; i < arity; i++) {
+            sb.append(" ".repeat((i - 1) * 4));
+            sb.append("l%d.stream().flatMap(t%d ->\n".formatted(i, i));
+        }
+        sb.append(" ".repeat((arity - 1) * 4));
+        sb.append("l%d.stream().map(t%d -> f.apply(%s))".formatted(arity, arity, args));
+        sb.append(")".repeat(arity - 1));
+        sb.append(";");
 
-        return collections + "\n\nreturn " + chain + ";";
+        return collections + "\n\n" + sb.toString();
     }
 
     private static String yieldIterableChain(int arity) {
@@ -496,14 +504,19 @@ class ForComprehensionGenerator {
           .collect(Collectors.joining("\n"));
 
         var loops = IntStream.rangeClosed(1, arity)
-          .mapToObj(i -> i == 1
+          .mapToObj(i -> " ".repeat((i - 1) * 4) + (i == 1
             ? "for (T1 t1 : i1) {"
-            : "for (T%d t%d : l%d) {".formatted(i, i, i))
+            : "for (T%d t%d : l%d) {".formatted(i, i, i)))
           .collect(Collectors.joining("\n"));
 
-        var closes = "}".repeat(arity);
+        var body = " ".repeat(arity * 4) + "result.add(f.apply(" + args + "));";
 
-        return collections + "\nList<R> result = new ArrayList<>();\n" + loops + "\n    result.add(f.apply(" + args + "));\n" + closes + "\nreturn result;";
+        var closes = IntStream.range(0, arity)
+          .map(i -> arity - 1 - i)
+          .mapToObj(i -> " ".repeat(i * 4) + "}")
+          .collect(Collectors.joining("\n"));
+
+        return collections + "\nList<R> result = new ArrayList<>();\n" + loops + "\n" + body + "\n" + closes + "\nreturn result;";
     }
 
     private static String typeParams(int arity) {
