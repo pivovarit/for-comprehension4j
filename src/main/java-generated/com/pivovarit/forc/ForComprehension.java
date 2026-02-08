@@ -16,6 +16,7 @@
 package com.pivovarit.forc;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -358,7 +359,7 @@ public final class ForComprehension {
                     result.add(f.apply(t1, t2));
                 }
             }
-            return result;
+            return Collections.unmodifiableList(result);
         }
     }
 }
