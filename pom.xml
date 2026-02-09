@@ -84,12 +84,9 @@
                             </compilerArgs>
                         </configuration>
                     </execution>
+
                     <execution>
-                        <id>compile-tests</id>
-                        <phase>test-compile</phase>
-                        <goals>
-                            <goal>testCompile</goal>
-                        </goals>
+                        <id>default-testCompile</id>
                         <configuration>
                             <release>25</release>
                         </configuration>
