@@ -336,7 +336,7 @@
 
     <profiles>
         <profile>
-            <id>sonatype-oss-release</id>
+            <id>maven-central-release</id>
             <build>
                 <plugins>
                     <plugin>

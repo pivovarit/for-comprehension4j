@@ -43,6 +43,8 @@ public final class ForComprehension {
      *
      * @param o1 the first optional value
      * @param o2 the second optional value
+     * @param <T1> the type of the first optional value
+     * @param <T2> the type of the second optional value
      * @return a for-comprehension over 2 optional values
      * @throws NullPointerException if any argument is {@code null}
      */
@@ -83,7 +85,8 @@ public final class ForComprehension {
         public <R> Optional<R> yield(Function2<? super T1, ? super T2, ? extends R> f) {
             Objects.requireNonNull(f, "f is null");
 
-            return o1.flatMap(t1 -> o2.map(t2 -> f.apply(t1, t2)));
+            return o1.flatMap(t1 ->
+                o2.map(t2 -> f.apply(t1, t2)));
         }
     }
 
@@ -512,6 +515,8 @@ public final class ForComprehension {
      *
      * @param s1 the first stream
      * @param s2 the second stream
+     * @param <T1> the type of the first stream
+     * @param <T2> the type of the second stream
      * @return a for-comprehension over 2 stream values
      * @throws NullPointerException if any argument is {@code null}
      */
@@ -551,7 +556,8 @@ public final class ForComprehension {
 
             List<T2> l2 = s2.collect(Collectors.toList());
 
-            return s1.flatMap(t1 -> l2.stream().map(t2 -> f.apply(t1, t2)));
+            return s1.flatMap(t1 ->
+                l2.stream().map(t2 -> f.apply(t1, t2)));
         }
     }
 
@@ -995,6 +1001,8 @@ public final class ForComprehension {
      *
      * @param i1 the first iterable
      * @param i2 the second iterable
+     * @param <T1> the type of the first iterable
+     * @param <T2> the type of the second iterable
      * @return a for-comprehension over 2 iterable values
      * @throws NullPointerException if any argument is {@code null}
      */
@@ -1036,9 +1044,10 @@ public final class ForComprehension {
             i2.forEach(l2::add);
             List<R> result = new ArrayList<>();
             for (T1 t1 : i1) {
-            for (T2 t2 : l2) {
-                result.add(f.apply(t1, t2));
-            }}
+                for (T2 t2 : l2) {
+                    result.add(f.apply(t1, t2));
+                }
+            }
             return result;
         }
     }
