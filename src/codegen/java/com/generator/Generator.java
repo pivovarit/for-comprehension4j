@@ -9,7 +9,7 @@ public class Generator {
     private static final String PACKAGE_NAME = "com/pivovarit/forc";
     private static final String API_FILE_NAME = "ForComprehension.java";
 
-    private static final int ARITY = 2;
+    private static final int ARITY = 8;
 
     void main(String[] args) throws IOException {
         var dir = Files.createDirectories(Path.of(args[0], PACKAGE_NAME));
