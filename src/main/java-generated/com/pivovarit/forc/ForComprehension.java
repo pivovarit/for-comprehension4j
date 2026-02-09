@@ -99,6 +99,9 @@ public final class ForComprehension {
      * @param o1 the first optional value
      * @param o2 the second optional value
      * @param o3 the third optional value
+     * @param <T1> the type of the first optional value
+     * @param <T2> the type of the second optional value
+     * @param <T3> the type of the third optional value
      * @return a for-comprehension over 3 optional values
      * @throws NullPointerException if any argument is {@code null}
      */
@@ -143,7 +146,9 @@ public final class ForComprehension {
         public <R> Optional<R> yield(Function3<? super T1, ? super T2, ? super T3, ? extends R> f) {
             Objects.requireNonNull(f, "f is null");
 
-            return o1.flatMap(t1 -> o2.flatMap(t2 -> o3.map(t3 -> f.apply(t1, t2, t3))));
+            return o1.flatMap(t1 ->
+                o2.flatMap(t2 ->
+                    o3.map(t3 -> f.apply(t1, t2, t3))));
         }
     }
 
@@ -157,6 +162,10 @@ public final class ForComprehension {
      * @param o2 the second optional value
      * @param o3 the third optional value
      * @param o4 the 4th optional value
+     * @param <T1> the type of the first optional value
+     * @param <T2> the type of the second optional value
+     * @param <T3> the type of the third optional value
+     * @param <T4> the type of the 4th optional value
      * @return a for-comprehension over 4 optional values
      * @throws NullPointerException if any argument is {@code null}
      */
@@ -205,7 +214,10 @@ public final class ForComprehension {
         public <R> Optional<R> yield(Function4<? super T1, ? super T2, ? super T3, ? super T4, ? extends R> f) {
             Objects.requireNonNull(f, "f is null");
 
-            return o1.flatMap(t1 -> o2.flatMap(t2 -> o3.flatMap(t3 -> o4.map(t4 -> f.apply(t1, t2, t3, t4)))));
+            return o1.flatMap(t1 ->
+                o2.flatMap(t2 ->
+                    o3.flatMap(t3 ->
+                        o4.map(t4 -> f.apply(t1, t2, t3, t4)))));
         }
     }
 
@@ -220,6 +232,11 @@ public final class ForComprehension {
      * @param o3 the third optional value
      * @param o4 the 4th optional value
      * @param o5 the 5th optional value
+     * @param <T1> the type of the first optional value
+     * @param <T2> the type of the second optional value
+     * @param <T3> the type of the third optional value
+     * @param <T4> the type of the 4th optional value
+     * @param <T5> the type of the 5th optional value
      * @return a for-comprehension over 5 optional values
      * @throws NullPointerException if any argument is {@code null}
      */
@@ -272,7 +289,11 @@ public final class ForComprehension {
         public <R> Optional<R> yield(Function5<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, ? extends R> f) {
             Objects.requireNonNull(f, "f is null");
 
-            return o1.flatMap(t1 -> o2.flatMap(t2 -> o3.flatMap(t3 -> o4.flatMap(t4 -> o5.map(t5 -> f.apply(t1, t2, t3, t4, t5))))));
+            return o1.flatMap(t1 ->
+                o2.flatMap(t2 ->
+                    o3.flatMap(t3 ->
+                        o4.flatMap(t4 ->
+                            o5.map(t5 -> f.apply(t1, t2, t3, t4, t5))))));
         }
     }
 
@@ -288,6 +309,12 @@ public final class ForComprehension {
      * @param o4 the 4th optional value
      * @param o5 the 5th optional value
      * @param o6 the 6th optional value
+     * @param <T1> the type of the first optional value
+     * @param <T2> the type of the second optional value
+     * @param <T3> the type of the third optional value
+     * @param <T4> the type of the 4th optional value
+     * @param <T5> the type of the 5th optional value
+     * @param <T6> the type of the 6th optional value
      * @return a for-comprehension over 6 optional values
      * @throws NullPointerException if any argument is {@code null}
      */
@@ -344,7 +371,12 @@ public final class ForComprehension {
         public <R> Optional<R> yield(Function6<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, ? super T6, ? extends R> f) {
             Objects.requireNonNull(f, "f is null");
 
-            return o1.flatMap(t1 -> o2.flatMap(t2 -> o3.flatMap(t3 -> o4.flatMap(t4 -> o5.flatMap(t5 -> o6.map(t6 -> f.apply(t1, t2, t3, t4, t5, t6)))))));
+            return o1.flatMap(t1 ->
+                o2.flatMap(t2 ->
+                    o3.flatMap(t3 ->
+                        o4.flatMap(t4 ->
+                            o5.flatMap(t5 ->
+                                o6.map(t6 -> f.apply(t1, t2, t3, t4, t5, t6)))))));
         }
     }
 
@@ -361,6 +393,13 @@ public final class ForComprehension {
      * @param o5 the 5th optional value
      * @param o6 the 6th optional value
      * @param o7 the 7th optional value
+     * @param <T1> the type of the first optional value
+     * @param <T2> the type of the second optional value
+     * @param <T3> the type of the third optional value
+     * @param <T4> the type of the 4th optional value
+     * @param <T5> the type of the 5th optional value
+     * @param <T6> the type of the 6th optional value
+     * @param <T7> the type of the 7th optional value
      * @return a for-comprehension over 7 optional values
      * @throws NullPointerException if any argument is {@code null}
      */
@@ -421,7 +460,13 @@ public final class ForComprehension {
         public <R> Optional<R> yield(Function7<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, ? super T6, ? super T7, ? extends R> f) {
             Objects.requireNonNull(f, "f is null");
 
-            return o1.flatMap(t1 -> o2.flatMap(t2 -> o3.flatMap(t3 -> o4.flatMap(t4 -> o5.flatMap(t5 -> o6.flatMap(t6 -> o7.map(t7 -> f.apply(t1, t2, t3, t4, t5, t6, t7))))))));
+            return o1.flatMap(t1 ->
+                o2.flatMap(t2 ->
+                    o3.flatMap(t3 ->
+                        o4.flatMap(t4 ->
+                            o5.flatMap(t5 ->
+                                o6.flatMap(t6 ->
+                                    o7.map(t7 -> f.apply(t1, t2, t3, t4, t5, t6, t7))))))));
         }
     }
 
@@ -439,6 +484,14 @@ public final class ForComprehension {
      * @param o6 the 6th optional value
      * @param o7 the 7th optional value
      * @param o8 the 8th optional value
+     * @param <T1> the type of the first optional value
+     * @param <T2> the type of the second optional value
+     * @param <T3> the type of the third optional value
+     * @param <T4> the type of the 4th optional value
+     * @param <T5> the type of the 5th optional value
+     * @param <T6> the type of the 6th optional value
+     * @param <T7> the type of the 7th optional value
+     * @param <T8> the type of the 8th optional value
      * @return a for-comprehension over 8 optional values
      * @throws NullPointerException if any argument is {@code null}
      */
@@ -503,7 +556,14 @@ public final class ForComprehension {
         public <R> Optional<R> yield(Function8<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, ? super T6, ? super T7, ? super T8, ? extends R> f) {
             Objects.requireNonNull(f, "f is null");
 
-            return o1.flatMap(t1 -> o2.flatMap(t2 -> o3.flatMap(t3 -> o4.flatMap(t4 -> o5.flatMap(t5 -> o6.flatMap(t6 -> o7.flatMap(t7 -> o8.map(t8 -> f.apply(t1, t2, t3, t4, t5, t6, t7, t8)))))))));
+            return o1.flatMap(t1 ->
+                o2.flatMap(t2 ->
+                    o3.flatMap(t3 ->
+                        o4.flatMap(t4 ->
+                            o5.flatMap(t5 ->
+                                o6.flatMap(t6 ->
+                                    o7.flatMap(t7 ->
+                                        o8.map(t8 -> f.apply(t1, t2, t3, t4, t5, t6, t7, t8)))))))));
         }
     }
 
@@ -570,6 +630,9 @@ public final class ForComprehension {
      * @param s1 the first stream
      * @param s2 the second stream
      * @param s3 the third stream
+     * @param <T1> the type of the first stream
+     * @param <T2> the type of the second stream
+     * @param <T3> the type of the third stream
      * @return a for-comprehension over 3 stream values
      * @throws NullPointerException if any argument is {@code null}
      */
@@ -614,7 +677,9 @@ public final class ForComprehension {
             List<T2> l2 = s2.collect(Collectors.toList());
             List<T3> l3 = s3.collect(Collectors.toList());
 
-            return s1.flatMap(t1 -> l2.stream().flatMap(t2 -> l3.stream().map(t3 -> f.apply(t1, t2, t3))));
+            return s1.flatMap(t1 ->
+                l2.stream().flatMap(t2 ->
+                    l3.stream().map(t3 -> f.apply(t1, t2, t3))));
         }
     }
 
@@ -628,6 +693,10 @@ public final class ForComprehension {
      * @param s2 the second stream
      * @param s3 the third stream
      * @param s4 the 4th stream
+     * @param <T1> the type of the first stream
+     * @param <T2> the type of the second stream
+     * @param <T3> the type of the third stream
+     * @param <T4> the type of the 4th stream
      * @return a for-comprehension over 4 stream values
      * @throws NullPointerException if any argument is {@code null}
      */
@@ -677,7 +746,10 @@ public final class ForComprehension {
             List<T3> l3 = s3.collect(Collectors.toList());
             List<T4> l4 = s4.collect(Collectors.toList());
 
-            return s1.flatMap(t1 -> l2.stream().flatMap(t2 -> l3.stream().flatMap(t3 -> l4.stream().map(t4 -> f.apply(t1, t2, t3, t4)))));
+            return s1.flatMap(t1 ->
+                l2.stream().flatMap(t2 ->
+                    l3.stream().flatMap(t3 ->
+                        l4.stream().map(t4 -> f.apply(t1, t2, t3, t4)))));
         }
     }
 
@@ -692,6 +764,11 @@ public final class ForComprehension {
      * @param s3 the third stream
      * @param s4 the 4th stream
      * @param s5 the 5th stream
+     * @param <T1> the type of the first stream
+     * @param <T2> the type of the second stream
+     * @param <T3> the type of the third stream
+     * @param <T4> the type of the 4th stream
+     * @param <T5> the type of the 5th stream
      * @return a for-comprehension over 5 stream values
      * @throws NullPointerException if any argument is {@code null}
      */
@@ -746,7 +823,11 @@ public final class ForComprehension {
             List<T4> l4 = s4.collect(Collectors.toList());
             List<T5> l5 = s5.collect(Collectors.toList());
 
-            return s1.flatMap(t1 -> l2.stream().flatMap(t2 -> l3.stream().flatMap(t3 -> l4.stream().flatMap(t4 -> l5.stream().map(t5 -> f.apply(t1, t2, t3, t4, t5))))));
+            return s1.flatMap(t1 ->
+                l2.stream().flatMap(t2 ->
+                    l3.stream().flatMap(t3 ->
+                        l4.stream().flatMap(t4 ->
+                            l5.stream().map(t5 -> f.apply(t1, t2, t3, t4, t5))))));
         }
     }
 
@@ -762,6 +843,12 @@ public final class ForComprehension {
      * @param s4 the 4th stream
      * @param s5 the 5th stream
      * @param s6 the 6th stream
+     * @param <T1> the type of the first stream
+     * @param <T2> the type of the second stream
+     * @param <T3> the type of the third stream
+     * @param <T4> the type of the 4th stream
+     * @param <T5> the type of the 5th stream
+     * @param <T6> the type of the 6th stream
      * @return a for-comprehension over 6 stream values
      * @throws NullPointerException if any argument is {@code null}
      */
@@ -821,7 +908,12 @@ public final class ForComprehension {
             List<T5> l5 = s5.collect(Collectors.toList());
             List<T6> l6 = s6.collect(Collectors.toList());
 
-            return s1.flatMap(t1 -> l2.stream().flatMap(t2 -> l3.stream().flatMap(t3 -> l4.stream().flatMap(t4 -> l5.stream().flatMap(t5 -> l6.stream().map(t6 -> f.apply(t1, t2, t3, t4, t5, t6)))))));
+            return s1.flatMap(t1 ->
+                l2.stream().flatMap(t2 ->
+                    l3.stream().flatMap(t3 ->
+                        l4.stream().flatMap(t4 ->
+                            l5.stream().flatMap(t5 ->
+                                l6.stream().map(t6 -> f.apply(t1, t2, t3, t4, t5, t6)))))));
         }
     }
 
@@ -838,6 +930,13 @@ public final class ForComprehension {
      * @param s5 the 5th stream
      * @param s6 the 6th stream
      * @param s7 the 7th stream
+     * @param <T1> the type of the first stream
+     * @param <T2> the type of the second stream
+     * @param <T3> the type of the third stream
+     * @param <T4> the type of the 4th stream
+     * @param <T5> the type of the 5th stream
+     * @param <T6> the type of the 6th stream
+     * @param <T7> the type of the 7th stream
      * @return a for-comprehension over 7 stream values
      * @throws NullPointerException if any argument is {@code null}
      */
@@ -902,7 +1001,13 @@ public final class ForComprehension {
             List<T6> l6 = s6.collect(Collectors.toList());
             List<T7> l7 = s7.collect(Collectors.toList());
 
-            return s1.flatMap(t1 -> l2.stream().flatMap(t2 -> l3.stream().flatMap(t3 -> l4.stream().flatMap(t4 -> l5.stream().flatMap(t5 -> l6.stream().flatMap(t6 -> l7.stream().map(t7 -> f.apply(t1, t2, t3, t4, t5, t6, t7))))))));
+            return s1.flatMap(t1 ->
+                l2.stream().flatMap(t2 ->
+                    l3.stream().flatMap(t3 ->
+                        l4.stream().flatMap(t4 ->
+                            l5.stream().flatMap(t5 ->
+                                l6.stream().flatMap(t6 ->
+                                    l7.stream().map(t7 -> f.apply(t1, t2, t3, t4, t5, t6, t7))))))));
         }
     }
 
@@ -920,6 +1025,14 @@ public final class ForComprehension {
      * @param s6 the 6th stream
      * @param s7 the 7th stream
      * @param s8 the 8th stream
+     * @param <T1> the type of the first stream
+     * @param <T2> the type of the second stream
+     * @param <T3> the type of the third stream
+     * @param <T4> the type of the 4th stream
+     * @param <T5> the type of the 5th stream
+     * @param <T6> the type of the 6th stream
+     * @param <T7> the type of the 7th stream
+     * @param <T8> the type of the 8th stream
      * @return a for-comprehension over 8 stream values
      * @throws NullPointerException if any argument is {@code null}
      */
@@ -989,7 +1102,14 @@ public final class ForComprehension {
             List<T7> l7 = s7.collect(Collectors.toList());
             List<T8> l8 = s8.collect(Collectors.toList());
 
-            return s1.flatMap(t1 -> l2.stream().flatMap(t2 -> l3.stream().flatMap(t3 -> l4.stream().flatMap(t4 -> l5.stream().flatMap(t5 -> l6.stream().flatMap(t6 -> l7.stream().flatMap(t7 -> l8.stream().map(t8 -> f.apply(t1, t2, t3, t4, t5, t6, t7, t8)))))))));
+            return s1.flatMap(t1 ->
+                l2.stream().flatMap(t2 ->
+                    l3.stream().flatMap(t3 ->
+                        l4.stream().flatMap(t4 ->
+                            l5.stream().flatMap(t5 ->
+                                l6.stream().flatMap(t6 ->
+                                    l7.stream().flatMap(t7 ->
+                                        l8.stream().map(t8 -> f.apply(t1, t2, t3, t4, t5, t6, t7, t8)))))))));
         }
     }
 
@@ -1061,6 +1181,9 @@ public final class ForComprehension {
      * @param i1 the first iterable
      * @param i2 the second iterable
      * @param i3 the third iterable
+     * @param <T1> the type of the first iterable
+     * @param <T2> the type of the second iterable
+     * @param <T3> the type of the third iterable
      * @return a for-comprehension over 3 iterable values
      * @throws NullPointerException if any argument is {@code null}
      */
@@ -1108,10 +1231,12 @@ public final class ForComprehension {
             i3.forEach(l3::add);
             List<R> result = new ArrayList<>();
             for (T1 t1 : i1) {
-            for (T2 t2 : l2) {
-            for (T3 t3 : l3) {
-                result.add(f.apply(t1, t2, t3));
-            }}}
+                for (T2 t2 : l2) {
+                    for (T3 t3 : l3) {
+                        result.add(f.apply(t1, t2, t3));
+                    }
+                }
+            }
             return result;
         }
     }
@@ -1126,6 +1251,10 @@ public final class ForComprehension {
      * @param i2 the second iterable
      * @param i3 the third iterable
      * @param i4 the 4th iterable
+     * @param <T1> the type of the first iterable
+     * @param <T2> the type of the second iterable
+     * @param <T3> the type of the third iterable
+     * @param <T4> the type of the 4th iterable
      * @return a for-comprehension over 4 iterable values
      * @throws NullPointerException if any argument is {@code null}
      */
@@ -1179,11 +1308,14 @@ public final class ForComprehension {
             i4.forEach(l4::add);
             List<R> result = new ArrayList<>();
             for (T1 t1 : i1) {
-            for (T2 t2 : l2) {
-            for (T3 t3 : l3) {
-            for (T4 t4 : l4) {
-                result.add(f.apply(t1, t2, t3, t4));
-            }}}}
+                for (T2 t2 : l2) {
+                    for (T3 t3 : l3) {
+                        for (T4 t4 : l4) {
+                            result.add(f.apply(t1, t2, t3, t4));
+                        }
+                    }
+                }
+            }
             return result;
         }
     }
@@ -1199,6 +1331,11 @@ public final class ForComprehension {
      * @param i3 the third iterable
      * @param i4 the 4th iterable
      * @param i5 the 5th iterable
+     * @param <T1> the type of the first iterable
+     * @param <T2> the type of the second iterable
+     * @param <T3> the type of the third iterable
+     * @param <T4> the type of the 4th iterable
+     * @param <T5> the type of the 5th iterable
      * @return a for-comprehension over 5 iterable values
      * @throws NullPointerException if any argument is {@code null}
      */
@@ -1258,12 +1395,16 @@ public final class ForComprehension {
             i5.forEach(l5::add);
             List<R> result = new ArrayList<>();
             for (T1 t1 : i1) {
-            for (T2 t2 : l2) {
-            for (T3 t3 : l3) {
-            for (T4 t4 : l4) {
-            for (T5 t5 : l5) {
-                result.add(f.apply(t1, t2, t3, t4, t5));
-            }}}}}
+                for (T2 t2 : l2) {
+                    for (T3 t3 : l3) {
+                        for (T4 t4 : l4) {
+                            for (T5 t5 : l5) {
+                                result.add(f.apply(t1, t2, t3, t4, t5));
+                            }
+                        }
+                    }
+                }
+            }
             return result;
         }
     }
@@ -1280,6 +1421,12 @@ public final class ForComprehension {
      * @param i4 the 4th iterable
      * @param i5 the 5th iterable
      * @param i6 the 6th iterable
+     * @param <T1> the type of the first iterable
+     * @param <T2> the type of the second iterable
+     * @param <T3> the type of the third iterable
+     * @param <T4> the type of the 4th iterable
+     * @param <T5> the type of the 5th iterable
+     * @param <T6> the type of the 6th iterable
      * @return a for-comprehension over 6 iterable values
      * @throws NullPointerException if any argument is {@code null}
      */
@@ -1345,13 +1492,18 @@ public final class ForComprehension {
             i6.forEach(l6::add);
             List<R> result = new ArrayList<>();
             for (T1 t1 : i1) {
-            for (T2 t2 : l2) {
-            for (T3 t3 : l3) {
-            for (T4 t4 : l4) {
-            for (T5 t5 : l5) {
-            for (T6 t6 : l6) {
-                result.add(f.apply(t1, t2, t3, t4, t5, t6));
-            }}}}}}
+                for (T2 t2 : l2) {
+                    for (T3 t3 : l3) {
+                        for (T4 t4 : l4) {
+                            for (T5 t5 : l5) {
+                                for (T6 t6 : l6) {
+                                    result.add(f.apply(t1, t2, t3, t4, t5, t6));
+                                }
+                            }
+                        }
+                    }
+                }
+            }
             return result;
         }
     }
@@ -1369,6 +1521,13 @@ public final class ForComprehension {
      * @param i5 the 5th iterable
      * @param i6 the 6th iterable
      * @param i7 the 7th iterable
+     * @param <T1> the type of the first iterable
+     * @param <T2> the type of the second iterable
+     * @param <T3> the type of the third iterable
+     * @param <T4> the type of the 4th iterable
+     * @param <T5> the type of the 5th iterable
+     * @param <T6> the type of the 6th iterable
+     * @param <T7> the type of the 7th iterable
      * @return a for-comprehension over 7 iterable values
      * @throws NullPointerException if any argument is {@code null}
      */
@@ -1440,14 +1599,20 @@ public final class ForComprehension {
             i7.forEach(l7::add);
             List<R> result = new ArrayList<>();
             for (T1 t1 : i1) {
-            for (T2 t2 : l2) {
-            for (T3 t3 : l3) {
-            for (T4 t4 : l4) {
-            for (T5 t5 : l5) {
-            for (T6 t6 : l6) {
-            for (T7 t7 : l7) {
-                result.add(f.apply(t1, t2, t3, t4, t5, t6, t7));
-            }}}}}}}
+                for (T2 t2 : l2) {
+                    for (T3 t3 : l3) {
+                        for (T4 t4 : l4) {
+                            for (T5 t5 : l5) {
+                                for (T6 t6 : l6) {
+                                    for (T7 t7 : l7) {
+                                        result.add(f.apply(t1, t2, t3, t4, t5, t6, t7));
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
             return result;
         }
     }
@@ -1466,6 +1631,14 @@ public final class ForComprehension {
      * @param i6 the 6th iterable
      * @param i7 the 7th iterable
      * @param i8 the 8th iterable
+     * @param <T1> the type of the first iterable
+     * @param <T2> the type of the second iterable
+     * @param <T3> the type of the third iterable
+     * @param <T4> the type of the 4th iterable
+     * @param <T5> the type of the 5th iterable
+     * @param <T6> the type of the 6th iterable
+     * @param <T7> the type of the 7th iterable
+     * @param <T8> the type of the 8th iterable
      * @return a for-comprehension over 8 iterable values
      * @throws NullPointerException if any argument is {@code null}
      */
@@ -1543,15 +1716,22 @@ public final class ForComprehension {
             i8.forEach(l8::add);
             List<R> result = new ArrayList<>();
             for (T1 t1 : i1) {
-            for (T2 t2 : l2) {
-            for (T3 t3 : l3) {
-            for (T4 t4 : l4) {
-            for (T5 t5 : l5) {
-            for (T6 t6 : l6) {
-            for (T7 t7 : l7) {
-            for (T8 t8 : l8) {
-                result.add(f.apply(t1, t2, t3, t4, t5, t6, t7, t8));
-            }}}}}}}}
+                for (T2 t2 : l2) {
+                    for (T3 t3 : l3) {
+                        for (T4 t4 : l4) {
+                            for (T5 t5 : l5) {
+                                for (T6 t6 : l6) {
+                                    for (T7 t7 : l7) {
+                                        for (T8 t8 : l8) {
+                                            result.add(f.apply(t1, t2, t3, t4, t5, t6, t7, t8));
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
             return result;
         }
     }

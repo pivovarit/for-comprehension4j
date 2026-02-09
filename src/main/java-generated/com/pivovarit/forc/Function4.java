@@ -19,12 +19,36 @@ import java.util.Objects;
 
 /**
  * Represents a function with 4 arguments.
+ *
+ * @param <T1> the type of the first argument
+ * @param <T2> the type of the second argument
+ * @param <T3> the type of the third argument
+ * @param <T4> the type of the 4th argument
+ * @param <R> the type of the result
  */
 @FunctionalInterface
 public interface Function4<T1, T2, T3, T4, R> {
 
+    /**
+     * Applies this function to the given arguments.
+     *
+     * @param t1 the first argument
+     * @param t2 the second argument
+     * @param t3 the third argument
+     * @param t4 the 4th argument
+     * @return the function result
+     */
     R apply(T1 t1, T2 t2, T3 t3, T4 t4);
 
+    /**
+     * Returns a composed function that first applies this function to its input,
+     * and then applies the {@code after} function to the result.
+     *
+     * @param after the function to apply after this function is applied
+     * @param <V> the type of the output of the {@code after} function
+     * @return a composed function
+     * @throws NullPointerException if after is {@code null}
+     */
     default <V> Function4<T1, T2, T3, T4, V> andThen(Function1<? super R, ? extends V> after) {
         Objects.requireNonNull(after);
         return (t1, t2, t3, t4) -> after.apply(apply(t1, t2, t3, t4));
