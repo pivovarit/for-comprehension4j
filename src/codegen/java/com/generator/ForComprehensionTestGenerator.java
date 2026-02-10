@@ -8,26 +8,33 @@ class ForComprehensionTestGenerator {
     static String generate(int arity) {
         var eagerOptionalTests = new StringBuilder();
         for (int i = 2; i <= arity; i++) {
-            eagerOptionalTests.append(generateEagerOptionalTest(i));
+            eagerOptionalTests.append(wrapInArityNested(i, generateEagerOptionalTest(i)));
         }
 
         var eagerStreamTests = new StringBuilder();
         for (int i = 2; i <= arity; i++) {
-            eagerStreamTests.append(generateEagerStreamTest(i));
-            eagerStreamTests.append(generateEagerStreamEmptyTest(i));
+            eagerStreamTests.append(wrapInArityNested(i, generateEagerStreamTest(i) + generateEagerStreamEmptyTest(i)));
         }
 
         var eagerIterableTests = new StringBuilder();
         for (int i = 2; i <= arity; i++) {
-            eagerIterableTests.append(generateEagerIterableTest(i));
-            eagerIterableTests.append(generateEagerIterableEmptyTest(i));
+            eagerIterableTests.append(wrapInArityNested(i, generateEagerIterableTest(i) + generateEagerIterableEmptyTest(i)));
         }
 
-        String lazyTests = generateLazyOptionalTest()
-                           + generateLazyStreamTest()
-                           + generateLazyStreamEmptyTest()
-                           + generateLazyIterableTest()
-                           + generateLazyIterableEmptyTest();
+        var lazyOptionalTests = new StringBuilder();
+        for (int i = 2; i <= arity; i++) {
+            lazyOptionalTests.append(wrapInArityNested(i, generateLazyOptionalTest(i)));
+        }
+
+        var lazyStreamTests = new StringBuilder();
+        for (int i = 2; i <= arity; i++) {
+            lazyStreamTests.append(wrapInArityNested(i, generateLazyStreamTest(i) + generateLazyStreamEmptyTest(i)));
+        }
+
+        var lazyIterableTests = new StringBuilder();
+        for (int i = 2; i <= arity; i++) {
+            lazyIterableTests.append(wrapInArityNested(i, generateLazyIterableTest(i) + generateLazyIterableEmptyTest(i)));
+        }
 
         return """
           package com.pivovarit.forc;
@@ -60,7 +67,17 @@ class ForComprehensionTestGenerator {
               }
 
               @Nested
-              class Lazy {
+              class LazyOptional {
+          %s
+              }
+
+              @Nested
+              class LazyStream {
+          %s
+              }
+
+              @Nested
+              class LazyIterable {
           %s
               }
           }
@@ -68,7 +85,9 @@ class ForComprehensionTestGenerator {
           indent(eagerOptionalTests.toString(), 4),
           indent(eagerStreamTests.toString(), 4),
           indent(eagerIterableTests.toString(), 4),
-          indent(lazyTests, 4));
+          indent(lazyOptionalTests.toString(), 4),
+          indent(lazyStreamTests.toString(), 4),
+          indent(lazyIterableTests.toString(), 4));
     }
 
     private static String indent(String text, int spaces) {
@@ -76,6 +95,10 @@ class ForComprehensionTestGenerator {
         return text.lines()
           .map(line -> line.isEmpty() ? line : prefix + line)
           .collect(Collectors.joining("\n"));
+    }
+
+    private static String wrapInArityNested(int arity, String tests) {
+        return "\n    @Nested\n    class Arity" + arity + " {" + indent(tests, 4) + "\n    }\n";
     }
 
     private static String generateEagerOptionalTest(int arity) {
@@ -175,64 +198,123 @@ class ForComprehensionTestGenerator {
           """.formatted(arity, firstEmptyArgs, lambda, lastEmptyArgs, lambda);
     }
 
-    private static String generateLazyOptionalTest() {
+    private static String generateLazyOptionalTest(int arity) {
+        var lambda = yieldLambda(arity);
+        var sum = arity * (arity + 1) / 2;
+        var allArgs = lazyOptionalArgs(arity, 0);
+        var firstEmptyArgs = lazyOptionalArgs(arity, 1);
+        var lastEmptyArgs = lazyOptionalArgs(arity, arity);
+
         return """
 
               @Test
-              void shouldTestLazyOptional() {
+              void shouldTestLazyOptional%d() {
                   Optional<Integer> o1 = Optional.of(1);
                   Optional<Integer> empty = Optional.empty();
 
-                  assertThat(ForComprehension.forc(o1, v1 -> Optional.of(v1)).yield((t1, t2) -> t1 + t2)).hasValue(2);
-                  assertThat(ForComprehension.forc(o1, v1 -> empty).yield((t1, t2) -> t1 + t2)).isEmpty();
-                  assertThat(ForComprehension.forc(empty, v1 -> o1).yield((t1, t2) -> t1 + t2)).isEmpty();
-                  assertThat(ForComprehension.forc(empty, v1 -> empty).yield((t1, t2) -> t1 + t2)).isEmpty();
+                  assertThat(ForComprehension.forc(%s).yield(%s)).hasValue(%d);
+                  assertThat(ForComprehension.forc(%s).yield(%s)).isEmpty();
+                  assertThat(ForComprehension.forc(%s).yield(%s)).isEmpty();
               }
-          """;
+          """.formatted(arity, allArgs, lambda, sum,
+          firstEmptyArgs, lambda, lastEmptyArgs, lambda);
     }
 
-    private static String generateLazyStreamTest() {
+    private static String generateLazyStreamTest(int arity) {
         return """
 
               @Test
-              void shouldTestLazyStream() {
-                  assertThat(ForComprehension.forc(Stream.of(1, 2), v1 -> Stream.of(v1 * 10, v1 * 20)).yield((t1, t2) -> t1 + t2))
-                      .containsExactly(11, 21, 22, 42);
+              void shouldTestLazyStream%d() {
+                  assertThat(ForComprehension.forc(%s).yield(%s))
+                      .containsExactly(%s);
               }
-          """;
+          """.formatted(arity, lazyStreamArgs(arity, 0), yieldLambda(arity), expectedCartesianValues(arity));
     }
 
-    private static String generateLazyStreamEmptyTest() {
+    private static String generateLazyStreamEmptyTest(int arity) {
+        var lambda = yieldLambda(arity);
         return """
 
               @Test
-              void shouldTestLazyStreamWithEmptyStream() {
-                  assertThat(ForComprehension.forc(Stream.<Integer>empty(), v1 -> Stream.of(v1)).yield((t1, t2) -> t1 + t2)).isEmpty();
-                  assertThat(ForComprehension.forc(Stream.of(1, 2), v1 -> Stream.<Integer>empty()).yield((t1, t2) -> t1 + t2)).isEmpty();
+              void shouldTestLazyStreamWithEmptyStream%d() {
+                  assertThat(ForComprehension.forc(%s).yield(%s))
+                      .isEmpty();
+                  assertThat(ForComprehension.forc(%s).yield(%s))
+                      .isEmpty();
               }
-          """;
+          """.formatted(arity, lazyStreamArgs(arity, 1), lambda, lazyStreamArgs(arity, arity), lambda);
     }
 
-    private static String generateLazyIterableTest() {
+    private static String generateLazyIterableTest(int arity) {
         return """
 
               @Test
-              void shouldTestLazyIterable() {
-                  assertThat(ForComprehension.forc(List.of(1, 2), v1 -> List.of(v1 * 10, v1 * 20)).yield((t1, t2) -> t1 + t2))
-                      .containsExactly(11, 21, 22, 42);
+              void shouldTestLazyIterable%d() {
+                  assertThat(ForComprehension.forc(%s).yield(%s))
+                      .containsExactly(%s);
               }
-          """;
+          """.formatted(arity, lazyIterableArgs(arity, 0), yieldLambda(arity), expectedCartesianValues(arity));
     }
 
-    private static String generateLazyIterableEmptyTest() {
+    private static String generateLazyIterableEmptyTest(int arity) {
+        var lambda = yieldLambda(arity);
         return """
 
               @Test
-              void shouldTestLazyIterableWithEmptyIterable() {
-                  assertThat(ForComprehension.forc(Collections.<Integer>emptyList(), v1 -> List.of(v1)).yield((t1, t2) -> t1 + t2)).isEmpty();
-                  assertThat(ForComprehension.forc(List.of(1, 2), v1 -> Collections.<Integer>emptyList()).yield((t1, t2) -> t1 + t2)).isEmpty();
+              void shouldTestLazyIterableWithEmptyIterable%d() {
+                  assertThat(ForComprehension.forc(%s).yield(%s)).isEmpty();
+                  assertThat(ForComprehension.forc(%s).yield(%s)).isEmpty();
               }
-          """;
+          """.formatted(arity, lazyIterableArgs(arity, 1), lambda, lazyIterableArgs(arity, arity), lambda);
+    }
+
+    private static String lazyLambdaParams(int position) {
+        var params = IntStream.rangeClosed(1, position - 1)
+          .mapToObj(j -> "v" + j)
+          .collect(Collectors.joining(", "));
+        return position - 1 == 1 ? params : "(" + params + ")";
+    }
+
+    private static String lazyOptionalArgs(int arity, int emptyPos) {
+        var sb = new StringBuilder(emptyPos == 1 ? "empty" : "o1");
+        for (int i = 2; i <= arity; i++) {
+            sb.append(", ");
+            sb.append(lazyLambdaParams(i));
+            if (i == emptyPos) {
+                sb.append(" -> empty");
+            } else {
+                sb.append(" -> Optional.of(%d)".formatted(i));
+            }
+        }
+        return sb.toString();
+    }
+
+    private static String lazyStreamArgs(int arity, int emptyPos) {
+        var sb = new StringBuilder(emptyPos == 1 ? "Stream.<Integer>empty()" : streamOf(1));
+        for (int i = 2; i <= arity; i++) {
+            sb.append(", ");
+            sb.append(lazyLambdaParams(i));
+            if (i == emptyPos) {
+                sb.append(" -> Stream.<Integer>empty()");
+            } else {
+                sb.append(" -> " + streamOf(i));
+            }
+        }
+        return sb.toString();
+    }
+
+    private static String lazyIterableArgs(int arity, int emptyPos) {
+        var sb = new StringBuilder(emptyPos == 1 ? "Collections.<Integer>emptyList()" : iterableOf(1));
+        for (int i = 2; i <= arity; i++) {
+            sb.append(", ");
+            sb.append(lazyLambdaParams(i));
+            if (i == emptyPos) {
+                sb.append(" -> Collections.<Integer>emptyList()");
+            } else {
+                sb.append(" -> " + iterableOf(i));
+            }
+        }
+        return sb.toString();
     }
 
     private static String yieldLambda(int arity) {

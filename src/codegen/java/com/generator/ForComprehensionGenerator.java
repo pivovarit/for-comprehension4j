@@ -50,178 +50,15 @@ class ForComprehensionGenerator {
           indent(IntStream.rangeClosed(2, arity)
             .mapToObj(ForComprehensionGenerator::generateEagerIterable)
             .collect(Collectors.joining("\n")), 4),
-          indent("""
-              /**
-               * Creates a lazy for-comprehension over two {@link Optional} values.
-               * <p>
-               * The second optional is computed lazily and depends on the value of the first.
-               * This enables dependent sequencing similar to Scala's for-expressions.
-               *
-               * @param o1 the first optional value
-               * @param o2 a function producing the second optional value based on the first
-               * @param <T1> the type of the first optional value
-               * @param <T2> the type of the second optional value
-               * @return a lazy for-comprehension over two optional values
-               * @throws NullPointerException if any argument is {@code null}
-               */
-              public static <T1, T2> ForLazy2Optional<T1, T2> forc(Optional<T1> o1, Function1<? super T1, Optional<T2>> o2) {
-                  Objects.requireNonNull(o1, "o1 is null");
-                  Objects.requireNonNull(o2, "o2 is null");
-                  return new ForLazy2Optional<>(o1, o2);
-              }
-
-              /**
-               * Represents a for-comprehension where the second {@link Optional} value
-               * is computed lazily based on the first value.
-               *
-               * @param <T1> the type of the first optional value
-               * @param <T2> the type of the second optional value
-               */
-              public static final class ForLazy2Optional<T1, T2> {
-
-                  private final Optional<T1> o1;
-                  private final Function1<? super T1, Optional<T2>> o2;
-
-                  private ForLazy2Optional(Optional<T1> o1, Function1<? super T1, Optional<T2>> o2) {
-                      this.o1 = o1;
-                      this.o2 = o2;
-                  }
-
-                  /**
-                   * Produces the result of the for-comprehension by applying the given function
-                   * to the contained values.
-                   * <p>
-                   * The second optional is evaluated only if the first optional is present.
-                   *
-                   * @param f the combining function
-                   * @param <R> the result type
-                   * @return an optional containing the result of the function application,
-                   *         or {@link Optional#empty()} if any step yields an empty optional
-                   * @throws NullPointerException if the function is {@code null}
-                   */
-                  public <R> Optional<R> yield(Function2<? super T1, ? super T2, ? extends R> f) {
-                      Objects.requireNonNull(f, "f is null");
-
-                      return o1.flatMap(t1 -> o2.apply(t1).map(t2 -> f.apply(t1, t2)));
-                  }
-              }
-            """, 2),
-          indent("""
-              /**
-               * Creates a lazy for-comprehension over two {@link Stream} values.
-               * <p>
-               * The second stream is computed lazily and depends on the elements of the first.
-               * This enables dependent sequencing similar to Scala's for-expressions.
-               *
-               * @param s1 the first stream
-               * @param s2 a function producing the second stream based on elements of the first
-               * @param <T1> the element type of the first stream
-               * @param <T2> the element type of the second stream
-               * @return a lazy for-comprehension over two streams
-               * @throws NullPointerException if any argument is {@code null}
-               */
-              public static <T1, T2> ForLazy2Stream<T1, T2> forc(Stream<T1> s1, Function1<? super T1, Stream<T2>> s2) {
-                  Objects.requireNonNull(s1, "s1 is null");
-                  Objects.requireNonNull(s2, "s2 is null");
-                  return new ForLazy2Stream<>(s1, s2);
-              }
-
-              /**
-               * Represents a for-comprehension where the second {@link Stream}
-               * is computed lazily based on elements of the first stream.
-               *
-               * @param <T1> the element type of the first stream
-               * @param <T2> the element type of the second stream
-               */
-              public static final class ForLazy2Stream<T1, T2> {
-
-                  private final Stream<T1> s1;
-                  private final Function1<? super T1, Stream<T2>> s2;
-
-                  private ForLazy2Stream(Stream<T1> s1, Function1<? super T1, Stream<T2>> s2) {
-                      this.s1 = s1;
-                      this.s2 = s2;
-                  }
-
-                  /**
-                   * Produces the result of the for-comprehension by applying the given function
-                   * to the combined stream elements.
-                   * <p>
-                   * The second stream is evaluated for each element of the first stream.
-                   *
-                   * @param f the combining function
-                   * @param <R> the result type
-                   * @return a stream containing the results of applying the function to all combinations
-                   * @throws NullPointerException if the function is {@code null}
-                   */
-                  public <R> Stream<R> yield(Function2<? super T1, ? super T2, ? extends R> f) {
-                      Objects.requireNonNull(f, "f is null");
-
-                      return s1.flatMap(t1 -> s2.apply(t1).map(t2 -> f.apply(t1, t2)));
-                  }
-              }
-            """, 2),
-          indent("""
-              /**
-               * Creates a lazy for-comprehension over two {@link Iterable} values.
-               * <p>
-               * The second iterable is computed lazily and depends on the elements of the first.
-               * This enables dependent sequencing similar to Scala's for-expressions.
-               *
-               * @param i1 the first iterable
-               * @param i2 a function producing the second iterable based on elements of the first
-               * @param <T1> the element type of the first iterable
-               * @param <T2> the element type of the second iterable
-               * @return a lazy for-comprehension over two iterables
-               * @throws NullPointerException if any argument is {@code null}
-               */
-              public static <T1, T2> ForLazy2Iterable<T1, T2> forc(Iterable<T1> i1, Function1<? super T1, Iterable<T2>> i2) {
-                  Objects.requireNonNull(i1, "i1 is null");
-                  Objects.requireNonNull(i2, "i2 is null");
-                  return new ForLazy2Iterable<>(i1, i2);
-              }
-
-              /**
-               * Represents a for-comprehension where the second {@link Iterable}
-               * is computed lazily based on elements of the first iterable.
-               *
-               * @param <T1> the element type of the first iterable
-               * @param <T2> the element type of the second iterable
-               */
-              public static final class ForLazy2Iterable<T1, T2> {
-
-                  private final Iterable<T1> i1;
-                  private final Function1<? super T1, Iterable<T2>> i2;
-
-                  private ForLazy2Iterable(Iterable<T1> i1, Function1<? super T1, Iterable<T2>> i2) {
-                      this.i1 = i1;
-                      this.i2 = i2;
-                  }
-
-                  /**
-                   * Produces the result of the for-comprehension by applying the given function
-                   * to the combined iterable elements.
-                   * <p>
-                   * The second iterable is evaluated for each element of the first iterable.
-                   *
-                   * @param f the combining function
-                   * @param <R> the result type
-                   * @return a list containing the results of applying the function to all combinations
-                   * @throws NullPointerException if the function is {@code null}
-                   */
-                  public <R> List<R> yield(Function2<? super T1, ? super T2, ? extends R> f) {
-                      Objects.requireNonNull(f, "f is null");
-
-                      List<R> result = new ArrayList<>();
-                      for (T1 t1 : i1) {
-                          for (T2 t2 : i2.apply(t1)) {
-                              result.add(f.apply(t1, t2));
-                          }
-                      }
-                      return Collections.unmodifiableList(result);
-                  }
-              }
-            """, 2));
+          indent(IntStream.rangeClosed(2, arity)
+            .mapToObj(ForComprehensionGenerator::generateLazyOptional)
+            .collect(Collectors.joining("\n")), 4),
+          indent(IntStream.rangeClosed(2, arity)
+            .mapToObj(ForComprehensionGenerator::generateLazyStream)
+            .collect(Collectors.joining("\n")), 4),
+          indent(IntStream.rangeClosed(2, arity)
+            .mapToObj(ForComprehensionGenerator::generateLazyIterable)
+            .collect(Collectors.joining("\n")), 4));
     }
 
     private static String generateEagerOptional(int arity) {
@@ -619,5 +456,203 @@ class ForComprehensionGenerator {
 
     private static String indent(String s, int spaces) {
         return s.lines().map(l -> l.isEmpty() ? l : " ".repeat(spaces) + l).collect(Collectors.joining("\n"));
+    }
+
+    private static String generateLazyOptional(int arity) {
+        var tparams = typeParams(arity);
+        var methodParams = lazyParams(arity, "Optional", "o");
+        var ctorArgs = argNamesPrefixed(arity, "o");
+        var fields = lazyFields(arity, "Optional", "o");
+        var nnp = nullChecks(arity, "o");
+        var yield = yieldLazyFlatMapChain(arity, "o");
+
+        return """
+          public static <%s> ForLazy%dOptional<%s> forc(%s) {
+          %s
+              return new ForLazy%dOptional<>(%s);
+          }
+
+          public static final class ForLazy%dOptional<%s> {
+
+          %s
+
+              private ForLazy%dOptional(%s) {
+          %s
+              }
+
+              public <R> Optional<R> yield(Function%d<%s> f) {
+                  Objects.requireNonNull(f, "f is null");
+
+          %s
+              }
+          }
+          """.formatted(
+          tparams,
+          arity, tparams,
+          methodParams,
+          indent(nnp, 4),
+          arity, ctorArgs,
+          arity, tparams,
+          indent(fields, 4),
+          arity, methodParams,
+          indent(assignFields(arity, "o"), 8),
+          arity, tparamsWithRWildcard(arity),
+          indent(yield, 8)
+        );
+    }
+
+    private static String generateLazyStream(int arity) {
+        var tparams = typeParams(arity);
+        var methodParams = lazyParams(arity, "Stream", "s");
+        var ctorArgs = argNamesPrefixed(arity, "s");
+        var fields = lazyFields(arity, "Stream", "s");
+        var nnp = nullChecks(arity, "s");
+        var yield = yieldLazyFlatMapChain(arity, "s");
+
+        return """
+          public static <%s> ForLazy%dStream<%s> forc(%s) {
+          %s
+              return new ForLazy%dStream<>(%s);
+          }
+
+          public static final class ForLazy%dStream<%s> {
+
+          %s
+
+              private ForLazy%dStream(%s) {
+          %s
+              }
+
+              public <R> Stream<R> yield(Function%d<%s> f) {
+                  Objects.requireNonNull(f, "f is null");
+
+          %s
+              }
+          }
+          """.formatted(
+          tparams,
+          arity, tparams,
+          methodParams,
+          indent(nnp, 4),
+          arity, ctorArgs,
+          arity, tparams,
+          indent(fields, 4),
+          arity, methodParams,
+          indent(assignFields(arity, "s"), 8),
+          arity, tparamsWithRWildcard(arity),
+          indent(yield, 8)
+        );
+    }
+
+    private static String generateLazyIterable(int arity) {
+        var tparams = typeParams(arity);
+        var methodParams = lazyParams(arity, "Iterable", "i");
+        var ctorArgs = argNamesPrefixed(arity, "i");
+        var fields = lazyFields(arity, "Iterable", "i");
+        var nnp = nullChecks(arity, "i");
+        var yield = yieldLazyIterableChain(arity);
+
+        return """
+          public static <%s> ForLazy%dIterable<%s> forc(%s) {
+          %s
+              return new ForLazy%dIterable<>(%s);
+          }
+
+          public static final class ForLazy%dIterable<%s> {
+
+          %s
+
+              private ForLazy%dIterable(%s) {
+          %s
+              }
+
+              public <R> List<R> yield(Function%d<%s> f) {
+                  Objects.requireNonNull(f, "f is null");
+
+          %s
+              }
+          }
+          """.formatted(
+          tparams,
+          arity, tparams,
+          methodParams,
+          indent(nnp, 4),
+          arity, ctorArgs,
+          arity, tparams,
+          indent(fields, 4),
+          arity, methodParams,
+          indent(assignFields(arity, "i"), 8),
+          arity, tparamsWithRWildcard(arity),
+          indent(yield, 8)
+        );
+    }
+
+    private static String lazyParams(int arity, String typeName, String prefix) {
+        var sb = new StringBuilder("%s<T1> %s1".formatted(typeName, prefix));
+        for (int i = 2; i <= arity; i++) {
+            var funcParams = IntStream.rangeClosed(1, i - 1)
+              .mapToObj("? super T%d"::formatted)
+              .collect(Collectors.joining(", "));
+            sb.append(", Function%d<%s, %s<T%d>> %s%d".formatted(i - 1, funcParams, typeName, i, prefix, i));
+        }
+        return sb.toString();
+    }
+
+    private static String lazyFields(int arity, String typeName, String prefix) {
+        var sb = new StringBuilder("private final %s<T1> %s1;".formatted(typeName, prefix));
+        for (int i = 2; i <= arity; i++) {
+            var funcParams = IntStream.rangeClosed(1, i - 1)
+              .mapToObj("? super T%d"::formatted)
+              .collect(Collectors.joining(", "));
+            sb.append("\nprivate final Function%d<%s, %s<T%d>> %s%d;".formatted(i - 1, funcParams, typeName, i, prefix, i));
+        }
+        return sb.toString();
+    }
+
+    private static String yieldLazyFlatMapChain(int arity, String prefix) {
+        var args = IntStream.rangeClosed(1, arity)
+          .mapToObj(i -> "t" + i)
+          .collect(Collectors.joining(", "));
+
+        var sb = new StringBuilder("return %s1.flatMap(t1 ->\n".formatted(prefix));
+        for (int i = 2; i < arity; i++) {
+            var applyArgs = IntStream.rangeClosed(1, i - 1)
+              .mapToObj(j -> "t" + j)
+              .collect(Collectors.joining(", "));
+            sb.append(" ".repeat((i - 1) * 4));
+            sb.append("%s%d.apply(%s).flatMap(t%d ->\n".formatted(prefix, i, applyArgs, i));
+        }
+        var lastApplyArgs = IntStream.rangeClosed(1, arity - 1)
+          .mapToObj(j -> "t" + j)
+          .collect(Collectors.joining(", "));
+        sb.append(" ".repeat((arity - 1) * 4));
+        sb.append("%s%d.apply(%s).map(t%d -> f.apply(%s))".formatted(prefix, arity, lastApplyArgs, arity, args));
+        sb.append(")".repeat(arity - 1));
+        sb.append(";");
+        return sb.toString();
+    }
+
+    private static String yieldLazyIterableChain(int arity) {
+        var args = IntStream.rangeClosed(1, arity)
+          .mapToObj(i -> "t" + i)
+          .collect(Collectors.joining(", "));
+
+        var sb = new StringBuilder("List<R> result = new ArrayList<>();\n");
+        sb.append("for (T1 t1 : i1) {\n");
+        for (int i = 2; i <= arity; i++) {
+            var applyArgs = IntStream.rangeClosed(1, i - 1)
+              .mapToObj(j -> "t" + j)
+              .collect(Collectors.joining(", "));
+            sb.append(" ".repeat((i - 1) * 4));
+            sb.append("for (T%d t%d : i%d.apply(%s)) {\n".formatted(i, i, i, applyArgs));
+        }
+        sb.append(" ".repeat(arity * 4));
+        sb.append("result.add(f.apply(%s));\n".formatted(args));
+        for (int i = arity; i >= 1; i--) {
+            sb.append(" ".repeat((i - 1) * 4));
+            sb.append("}\n");
+        }
+        sb.append("return Collections.unmodifiableList(result);");
+        return sb.toString();
     }
 }
