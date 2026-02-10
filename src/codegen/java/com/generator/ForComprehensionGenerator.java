@@ -342,14 +342,8 @@ class ForComprehensionGenerator {
           .mapToObj(i -> "t" + i)
           .collect(Collectors.joining(", "));
 
-        var collections = IntStream.rangeClosed(2, arity)
-          .mapToObj(i -> "List<T%d> l%d = new ArrayList<>();\ni%d.forEach(l%d::add);".formatted(i, i, i, i))
-          .collect(Collectors.joining("\n"));
-
         var loops = IntStream.rangeClosed(1, arity)
-          .mapToObj(i -> " ".repeat((i - 1) * 4) + (i == 1
-            ? "for (T1 t1 : i1) {"
-            : "for (T%d t%d : l%d) {".formatted(i, i, i)))
+          .mapToObj(i -> " ".repeat((i - 1) * 4) + "for (T%d t%d : i%d) {".formatted(i, i, i))
           .collect(Collectors.joining("\n"));
 
         var body = " ".repeat(arity * 4) + "result.add(f.apply(" + args + "));";
@@ -359,7 +353,7 @@ class ForComprehensionGenerator {
           .mapToObj(i -> " ".repeat(i * 4) + "}")
           .collect(Collectors.joining("\n"));
 
-        return collections + "\nList<R> result = new ArrayList<>();\n" + loops + "\n" + body + "\n" + closes + "\nreturn result;";
+        return "List<R> result = new ArrayList<>();\n" + loops + "\n" + body + "\n" + closes + "\nreturn result;";
     }
 
     private static String typeParams(int arity) {

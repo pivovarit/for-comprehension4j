@@ -1160,11 +1160,9 @@ public final class ForComprehension {
         public <R> List<R> yield(Function2<? super T1, ? super T2, ? extends R> f) {
             Objects.requireNonNull(f, "f is null");
 
-            List<T2> l2 = new ArrayList<>();
-            i2.forEach(l2::add);
             List<R> result = new ArrayList<>();
             for (T1 t1 : i1) {
-                for (T2 t2 : l2) {
+                for (T2 t2 : i2) {
                     result.add(f.apply(t1, t2));
                 }
             }
@@ -1225,14 +1223,10 @@ public final class ForComprehension {
         public <R> List<R> yield(Function3<? super T1, ? super T2, ? super T3, ? extends R> f) {
             Objects.requireNonNull(f, "f is null");
 
-            List<T2> l2 = new ArrayList<>();
-            i2.forEach(l2::add);
-            List<T3> l3 = new ArrayList<>();
-            i3.forEach(l3::add);
             List<R> result = new ArrayList<>();
             for (T1 t1 : i1) {
-                for (T2 t2 : l2) {
-                    for (T3 t3 : l3) {
+                for (T2 t2 : i2) {
+                    for (T3 t3 : i3) {
                         result.add(f.apply(t1, t2, t3));
                     }
                 }
@@ -1300,17 +1294,11 @@ public final class ForComprehension {
         public <R> List<R> yield(Function4<? super T1, ? super T2, ? super T3, ? super T4, ? extends R> f) {
             Objects.requireNonNull(f, "f is null");
 
-            List<T2> l2 = new ArrayList<>();
-            i2.forEach(l2::add);
-            List<T3> l3 = new ArrayList<>();
-            i3.forEach(l3::add);
-            List<T4> l4 = new ArrayList<>();
-            i4.forEach(l4::add);
             List<R> result = new ArrayList<>();
             for (T1 t1 : i1) {
-                for (T2 t2 : l2) {
-                    for (T3 t3 : l3) {
-                        for (T4 t4 : l4) {
+                for (T2 t2 : i2) {
+                    for (T3 t3 : i3) {
+                        for (T4 t4 : i4) {
                             result.add(f.apply(t1, t2, t3, t4));
                         }
                     }
@@ -1385,20 +1373,12 @@ public final class ForComprehension {
         public <R> List<R> yield(Function5<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, ? extends R> f) {
             Objects.requireNonNull(f, "f is null");
 
-            List<T2> l2 = new ArrayList<>();
-            i2.forEach(l2::add);
-            List<T3> l3 = new ArrayList<>();
-            i3.forEach(l3::add);
-            List<T4> l4 = new ArrayList<>();
-            i4.forEach(l4::add);
-            List<T5> l5 = new ArrayList<>();
-            i5.forEach(l5::add);
             List<R> result = new ArrayList<>();
             for (T1 t1 : i1) {
-                for (T2 t2 : l2) {
-                    for (T3 t3 : l3) {
-                        for (T4 t4 : l4) {
-                            for (T5 t5 : l5) {
+                for (T2 t2 : i2) {
+                    for (T3 t3 : i3) {
+                        for (T4 t4 : i4) {
+                            for (T5 t5 : i5) {
                                 result.add(f.apply(t1, t2, t3, t4, t5));
                             }
                         }
@@ -1480,23 +1460,13 @@ public final class ForComprehension {
         public <R> List<R> yield(Function6<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, ? super T6, ? extends R> f) {
             Objects.requireNonNull(f, "f is null");
 
-            List<T2> l2 = new ArrayList<>();
-            i2.forEach(l2::add);
-            List<T3> l3 = new ArrayList<>();
-            i3.forEach(l3::add);
-            List<T4> l4 = new ArrayList<>();
-            i4.forEach(l4::add);
-            List<T5> l5 = new ArrayList<>();
-            i5.forEach(l5::add);
-            List<T6> l6 = new ArrayList<>();
-            i6.forEach(l6::add);
             List<R> result = new ArrayList<>();
             for (T1 t1 : i1) {
-                for (T2 t2 : l2) {
-                    for (T3 t3 : l3) {
-                        for (T4 t4 : l4) {
-                            for (T5 t5 : l5) {
-                                for (T6 t6 : l6) {
+                for (T2 t2 : i2) {
+                    for (T3 t3 : i3) {
+                        for (T4 t4 : i4) {
+                            for (T5 t5 : i5) {
+                                for (T6 t6 : i6) {
                                     result.add(f.apply(t1, t2, t3, t4, t5, t6));
                                 }
                             }
@@ -1585,26 +1555,14 @@ public final class ForComprehension {
         public <R> List<R> yield(Function7<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, ? super T6, ? super T7, ? extends R> f) {
             Objects.requireNonNull(f, "f is null");
 
-            List<T2> l2 = new ArrayList<>();
-            i2.forEach(l2::add);
-            List<T3> l3 = new ArrayList<>();
-            i3.forEach(l3::add);
-            List<T4> l4 = new ArrayList<>();
-            i4.forEach(l4::add);
-            List<T5> l5 = new ArrayList<>();
-            i5.forEach(l5::add);
-            List<T6> l6 = new ArrayList<>();
-            i6.forEach(l6::add);
-            List<T7> l7 = new ArrayList<>();
-            i7.forEach(l7::add);
             List<R> result = new ArrayList<>();
             for (T1 t1 : i1) {
-                for (T2 t2 : l2) {
-                    for (T3 t3 : l3) {
-                        for (T4 t4 : l4) {
-                            for (T5 t5 : l5) {
-                                for (T6 t6 : l6) {
-                                    for (T7 t7 : l7) {
+                for (T2 t2 : i2) {
+                    for (T3 t3 : i3) {
+                        for (T4 t4 : i4) {
+                            for (T5 t5 : i5) {
+                                for (T6 t6 : i6) {
+                                    for (T7 t7 : i7) {
                                         result.add(f.apply(t1, t2, t3, t4, t5, t6, t7));
                                     }
                                 }
@@ -1700,29 +1658,15 @@ public final class ForComprehension {
         public <R> List<R> yield(Function8<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, ? super T6, ? super T7, ? super T8, ? extends R> f) {
             Objects.requireNonNull(f, "f is null");
 
-            List<T2> l2 = new ArrayList<>();
-            i2.forEach(l2::add);
-            List<T3> l3 = new ArrayList<>();
-            i3.forEach(l3::add);
-            List<T4> l4 = new ArrayList<>();
-            i4.forEach(l4::add);
-            List<T5> l5 = new ArrayList<>();
-            i5.forEach(l5::add);
-            List<T6> l6 = new ArrayList<>();
-            i6.forEach(l6::add);
-            List<T7> l7 = new ArrayList<>();
-            i7.forEach(l7::add);
-            List<T8> l8 = new ArrayList<>();
-            i8.forEach(l8::add);
             List<R> result = new ArrayList<>();
             for (T1 t1 : i1) {
-                for (T2 t2 : l2) {
-                    for (T3 t3 : l3) {
-                        for (T4 t4 : l4) {
-                            for (T5 t5 : l5) {
-                                for (T6 t6 : l6) {
-                                    for (T7 t7 : l7) {
-                                        for (T8 t8 : l8) {
+                for (T2 t2 : i2) {
+                    for (T3 t3 : i3) {
+                        for (T4 t4 : i4) {
+                            for (T5 t5 : i5) {
+                                for (T6 t6 : i6) {
+                                    for (T7 t7 : i7) {
+                                        for (T8 t8 : i8) {
                                             result.add(f.apply(t1, t2, t3, t4, t5, t6, t7, t8));
                                         }
                                     }
