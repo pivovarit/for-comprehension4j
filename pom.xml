@@ -186,6 +186,19 @@
                             </sources>
                         </configuration>
                     </execution>
+
+                    <execution>
+                        <id>add-generated-tests</id>
+                        <phase>generate-test-sources</phase>
+                        <goals>
+                            <goal>add-test-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>${project.basedir}/src/test/java-generated</source>
+                            </sources>
+                        </configuration>
+                    </execution>
                 </executions>
             </plugin>
 
@@ -197,6 +210,12 @@
                     <filesets>
                         <fileset>
                             <directory>${project.basedir}/src/main/java-generated</directory>
+                            <includes>
+                                <include>**/*</include>
+                            </includes>
+                        </fileset>
+                        <fileset>
+                            <directory>${project.basedir}/src/test/java-generated</directory>
                             <includes>
                                 <include>**/*</include>
                             </includes>
@@ -220,6 +239,7 @@
                             <mainClass>com.generator.Generator</mainClass>
                             <arguments>
                                 <argument>${project.basedir}/src/main/java-generated</argument>
+                                <argument>${project.basedir}/src/test/java-generated</argument>
                             </arguments>
                             <additionalClasspathElements>
                                 <additionalClasspathElement>

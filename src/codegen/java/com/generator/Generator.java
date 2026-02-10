@@ -8,17 +8,20 @@ public class Generator {
 
     private static final String PACKAGE_NAME = "com/pivovarit/forc";
     private static final String API_FILE_NAME = "ForComprehension.java";
+    private static final String TEST_FILE_NAME = "ForComprehensionTest.java";
 
     private static final int ARITY = 8;
 
     void main(String[] args) throws IOException {
         var dir = Files.createDirectories(Path.of(args[0], PACKAGE_NAME));
+        var testDir = Files.createDirectories(Path.of(args[1], PACKAGE_NAME));
 
         for (int i = 1; i <= ARITY; i++) {
             Files.writeString(dir.resolve("Function%d.java".formatted(i)), header() + FunctionTypeGenerator.generate(i));
         }
 
         Files.writeString(dir.resolve(API_FILE_NAME), header() + ForComprehensionGenerator.generate(ARITY));
+        Files.writeString(testDir.resolve(TEST_FILE_NAME), header() + ForComprehensionTestGenerator.generate(ARITY));
     }
 
     private static String header() {
