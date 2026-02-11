@@ -1,11 +1,42 @@
 package com.generator;
 
+import java.util.Arrays;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 class ForComprehensionGenerator {
 
+    enum ContainerType {
+        OPTIONAL("Optional", "o", "Optional<R>", "optional value"),
+        STREAM("Stream", "s", "Stream<R>", "stream"),
+        ITERABLE("Iterable", "i", "List<R>", "iterable");
+
+        final String typeName;
+        final String prefix;
+        final String returnType;
+        final String javadocNoun;
+
+        ContainerType(String typeName, String prefix, String returnType, String javadocNoun) {
+            this.typeName = typeName;
+            this.prefix = prefix;
+            this.returnType = returnType;
+            this.javadocNoun = javadocNoun;
+        }
+    }
+
     static String generate(int arity) {
+        var sections = Arrays.stream(ContainerType.values())
+          .map(ct -> Generator.indent(IntStream.rangeClosed(2, arity)
+            .mapToObj(a -> generateEager(a, ct))
+            .collect(Collectors.joining("\n")), 4))
+          .collect(Collectors.toList());
+
+        var lazySections = Arrays.stream(ContainerType.values())
+          .map(ct -> Generator.indent(IntStream.rangeClosed(2, arity)
+            .mapToObj(a -> generateLazy(a, ct))
+            .collect(Collectors.joining("\n")), 4))
+          .collect(Collectors.toList());
+
         return """
           package com.pivovarit.forc;
 
@@ -41,270 +72,198 @@ class ForComprehensionGenerator {
 
           %s
           }
-          """.formatted(indent(IntStream.rangeClosed(2, arity)
-            .mapToObj(ForComprehensionGenerator::generateEagerOptional)
-            .collect(Collectors.joining("\n")), 4),
-          indent(IntStream.rangeClosed(2, arity)
-            .mapToObj(ForComprehensionGenerator::generateEagerStream)
-            .collect(Collectors.joining("\n")), 4),
-          indent(IntStream.rangeClosed(2, arity)
-            .mapToObj(ForComprehensionGenerator::generateEagerIterable)
-            .collect(Collectors.joining("\n")), 4),
-          indent(IntStream.rangeClosed(2, arity)
-            .mapToObj(ForComprehensionGenerator::generateLazyOptional)
-            .collect(Collectors.joining("\n")), 4),
-          indent(IntStream.rangeClosed(2, arity)
-            .mapToObj(ForComprehensionGenerator::generateLazyStream)
-            .collect(Collectors.joining("\n")), 4),
-          indent(IntStream.rangeClosed(2, arity)
-            .mapToObj(ForComprehensionGenerator::generateLazyIterable)
-            .collect(Collectors.joining("\n")), 4));
+          """.formatted(
+          sections.get(0),
+          sections.get(1),
+          sections.get(2),
+          lazySections.get(0),
+          lazySections.get(1),
+          lazySections.get(2));
     }
 
-    private static String generateEagerOptional(int arity) {
+    private static String generateEager(int arity, ContainerType ct) {
         var tparams = typeParams(arity);
-        var methodParams = optionalParams(arity);
-        var ctorArgs = argNamesPrefixed(arity, "o");
-        var fields = optionalFields(arity);
-        var ctorParams = optionalCtorParams(arity);
-        var nnp = nullChecks(arity, "o");
-        var yield = yieldOptionalChain(arity);
+        var methodParams = params(arity, ct.typeName, ct.prefix);
+        var ctorArgs = argNamesPrefixed(arity, ct.prefix);
+        var fields = fields(arity, ct.typeName, ct.prefix);
+        var ctorParams = params(arity, ct.typeName, ct.prefix);
+        var nnp = nullChecks(arity, ct.prefix);
+        var yield = eagerYieldChain(arity, ct);
 
         return """
           /**
-           * Creates a strict (eager) for-comprehension over %d {@link Optional} value%s.
+           * Creates a strict (eager) for-comprehension over %d {@link %s} value%s.
            * <p>
-           * All optionals are evaluated eagerly, and the resulting comprehension
-           * yields a value only if all optionals are present.
+           * %s
            *
            * %s
            * %s
-           * @return a for-comprehension over %d optional value%s
+           * @return a for-comprehension over %d %s value%s
            * @throws NullPointerException if any argument is {@code null}
            */
-          public static <%s> For%dOptional<%s> forc(%s) {
+          public static <%s> For%d%s<%s> forc(%s) {
           %s
-              return new For%dOptional<>(%s);
+              return new For%d%s<>(%s);
           }
 
           /**
-           * Represents a for-comprehension over %d eagerly evaluated {@link Optional} value%s.
+           * Represents a for-comprehension over %d eagerly evaluated {@link %s} value%s.
            *
            * %s
            */
-          public static final class For%dOptional<%s> {
+          public static final class For%d%s<%s> {
 
           %s
 
-              private For%dOptional(%s) {
+              private For%d%s(%s) {
           %s
               }
 
               /**
                * Produces the result of the for-comprehension by applying the given function
-               * to the contained values.
-               * <p>
-               * The function is invoked only if all optionals are present.
-               *
+               * to the %s.
+               *%s
                * @param f the combining function
                * @param <R> the result type
-               * @return an optional containing the result of the function application,
-               *         or {@link Optional#empty()} if any input optional is empty
+               * @return %s
                * @throws NullPointerException if the function is {@code null}
                */
-              public <R> Optional<R> yield(Function%d<%s> f) {
+              public <R> %s yield(Function%d<%s> f) {
                   Objects.requireNonNull(f, "f is null");
 
           %s
               }
           }
           """.formatted(
-          arity, "s",
-          javadocParams(arity, "o", "optional value"),
-          javadocTypeParams(arity, "optional value"),
-          arity, "s",
+          arity, ct.typeName, "s",
+          eagerJavadocDescription(ct),
+          javadocParams(arity, ct.prefix, ct.javadocNoun),
+          javadocTypeParams(arity, ct.javadocNoun),
+          arity, ct.typeName.toLowerCase(), "s",
           typeParams(arity),
-          arity, tparams,
+          arity, ct.typeName, tparams,
           methodParams,
-          indent(nnp, 4),
-          arity, ctorArgs,
-          arity, "s",
-          javadocTypeParams(arity, "optional value"),
-          arity, tparams,
-          indent(fields, 4),
-          arity, ctorParams,
-          indent(assignFields(arity, "o"), 8),
-          arity, tparamsWithRWildcard(arity),
-          indent(yield, 8)
+          Generator.indent(nnp, 4),
+          arity, ct.typeName, ctorArgs,
+          arity, ct.typeName, "s",
+          javadocTypeParams(arity, ct.javadocNoun),
+          arity, ct.typeName, tparams,
+          Generator.indent(fields, 4),
+          arity, ct.typeName, ctorParams,
+          Generator.indent(assignFields(arity, ct.prefix), 8),
+          eagerYieldJavadocSubject(ct),
+          eagerYieldJavadocExtra(ct),
+          eagerYieldJavadocReturn(ct),
+          ct.returnType, arity, tparamsWithRWildcard(arity),
+          Generator.indent(yield, 8)
         );
     }
 
-    private static String generateEagerStream(int arity) {
+    private static String eagerJavadocDescription(ContainerType ct) {
+        return switch (ct) {
+            case OPTIONAL -> "All optionals are evaluated eagerly, and the resulting comprehension\n * yields a value only if all optionals are present.";
+            case STREAM -> "All streams are evaluated eagerly. The resulting comprehension yields\n * the cartesian product of all streams, transformed by the yield function.";
+            case ITERABLE -> "All iterables are evaluated eagerly. The resulting comprehension yields\n * the cartesian product of all iterables, transformed by the yield function.";
+        };
+    }
+
+    private static String eagerYieldJavadocSubject(ContainerType ct) {
+        return switch (ct) {
+            case OPTIONAL -> "contained values";
+            case STREAM -> "cartesian product of the stream elements";
+            case ITERABLE -> "cartesian product of the iterable elements";
+        };
+    }
+
+    private static String eagerYieldJavadocExtra(ContainerType ct) {
+        return switch (ct) {
+            case OPTIONAL -> " <p>\n     * The function is invoked only if all optionals are present.\n     *";
+            case STREAM, ITERABLE -> "";
+        };
+    }
+
+    private static String eagerYieldJavadocReturn(ContainerType ct) {
+        return switch (ct) {
+            case OPTIONAL -> "an optional containing the result of the function application,\n     *         or {@link Optional#empty()} if any input optional is empty";
+            case STREAM -> "a stream containing the results of applying the function to all combinations";
+            case ITERABLE -> "a list containing the results of applying the function to all combinations";
+        };
+    }
+
+    private static String eagerYieldChain(int arity, ContainerType ct) {
+        return switch (ct) {
+            case OPTIONAL -> yieldFlatMapChain(arity, "o");
+            case STREAM -> yieldStreamChain(arity);
+            case ITERABLE -> yieldForLoopChain(arity, "i");
+        };
+    }
+
+    private static String generateLazy(int arity, ContainerType ct) {
         var tparams = typeParams(arity);
-        var methodParams = streamParams(arity);
-        var ctorArgs = argNamesPrefixed(arity, "s");
-        var fields = streamFields(arity);
-        var ctorParams = streamParams(arity);
-        var nnp = nullChecks(arity, "s");
-        var yield = yieldStreamChain(arity);
+        var methodParams = lazyParams(arity, ct.typeName, ct.prefix);
+        var ctorArgs = argNamesPrefixed(arity, ct.prefix);
+        var fields = lazyFields(arity, ct.typeName, ct.prefix);
+        var nnp = nullChecks(arity, ct.prefix);
+        var yield = lazyYieldChain(arity, ct);
 
         return """
-          /**
-           * Creates a strict (eager) for-comprehension over %d {@link Stream} value%s.
-           * <p>
-           * All streams are evaluated eagerly. The resulting comprehension yields
-           * the cartesian product of all streams, transformed by the yield function.
-           *
-           * %s
-           * %s
-           * @return a for-comprehension over %d stream value%s
-           * @throws NullPointerException if any argument is {@code null}
-           */
-          public static <%s> For%dStream<%s> forc(%s) {
+          public static <%s> ForLazy%d%s<%s> forc(%s) {
           %s
-              return new For%dStream<>(%s);
+              return new ForLazy%d%s<>(%s);
           }
 
-          /**
-           * Represents a for-comprehension over %d eagerly evaluated {@link Stream} value%s.
-           *
-           * %s
-           */
-          public static final class For%dStream<%s> {
+          public static final class ForLazy%d%s<%s> {
 
           %s
 
-              private For%dStream(%s) {
+              private ForLazy%d%s(%s) {
           %s
               }
 
-              /**
-               * Produces the result of the for-comprehension by applying the given function
-               * to the cartesian product of the stream elements.
-               *
-               * @param f the combining function
-               * @param <R> the result type
-               * @return a stream containing the results of applying the function to all combinations
-               * @throws NullPointerException if the function is {@code null}
-               */
-              public <R> Stream<R> yield(Function%d<%s> f) {
+              public <R> %s yield(Function%d<%s> f) {
                   Objects.requireNonNull(f, "f is null");
 
           %s
               }
           }
           """.formatted(
-          arity, "s",
-          javadocParams(arity, "s", "stream"),
-          javadocTypeParams(arity, "stream"),
-          arity, "s",
-          typeParams(arity),
-          arity, tparams,
+          tparams,
+          arity, ct.typeName, tparams,
           methodParams,
-          indent(nnp, 4),
-          arity, ctorArgs,
-          arity, "s",
-          javadocTypeParams(arity, "stream"),
-          arity, tparams,
-          indent(fields, 4),
-          arity, ctorParams,
-          indent(assignFields(arity, "s"), 8),
-          arity, tparamsWithRWildcard(arity),
-          indent(yield, 8)
+          Generator.indent(nnp, 4),
+          arity, ct.typeName, ctorArgs,
+          arity, ct.typeName, tparams,
+          Generator.indent(fields, 4),
+          arity, ct.typeName, methodParams,
+          Generator.indent(assignFields(arity, ct.prefix), 8),
+          ct.returnType, arity, tparamsWithRWildcard(arity),
+          Generator.indent(yield, 8)
         );
     }
 
-    private static String generateEagerIterable(int arity) {
-        var tparams = typeParams(arity);
-        var methodParams = iterableParams(arity);
-        var ctorArgs = argNamesPrefixed(arity, "i");
-        var fields = iterableFields(arity);
-        var ctorParams = iterableParams(arity);
-        var nnp = nullChecks(arity, "i");
-        var yield = yieldIterableChain(arity);
-
-        return """
-          /**
-           * Creates a strict (eager) for-comprehension over %d {@link Iterable} value%s.
-           * <p>
-           * All iterables are evaluated eagerly. The resulting comprehension yields
-           * the cartesian product of all iterables, transformed by the yield function.
-           *
-           * %s
-           * %s
-           * @return a for-comprehension over %d iterable value%s
-           * @throws NullPointerException if any argument is {@code null}
-           */
-          public static <%s> For%dIterable<%s> forc(%s) {
-          %s
-              return new For%dIterable<>(%s);
-          }
-
-          /**
-           * Represents a for-comprehension over %d eagerly evaluated {@link Iterable} value%s.
-           *
-           * %s
-           */
-          public static final class For%dIterable<%s> {
-
-          %s
-
-              private For%dIterable(%s) {
-          %s
-              }
-
-              /**
-               * Produces the result of the for-comprehension by applying the given function
-               * to the cartesian product of the iterable elements.
-               *
-               * @param f the combining function
-               * @param <R> the result type
-               * @return a list containing the results of applying the function to all combinations
-               * @throws NullPointerException if the function is {@code null}
-               */
-              public <R> List<R> yield(Function%d<%s> f) {
-                  Objects.requireNonNull(f, "f is null");
-
-          %s
-              }
-          }
-          """.formatted(
-          arity, "s",
-          javadocParams(arity, "i", "iterable"),
-          javadocTypeParams(arity, "iterable"),
-          arity, "s",
-          typeParams(arity),
-          arity, tparams,
-          methodParams,
-          indent(nnp, 4),
-          arity, ctorArgs,
-          arity, "s",
-          javadocTypeParams(arity, "iterable"),
-          arity, tparams,
-          indent(fields, 4),
-          arity, ctorParams,
-          indent(assignFields(arity, "i"), 8),
-          arity, tparamsWithRWildcard(arity),
-          indent(yield, 8)
-        );
+    private static String lazyYieldChain(int arity, ContainerType ct) {
+        return switch (ct) {
+            case OPTIONAL, STREAM -> yieldLazyFlatMapChain(arity, ct.prefix);
+            case ITERABLE -> yieldLazyIterableChain(arity);
+        };
     }
 
-    private static String yieldOptionalChain(int arity) {
+    private static String yieldFlatMapChain(int arity, String prefix) {
         if (arity == 1) {
-            return "return o1.map(t1 -> f.apply(t1));";
+            return "return %s1.map(t1 -> f.apply(t1));".formatted(prefix);
         }
 
         var args = IntStream.rangeClosed(1, arity)
           .mapToObj(i -> "t" + i)
           .collect(Collectors.joining(", "));
 
-        var sb = new StringBuilder("return o1.flatMap(t1 ->\n");
+        var sb = new StringBuilder("return %s1.flatMap(t1 ->\n".formatted(prefix));
         for (int i = 2; i < arity; i++) {
             sb.append(" ".repeat((i - 1) * 4));
-            sb.append("o%d.flatMap(t%d ->\n".formatted(i, i));
+            sb.append("%s%d.flatMap(t%d ->\n".formatted(prefix, i, i));
         }
         sb.append(" ".repeat((arity - 1) * 4));
-        sb.append("o%d.map(t%d -> f.apply(%s))".formatted(arity, arity, args));
+        sb.append("%s%d.map(t%d -> f.apply(%s))".formatted(prefix, arity, arity, args));
         sb.append(")".repeat(arity - 1));
         sb.append(";");
 
@@ -337,13 +296,13 @@ class ForComprehensionGenerator {
         return collections + "\n\n" + sb.toString();
     }
 
-    private static String yieldIterableChain(int arity) {
+    private static String yieldForLoopChain(int arity, String prefix) {
         var args = IntStream.rangeClosed(1, arity)
           .mapToObj(i -> "t" + i)
           .collect(Collectors.joining(", "));
 
         var loops = IntStream.rangeClosed(1, arity)
-          .mapToObj(i -> " ".repeat((i - 1) * 4) + "for (T%d t%d : i%d) {".formatted(i, i, i))
+          .mapToObj(i -> " ".repeat((i - 1) * 4) + "for (T%d t%d : %s%d) {".formatted(i, i, prefix, i))
           .collect(Collectors.joining("\n"));
 
         var body = " ".repeat(arity * 4) + "result.add(f.apply(" + args + "));";
@@ -369,43 +328,15 @@ class ForComprehensionGenerator {
         return (args.isEmpty() ? "" : args + ", ") + "? extends R";
     }
 
-    private static String optionalParams(int arity) {
+    private static String params(int arity, String typeName, String prefix) {
         return IntStream.rangeClosed(1, arity)
-          .mapToObj(i -> "Optional<T%d> o%d".formatted(i, i))
+          .mapToObj(i -> "%s<T%d> %s%d".formatted(typeName, i, prefix, i))
           .collect(Collectors.joining(", "));
     }
 
-    private static String optionalCtorParams(int arity) {
-        return optionalParams(arity);
-    }
-
-    private static String optionalFields(int arity) {
+    private static String fields(int arity, String typeName, String prefix) {
         return IntStream.rangeClosed(1, arity)
-          .mapToObj(i -> "private final Optional<T%d> o%d;".formatted(i, i))
-          .collect(Collectors.joining("\n"));
-    }
-
-    private static String iterableParams(int arity) {
-        return IntStream.rangeClosed(1, arity)
-          .mapToObj(i -> "Iterable<T%d> i%d".formatted(i, i))
-          .collect(Collectors.joining(", "));
-    }
-
-    private static String iterableFields(int arity) {
-        return IntStream.rangeClosed(1, arity)
-          .mapToObj(i -> "private final Iterable<T%d> i%d;".formatted(i, i))
-          .collect(Collectors.joining("\n"));
-    }
-
-    private static String streamParams(int arity) {
-        return IntStream.rangeClosed(1, arity)
-          .mapToObj(i -> "Stream<T%d> s%d".formatted(i, i))
-          .collect(Collectors.joining(", "));
-    }
-
-    private static String streamFields(int arity) {
-        return IntStream.rangeClosed(1, arity)
-          .mapToObj(i -> "private final Stream<T%d> s%d;".formatted(i, i))
+          .mapToObj(i -> "private final %s<T%d> %s%d;".formatted(typeName, i, prefix, i))
           .collect(Collectors.joining("\n"));
     }
 
@@ -429,156 +360,14 @@ class ForComprehensionGenerator {
 
     private static String javadocParams(int arity, String prefix, String description) {
         return IntStream.rangeClosed(1, arity)
-          .mapToObj(i -> "@param %s%d the %s %s".formatted(prefix, i, ordinal(i), description))
+          .mapToObj(i -> "@param %s%d the %s %s".formatted(prefix, i, Generator.ordinal(i), description))
           .collect(Collectors.joining("\n * "));
     }
 
     private static String javadocTypeParams(int arity, String description) {
         return IntStream.rangeClosed(1, arity)
-          .mapToObj(i -> "@param <T%d> the type of the %s %s".formatted(i, ordinal(i), description))
+          .mapToObj(i -> "@param <T%d> the type of the %s %s".formatted(i, Generator.ordinal(i), description))
           .collect(Collectors.joining("\n * "));
-    }
-
-    private static String ordinal(int i) {
-        return switch (i) {
-            case 1 -> "first";
-            case 2 -> "second";
-            case 3 -> "third";
-            default -> i + "th";
-        };
-    }
-
-    private static String indent(String s, int spaces) {
-        return s.lines().map(l -> l.isEmpty() ? l : " ".repeat(spaces) + l).collect(Collectors.joining("\n"));
-    }
-
-    private static String generateLazyOptional(int arity) {
-        var tparams = typeParams(arity);
-        var methodParams = lazyParams(arity, "Optional", "o");
-        var ctorArgs = argNamesPrefixed(arity, "o");
-        var fields = lazyFields(arity, "Optional", "o");
-        var nnp = nullChecks(arity, "o");
-        var yield = yieldLazyFlatMapChain(arity, "o");
-
-        return """
-          public static <%s> ForLazy%dOptional<%s> forc(%s) {
-          %s
-              return new ForLazy%dOptional<>(%s);
-          }
-
-          public static final class ForLazy%dOptional<%s> {
-
-          %s
-
-              private ForLazy%dOptional(%s) {
-          %s
-              }
-
-              public <R> Optional<R> yield(Function%d<%s> f) {
-                  Objects.requireNonNull(f, "f is null");
-
-          %s
-              }
-          }
-          """.formatted(
-          tparams,
-          arity, tparams,
-          methodParams,
-          indent(nnp, 4),
-          arity, ctorArgs,
-          arity, tparams,
-          indent(fields, 4),
-          arity, methodParams,
-          indent(assignFields(arity, "o"), 8),
-          arity, tparamsWithRWildcard(arity),
-          indent(yield, 8)
-        );
-    }
-
-    private static String generateLazyStream(int arity) {
-        var tparams = typeParams(arity);
-        var methodParams = lazyParams(arity, "Stream", "s");
-        var ctorArgs = argNamesPrefixed(arity, "s");
-        var fields = lazyFields(arity, "Stream", "s");
-        var nnp = nullChecks(arity, "s");
-        var yield = yieldLazyFlatMapChain(arity, "s");
-
-        return """
-          public static <%s> ForLazy%dStream<%s> forc(%s) {
-          %s
-              return new ForLazy%dStream<>(%s);
-          }
-
-          public static final class ForLazy%dStream<%s> {
-
-          %s
-
-              private ForLazy%dStream(%s) {
-          %s
-              }
-
-              public <R> Stream<R> yield(Function%d<%s> f) {
-                  Objects.requireNonNull(f, "f is null");
-
-          %s
-              }
-          }
-          """.formatted(
-          tparams,
-          arity, tparams,
-          methodParams,
-          indent(nnp, 4),
-          arity, ctorArgs,
-          arity, tparams,
-          indent(fields, 4),
-          arity, methodParams,
-          indent(assignFields(arity, "s"), 8),
-          arity, tparamsWithRWildcard(arity),
-          indent(yield, 8)
-        );
-    }
-
-    private static String generateLazyIterable(int arity) {
-        var tparams = typeParams(arity);
-        var methodParams = lazyParams(arity, "Iterable", "i");
-        var ctorArgs = argNamesPrefixed(arity, "i");
-        var fields = lazyFields(arity, "Iterable", "i");
-        var nnp = nullChecks(arity, "i");
-        var yield = yieldLazyIterableChain(arity);
-
-        return """
-          public static <%s> ForLazy%dIterable<%s> forc(%s) {
-          %s
-              return new ForLazy%dIterable<>(%s);
-          }
-
-          public static final class ForLazy%dIterable<%s> {
-
-          %s
-
-              private ForLazy%dIterable(%s) {
-          %s
-              }
-
-              public <R> List<R> yield(Function%d<%s> f) {
-                  Objects.requireNonNull(f, "f is null");
-
-          %s
-              }
-          }
-          """.formatted(
-          tparams,
-          arity, tparams,
-          methodParams,
-          indent(nnp, 4),
-          arity, ctorArgs,
-          arity, tparams,
-          indent(fields, 4),
-          arity, methodParams,
-          indent(assignFields(arity, "i"), 8),
-          arity, tparamsWithRWildcard(arity),
-          indent(yield, 8)
-        );
     }
 
     private static String lazyParams(int arity, String typeName, String prefix) {

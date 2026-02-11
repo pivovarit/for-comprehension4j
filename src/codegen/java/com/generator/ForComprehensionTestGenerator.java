@@ -1,39 +1,26 @@
 package com.generator;
 
+import com.generator.ForComprehensionGenerator.ContainerType;
+
+import java.util.ArrayList;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 class ForComprehensionTestGenerator {
 
     static String generate(int arity) {
-        var eagerOptionalTests = new StringBuilder();
-        for (int i = 2; i <= arity; i++) {
-            eagerOptionalTests.append(wrapInArityNested(i, generateEagerOptionalTest(i)));
-        }
+        var eagerSections = new ArrayList<String>();
+        var lazySections = new ArrayList<String>();
 
-        var eagerStreamTests = new StringBuilder();
-        for (int i = 2; i <= arity; i++) {
-            eagerStreamTests.append(wrapInArityNested(i, generateEagerStreamTest(i) + generateEagerStreamEmptyTest(i)));
-        }
-
-        var eagerIterableTests = new StringBuilder();
-        for (int i = 2; i <= arity; i++) {
-            eagerIterableTests.append(wrapInArityNested(i, generateEagerIterableTest(i) + generateEagerIterableEmptyTest(i)));
-        }
-
-        var lazyOptionalTests = new StringBuilder();
-        for (int i = 2; i <= arity; i++) {
-            lazyOptionalTests.append(wrapInArityNested(i, generateLazyOptionalTest(i)));
-        }
-
-        var lazyStreamTests = new StringBuilder();
-        for (int i = 2; i <= arity; i++) {
-            lazyStreamTests.append(wrapInArityNested(i, generateLazyStreamTest(i) + generateLazyStreamEmptyTest(i)));
-        }
-
-        var lazyIterableTests = new StringBuilder();
-        for (int i = 2; i <= arity; i++) {
-            lazyIterableTests.append(wrapInArityNested(i, generateLazyIterableTest(i) + generateLazyIterableEmptyTest(i)));
+        for (var ct : ContainerType.values()) {
+            var eagerTests = new StringBuilder();
+            var lazyTests = new StringBuilder();
+            for (int i = 2; i <= arity; i++) {
+                eagerTests.append(wrapInArityNested(i, generateEagerTest(i, ct) + generateEagerEmptyTest(i, ct)));
+                lazyTests.append(wrapInArityNested(i, generateLazyTest(i, ct) + generateLazyEmptyTest(i, ct)));
+            }
+            eagerSections.add(eagerTests.toString());
+            lazySections.add(lazyTests.toString());
         }
 
         return """
@@ -82,42 +69,35 @@ class ForComprehensionTestGenerator {
               }
           }
           """.formatted(
-          indent(eagerOptionalTests.toString(), 4),
-          indent(eagerStreamTests.toString(), 4),
-          indent(eagerIterableTests.toString(), 4),
-          indent(lazyOptionalTests.toString(), 4),
-          indent(lazyStreamTests.toString(), 4),
-          indent(lazyIterableTests.toString(), 4));
-    }
-
-    private static String indent(String text, int spaces) {
-        var prefix = " ".repeat(spaces);
-        return text.lines()
-          .map(line -> line.isEmpty() ? line : prefix + line)
-          .collect(Collectors.joining("\n"));
+          Generator.indent(eagerSections.get(0), 4),
+          Generator.indent(eagerSections.get(1), 4),
+          Generator.indent(eagerSections.get(2), 4),
+          Generator.indent(lazySections.get(0), 4),
+          Generator.indent(lazySections.get(1), 4),
+          Generator.indent(lazySections.get(2), 4));
     }
 
     private static String wrapInArityNested(int arity, String tests) {
-        return "\n    @Nested\n    class Arity" + arity + " {" + indent(tests, 4) + "\n    }\n";
+        return "\n    @Nested\n    class Arity" + arity + " {" + Generator.indent(tests, 4) + "\n    }\n";
     }
 
-    private static String generateEagerOptionalTest(int arity) {
-        var declarations = IntStream.rangeClosed(1, arity)
-          .mapToObj(i -> indent("Optional<Integer> o%d = Optional.of(%d);".formatted(i, i), 8))
-          .collect(Collectors.joining("\n"));
-        var allArgs = forcArgs(arity, "o");
+    private static String generateEagerTest(int arity, ContainerType ct) {
         var lambda = yieldLambda(arity);
-        var sum = arity * (arity + 1) / 2;
+        return switch (ct) {
+            case OPTIONAL -> {
+                var declarations = IntStream.rangeClosed(1, arity)
+                  .mapToObj(i -> Generator.indent("Optional<Integer> o%d = Optional.of(%d);".formatted(i, i), 8))
+                  .collect(Collectors.joining("\n"));
+                var allArgs = forcArgs(arity, "o");
+                var sum = arity * (arity + 1) / 2;
+                var firstEmptyArgs = IntStream.rangeClosed(1, arity)
+                  .mapToObj(i -> i == 1 ? "empty" : "o" + i)
+                  .collect(Collectors.joining(", "));
+                var lastEmptyArgs = IntStream.rangeClosed(1, arity)
+                  .mapToObj(i -> i == arity ? "empty" : "o" + i)
+                  .collect(Collectors.joining(", "));
 
-        var firstEmptyArgs = IntStream.rangeClosed(1, arity)
-          .mapToObj(i -> i == 1 ? "empty" : "o" + i)
-          .collect(Collectors.joining(", "));
-
-        var lastEmptyArgs = IntStream.rangeClosed(1, arity)
-          .mapToObj(i -> i == arity ? "empty" : "o" + i)
-          .collect(Collectors.joining(", "));
-
-        return """
+                yield """
 
               @Test
               void shouldTestEagerOptional%d() {
@@ -129,32 +109,27 @@ class ForComprehensionTestGenerator {
                   assertThat(ForComprehension.forc(%s).yield(%s)).isEmpty();
               }
           """.formatted(arity, declarations, allArgs, lambda, sum,
-          firstEmptyArgs, lambda, lastEmptyArgs, lambda);
-    }
-
-    private static String generateEagerStreamTest(int arity) {
-        return """
+                  firstEmptyArgs, lambda, lastEmptyArgs, lambda);
+            }
+            case STREAM, ITERABLE -> """
 
               @Test
-              void shouldTestEagerStream%d() {
+              void shouldTestEager%s%d() {
                   assertThat(ForComprehension.forc(%s).yield(%s))
                       .containsExactly(%s);
               }
-          """.formatted(arity, streamCreationArgs(arity), yieldLambda(arity), expectedCartesianValues(arity));
+          """.formatted(ct.typeName, arity, creationArgs(arity, ct), lambda, expectedCartesianValues(arity));
+        };
     }
 
-    private static String generateEagerStreamEmptyTest(int arity) {
+    private static String generateEagerEmptyTest(int arity, ContainerType ct) {
+        if (ct == ContainerType.OPTIONAL) return "";
         var lambda = yieldLambda(arity);
+        var firstEmptyArgs = eagerArgsWithEmpty(arity, 1, ct);
+        var lastEmptyArgs = eagerArgsWithEmpty(arity, arity, ct);
 
-        var firstEmptyArgs = IntStream.rangeClosed(1, arity)
-          .mapToObj(i -> i == 1 ? "Stream.<Integer>empty()" : streamOf(i))
-          .collect(Collectors.joining(", "));
-
-        var lastEmptyArgs = IntStream.rangeClosed(1, arity)
-          .mapToObj(i -> i == arity ? "Stream.<Integer>empty()" : streamOf(i))
-          .collect(Collectors.joining(", "));
-
-        return """
+        return switch (ct) {
+            case STREAM -> """
 
               @Test
               void shouldTestEagerStreamWithEmptyStream%d() {
@@ -164,31 +139,7 @@ class ForComprehensionTestGenerator {
                       .isEmpty();
               }
           """.formatted(arity, firstEmptyArgs, lambda, lastEmptyArgs, lambda);
-    }
-
-    private static String generateEagerIterableTest(int arity) {
-        return """
-
-              @Test
-              void shouldTestEagerIterable%d() {
-                  assertThat(ForComprehension.forc(%s).yield(%s))
-                      .containsExactly(%s);
-              }
-          """.formatted(arity, iterableCreationArgs(arity), yieldLambda(arity), expectedCartesianValues(arity));
-    }
-
-    private static String generateEagerIterableEmptyTest(int arity) {
-        var lambda = yieldLambda(arity);
-
-        var firstEmptyArgs = IntStream.rangeClosed(1, arity)
-          .mapToObj(i -> i == 1 ? "Collections.<Integer>emptyList()" : iterableOf(i))
-          .collect(Collectors.joining(", "));
-
-        var lastEmptyArgs = IntStream.rangeClosed(1, arity)
-          .mapToObj(i -> i == arity ? "Collections.<Integer>emptyList()" : iterableOf(i))
-          .collect(Collectors.joining(", "));
-
-        return """
+            case ITERABLE -> """
 
               @Test
               void shouldTestEagerIterableWithEmptyIterable%d() {
@@ -196,16 +147,20 @@ class ForComprehensionTestGenerator {
                   assertThat(ForComprehension.forc(%s).yield(%s)).isEmpty();
               }
           """.formatted(arity, firstEmptyArgs, lambda, lastEmptyArgs, lambda);
+            default -> "";
+        };
     }
 
-    private static String generateLazyOptionalTest(int arity) {
+    private static String generateLazyTest(int arity, ContainerType ct) {
         var lambda = yieldLambda(arity);
-        var sum = arity * (arity + 1) / 2;
-        var allArgs = lazyOptionalArgs(arity, 0);
-        var firstEmptyArgs = lazyOptionalArgs(arity, 1);
-        var lastEmptyArgs = lazyOptionalArgs(arity, arity);
+        return switch (ct) {
+            case OPTIONAL -> {
+                var sum = arity * (arity + 1) / 2;
+                var allArgs = lazyArgs(arity, 0, ct);
+                var firstEmptyArgs = lazyArgs(arity, 1, ct);
+                var lastEmptyArgs = lazyArgs(arity, arity, ct);
 
-        return """
+                yield """
 
               @Test
               void shouldTestLazyOptional%d() {
@@ -217,23 +172,25 @@ class ForComprehensionTestGenerator {
                   assertThat(ForComprehension.forc(%s).yield(%s)).isEmpty();
               }
           """.formatted(arity, allArgs, lambda, sum,
-          firstEmptyArgs, lambda, lastEmptyArgs, lambda);
-    }
-
-    private static String generateLazyStreamTest(int arity) {
-        return """
+                  firstEmptyArgs, lambda, lastEmptyArgs, lambda);
+            }
+            case STREAM, ITERABLE -> """
 
               @Test
-              void shouldTestLazyStream%d() {
+              void shouldTestLazy%s%d() {
                   assertThat(ForComprehension.forc(%s).yield(%s))
                       .containsExactly(%s);
               }
-          """.formatted(arity, lazyStreamArgs(arity, 0), yieldLambda(arity), expectedCartesianValues(arity));
+          """.formatted(ct.typeName, arity, lazyArgs(arity, 0, ct), lambda, expectedCartesianValues(arity));
+        };
     }
 
-    private static String generateLazyStreamEmptyTest(int arity) {
+    private static String generateLazyEmptyTest(int arity, ContainerType ct) {
+        if (ct == ContainerType.OPTIONAL) return "";
         var lambda = yieldLambda(arity);
-        return """
+
+        return switch (ct) {
+            case STREAM -> """
 
               @Test
               void shouldTestLazyStreamWithEmptyStream%d() {
@@ -242,30 +199,17 @@ class ForComprehensionTestGenerator {
                   assertThat(ForComprehension.forc(%s).yield(%s))
                       .isEmpty();
               }
-          """.formatted(arity, lazyStreamArgs(arity, 1), lambda, lazyStreamArgs(arity, arity), lambda);
-    }
-
-    private static String generateLazyIterableTest(int arity) {
-        return """
-
-              @Test
-              void shouldTestLazyIterable%d() {
-                  assertThat(ForComprehension.forc(%s).yield(%s))
-                      .containsExactly(%s);
-              }
-          """.formatted(arity, lazyIterableArgs(arity, 0), yieldLambda(arity), expectedCartesianValues(arity));
-    }
-
-    private static String generateLazyIterableEmptyTest(int arity) {
-        var lambda = yieldLambda(arity);
-        return """
+          """.formatted(arity, lazyArgs(arity, 1, ct), lambda, lazyArgs(arity, arity, ct), lambda);
+            case ITERABLE -> """
 
               @Test
               void shouldTestLazyIterableWithEmptyIterable%d() {
                   assertThat(ForComprehension.forc(%s).yield(%s)).isEmpty();
                   assertThat(ForComprehension.forc(%s).yield(%s)).isEmpty();
               }
-          """.formatted(arity, lazyIterableArgs(arity, 1), lambda, lazyIterableArgs(arity, arity), lambda);
+          """.formatted(arity, lazyArgs(arity, 1, ct), lambda, lazyArgs(arity, arity, ct), lambda);
+            default -> "";
+        };
     }
 
     private static String lazyLambdaParams(int position) {
@@ -275,46 +219,49 @@ class ForComprehensionTestGenerator {
         return position - 1 == 1 ? params : "(" + params + ")";
     }
 
-    private static String lazyOptionalArgs(int arity, int emptyPos) {
-        var sb = new StringBuilder(emptyPos == 1 ? "empty" : "o1");
+    private static String lazyArgs(int arity, int emptyPos, ContainerType ct) {
+        var sb = new StringBuilder(emptyPos == 1 ? emptyExpr(ct) : lazyFirstArg(ct));
         for (int i = 2; i <= arity; i++) {
             sb.append(", ");
             sb.append(lazyLambdaParams(i));
             if (i == emptyPos) {
-                sb.append(" -> empty");
+                sb.append(" -> " + emptyExpr(ct));
             } else {
-                sb.append(" -> Optional.of(%d)".formatted(i));
+                sb.append(" -> " + lazyValueExpr(i, ct));
             }
         }
         return sb.toString();
     }
 
-    private static String lazyStreamArgs(int arity, int emptyPos) {
-        var sb = new StringBuilder(emptyPos == 1 ? "Stream.<Integer>empty()" : streamOf(1));
-        for (int i = 2; i <= arity; i++) {
-            sb.append(", ");
-            sb.append(lazyLambdaParams(i));
-            if (i == emptyPos) {
-                sb.append(" -> Stream.<Integer>empty()");
-            } else {
-                sb.append(" -> " + streamOf(i));
-            }
-        }
-        return sb.toString();
+    private static String emptyExpr(ContainerType ct) {
+        return switch (ct) {
+            case OPTIONAL -> "empty";
+            case STREAM -> "Stream.<Integer>empty()";
+            case ITERABLE -> "Collections.<Integer>emptyList()";
+        };
     }
 
-    private static String lazyIterableArgs(int arity, int emptyPos) {
-        var sb = new StringBuilder(emptyPos == 1 ? "Collections.<Integer>emptyList()" : iterableOf(1));
-        for (int i = 2; i <= arity; i++) {
-            sb.append(", ");
-            sb.append(lazyLambdaParams(i));
-            if (i == emptyPos) {
-                sb.append(" -> Collections.<Integer>emptyList()");
-            } else {
-                sb.append(" -> " + iterableOf(i));
-            }
-        }
-        return sb.toString();
+    private static String lazyFirstArg(ContainerType ct) {
+        return ct == ContainerType.OPTIONAL ? "o1" : valueOf(1, ct);
+    }
+
+    private static String lazyValueExpr(int i, ContainerType ct) {
+        return ct == ContainerType.OPTIONAL ? "Optional.of(%d)".formatted(i) : valueOf(i, ct);
+    }
+
+    private static String eagerArgsWithEmpty(int arity, int emptyPos, ContainerType ct) {
+        var empty = eagerEmptyExpr(ct);
+        return IntStream.rangeClosed(1, arity)
+          .mapToObj(i -> i == emptyPos ? empty : valueOf(i, ct))
+          .collect(Collectors.joining(", "));
+    }
+
+    private static String eagerEmptyExpr(ContainerType ct) {
+        return switch (ct) {
+            case STREAM -> "Stream.<Integer>empty()";
+            case ITERABLE -> "Collections.<Integer>emptyList()";
+            case OPTIONAL -> throw new IllegalArgumentException();
+        };
     }
 
     private static String yieldLambda(int arity) {
@@ -331,31 +278,18 @@ class ForComprehensionTestGenerator {
           .collect(Collectors.joining(", "));
     }
 
-    private static String streamOf(int position) {
+    private static String valueOf(int position, ContainerType ct) {
+        var factoryPrefix = ct == ContainerType.STREAM ? "Stream" : "List";
         return switch (position) {
-            case 1 -> "Stream.of(1, 2)";
-            case 2 -> "Stream.of(10, 20)";
-            default -> "Stream.of(%d)".formatted((long) Math.pow(10, position - 1));
+            case 1 -> "%s.of(1, 2)".formatted(factoryPrefix);
+            case 2 -> "%s.of(10, 20)".formatted(factoryPrefix);
+            default -> "%s.of(%d)".formatted(factoryPrefix, (long) Math.pow(10, position - 1));
         };
     }
 
-    private static String streamCreationArgs(int arity) {
+    private static String creationArgs(int arity, ContainerType ct) {
         return IntStream.rangeClosed(1, arity)
-          .mapToObj(ForComprehensionTestGenerator::streamOf)
-          .collect(Collectors.joining(", "));
-    }
-
-    private static String iterableOf(int position) {
-        return switch (position) {
-            case 1 -> "List.of(1, 2)";
-            case 2 -> "List.of(10, 20)";
-            default -> "List.of(%d)".formatted((long) Math.pow(10, position - 1));
-        };
-    }
-
-    private static String iterableCreationArgs(int arity) {
-        return IntStream.rangeClosed(1, arity)
-          .mapToObj(ForComprehensionTestGenerator::iterableOf)
+          .mapToObj(i -> valueOf(i, ct))
           .collect(Collectors.joining(", "));
     }
 
