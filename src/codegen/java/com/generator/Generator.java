@@ -3,6 +3,7 @@ package com.generator;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.stream.Collectors;
 
 public class Generator {
 
@@ -22,6 +23,19 @@ public class Generator {
 
         Files.writeString(dir.resolve(API_FILE_NAME), header() + ForComprehensionGenerator.generate(ARITY));
         Files.writeString(testDir.resolve(TEST_FILE_NAME), header() + ForComprehensionTestGenerator.generate(ARITY));
+    }
+
+    static String ordinal(int i) {
+        return switch (i) {
+            case 1 -> "first";
+            case 2 -> "second";
+            case 3 -> "third";
+            default -> i + "th";
+        };
+    }
+
+    static String indent(String s, int spaces) {
+        return s.lines().map(l -> l.isEmpty() ? l : " ".repeat(spaces) + l).collect(Collectors.joining("\n"));
     }
 
     private static String header() {

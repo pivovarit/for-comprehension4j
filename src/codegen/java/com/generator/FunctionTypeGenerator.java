@@ -59,23 +59,14 @@ class FunctionTypeGenerator {
 
     private static String typeParamDocs(int arity) {
         return IntStream.rangeClosed(1, arity)
-          .mapToObj(i -> "@param <T%d> the type of the %s argument".formatted(i, ordinal(i)))
+          .mapToObj(i -> "@param <T%d> the type of the %s argument".formatted(i, Generator.ordinal(i)))
           .collect(Collectors.joining("\n * "));
     }
 
     private static String paramDocs(int arity) {
         return IntStream.rangeClosed(1, arity)
-          .mapToObj(i -> "@param t%d the %s argument".formatted(i, ordinal(i)))
+          .mapToObj(i -> "@param t%d the %s argument".formatted(i, Generator.ordinal(i)))
           .collect(Collectors.joining("\n     * "));
-    }
-
-    private static String ordinal(int i) {
-        return switch (i) {
-            case 1 -> "first";
-            case 2 -> "second";
-            case 3 -> "third";
-            default -> i + "th";
-        };
     }
 
     private static String typeParams(int arity, String last) {
