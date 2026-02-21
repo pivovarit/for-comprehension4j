@@ -64,10 +64,25 @@ public final class ForComprehension {
 
         private final Optional<T1> o1;
         private final Optional<T2> o2;
+        private final Function2<T1, T2, Boolean> guard;
 
         private For2Optional(Optional<T1> o1, Optional<T2> o2) {
             this.o1 = o1;
             this.o2 = o2;
+            this.guard = null;
+        }
+
+        private For2Optional(Optional<T1> o1, Optional<T2> o2, Function2<T1, T2, Boolean> guard) {
+            this.o1 = o1;
+            this.o2 = o2;
+            this.guard = guard;
+        }
+
+        public For2Optional<T1, T2> filter(Function2<T1, T2, Boolean> predicate) {
+            Objects.requireNonNull(predicate, "predicate is null");
+            Function2<T1, T2, Boolean> existingGuard = this.guard;
+            Function2<T1, T2, Boolean> newGuard = existingGuard == null ? predicate : (t1, t2) -> existingGuard.apply(t1, t2) && predicate.apply(t1, t2);
+            return new For2Optional<>(o1, o2, newGuard);
         }
 
         /**
@@ -86,7 +101,8 @@ public final class ForComprehension {
             Objects.requireNonNull(f, "f is null");
 
             return o1.flatMap(t1 ->
-                o2.map(t2 -> f.apply(t1, t2)));
+                o2.flatMap(t2 ->
+                    (guard != null && !guard.apply(t1, t2)) ? Optional.empty() : Optional.of(f.apply(t1, t2))));
         }
     }
 
@@ -124,11 +140,27 @@ public final class ForComprehension {
         private final Optional<T1> o1;
         private final Optional<T2> o2;
         private final Optional<T3> o3;
+        private final Function3<T1, T2, T3, Boolean> guard;
 
         private For3Optional(Optional<T1> o1, Optional<T2> o2, Optional<T3> o3) {
             this.o1 = o1;
             this.o2 = o2;
             this.o3 = o3;
+            this.guard = null;
+        }
+
+        private For3Optional(Optional<T1> o1, Optional<T2> o2, Optional<T3> o3, Function3<T1, T2, T3, Boolean> guard) {
+            this.o1 = o1;
+            this.o2 = o2;
+            this.o3 = o3;
+            this.guard = guard;
+        }
+
+        public For3Optional<T1, T2, T3> filter(Function3<T1, T2, T3, Boolean> predicate) {
+            Objects.requireNonNull(predicate, "predicate is null");
+            Function3<T1, T2, T3, Boolean> existingGuard = this.guard;
+            Function3<T1, T2, T3, Boolean> newGuard = existingGuard == null ? predicate : (t1, t2, t3) -> existingGuard.apply(t1, t2, t3) && predicate.apply(t1, t2, t3);
+            return new For3Optional<>(o1, o2, o3, newGuard);
         }
 
         /**
@@ -148,7 +180,8 @@ public final class ForComprehension {
 
             return o1.flatMap(t1 ->
                 o2.flatMap(t2 ->
-                    o3.map(t3 -> f.apply(t1, t2, t3))));
+                    o3.flatMap(t3 ->
+                        (guard != null && !guard.apply(t1, t2, t3)) ? Optional.empty() : Optional.of(f.apply(t1, t2, t3)))));
         }
     }
 
@@ -191,12 +224,29 @@ public final class ForComprehension {
         private final Optional<T2> o2;
         private final Optional<T3> o3;
         private final Optional<T4> o4;
+        private final Function4<T1, T2, T3, T4, Boolean> guard;
 
         private For4Optional(Optional<T1> o1, Optional<T2> o2, Optional<T3> o3, Optional<T4> o4) {
             this.o1 = o1;
             this.o2 = o2;
             this.o3 = o3;
             this.o4 = o4;
+            this.guard = null;
+        }
+
+        private For4Optional(Optional<T1> o1, Optional<T2> o2, Optional<T3> o3, Optional<T4> o4, Function4<T1, T2, T3, T4, Boolean> guard) {
+            this.o1 = o1;
+            this.o2 = o2;
+            this.o3 = o3;
+            this.o4 = o4;
+            this.guard = guard;
+        }
+
+        public For4Optional<T1, T2, T3, T4> filter(Function4<T1, T2, T3, T4, Boolean> predicate) {
+            Objects.requireNonNull(predicate, "predicate is null");
+            Function4<T1, T2, T3, T4, Boolean> existingGuard = this.guard;
+            Function4<T1, T2, T3, T4, Boolean> newGuard = existingGuard == null ? predicate : (t1, t2, t3, t4) -> existingGuard.apply(t1, t2, t3, t4) && predicate.apply(t1, t2, t3, t4);
+            return new For4Optional<>(o1, o2, o3, o4, newGuard);
         }
 
         /**
@@ -217,7 +267,8 @@ public final class ForComprehension {
             return o1.flatMap(t1 ->
                 o2.flatMap(t2 ->
                     o3.flatMap(t3 ->
-                        o4.map(t4 -> f.apply(t1, t2, t3, t4)))));
+                        o4.flatMap(t4 ->
+                            (guard != null && !guard.apply(t1, t2, t3, t4)) ? Optional.empty() : Optional.of(f.apply(t1, t2, t3, t4))))));
         }
     }
 
@@ -265,6 +316,7 @@ public final class ForComprehension {
         private final Optional<T3> o3;
         private final Optional<T4> o4;
         private final Optional<T5> o5;
+        private final Function5<T1, T2, T3, T4, T5, Boolean> guard;
 
         private For5Optional(Optional<T1> o1, Optional<T2> o2, Optional<T3> o3, Optional<T4> o4, Optional<T5> o5) {
             this.o1 = o1;
@@ -272,6 +324,23 @@ public final class ForComprehension {
             this.o3 = o3;
             this.o4 = o4;
             this.o5 = o5;
+            this.guard = null;
+        }
+
+        private For5Optional(Optional<T1> o1, Optional<T2> o2, Optional<T3> o3, Optional<T4> o4, Optional<T5> o5, Function5<T1, T2, T3, T4, T5, Boolean> guard) {
+            this.o1 = o1;
+            this.o2 = o2;
+            this.o3 = o3;
+            this.o4 = o4;
+            this.o5 = o5;
+            this.guard = guard;
+        }
+
+        public For5Optional<T1, T2, T3, T4, T5> filter(Function5<T1, T2, T3, T4, T5, Boolean> predicate) {
+            Objects.requireNonNull(predicate, "predicate is null");
+            Function5<T1, T2, T3, T4, T5, Boolean> existingGuard = this.guard;
+            Function5<T1, T2, T3, T4, T5, Boolean> newGuard = existingGuard == null ? predicate : (t1, t2, t3, t4, t5) -> existingGuard.apply(t1, t2, t3, t4, t5) && predicate.apply(t1, t2, t3, t4, t5);
+            return new For5Optional<>(o1, o2, o3, o4, o5, newGuard);
         }
 
         /**
@@ -293,7 +362,8 @@ public final class ForComprehension {
                 o2.flatMap(t2 ->
                     o3.flatMap(t3 ->
                         o4.flatMap(t4 ->
-                            o5.map(t5 -> f.apply(t1, t2, t3, t4, t5))))));
+                            o5.flatMap(t5 ->
+                                (guard != null && !guard.apply(t1, t2, t3, t4, t5)) ? Optional.empty() : Optional.of(f.apply(t1, t2, t3, t4, t5)))))));
         }
     }
 
@@ -346,6 +416,7 @@ public final class ForComprehension {
         private final Optional<T4> o4;
         private final Optional<T5> o5;
         private final Optional<T6> o6;
+        private final Function6<T1, T2, T3, T4, T5, T6, Boolean> guard;
 
         private For6Optional(Optional<T1> o1, Optional<T2> o2, Optional<T3> o3, Optional<T4> o4, Optional<T5> o5, Optional<T6> o6) {
             this.o1 = o1;
@@ -354,6 +425,24 @@ public final class ForComprehension {
             this.o4 = o4;
             this.o5 = o5;
             this.o6 = o6;
+            this.guard = null;
+        }
+
+        private For6Optional(Optional<T1> o1, Optional<T2> o2, Optional<T3> o3, Optional<T4> o4, Optional<T5> o5, Optional<T6> o6, Function6<T1, T2, T3, T4, T5, T6, Boolean> guard) {
+            this.o1 = o1;
+            this.o2 = o2;
+            this.o3 = o3;
+            this.o4 = o4;
+            this.o5 = o5;
+            this.o6 = o6;
+            this.guard = guard;
+        }
+
+        public For6Optional<T1, T2, T3, T4, T5, T6> filter(Function6<T1, T2, T3, T4, T5, T6, Boolean> predicate) {
+            Objects.requireNonNull(predicate, "predicate is null");
+            Function6<T1, T2, T3, T4, T5, T6, Boolean> existingGuard = this.guard;
+            Function6<T1, T2, T3, T4, T5, T6, Boolean> newGuard = existingGuard == null ? predicate : (t1, t2, t3, t4, t5, t6) -> existingGuard.apply(t1, t2, t3, t4, t5, t6) && predicate.apply(t1, t2, t3, t4, t5, t6);
+            return new For6Optional<>(o1, o2, o3, o4, o5, o6, newGuard);
         }
 
         /**
@@ -376,7 +465,8 @@ public final class ForComprehension {
                     o3.flatMap(t3 ->
                         o4.flatMap(t4 ->
                             o5.flatMap(t5 ->
-                                o6.map(t6 -> f.apply(t1, t2, t3, t4, t5, t6)))))));
+                                o6.flatMap(t6 ->
+                                    (guard != null && !guard.apply(t1, t2, t3, t4, t5, t6)) ? Optional.empty() : Optional.of(f.apply(t1, t2, t3, t4, t5, t6))))))));
         }
     }
 
@@ -434,6 +524,7 @@ public final class ForComprehension {
         private final Optional<T5> o5;
         private final Optional<T6> o6;
         private final Optional<T7> o7;
+        private final Function7<T1, T2, T3, T4, T5, T6, T7, Boolean> guard;
 
         private For7Optional(Optional<T1> o1, Optional<T2> o2, Optional<T3> o3, Optional<T4> o4, Optional<T5> o5, Optional<T6> o6, Optional<T7> o7) {
             this.o1 = o1;
@@ -443,6 +534,25 @@ public final class ForComprehension {
             this.o5 = o5;
             this.o6 = o6;
             this.o7 = o7;
+            this.guard = null;
+        }
+
+        private For7Optional(Optional<T1> o1, Optional<T2> o2, Optional<T3> o3, Optional<T4> o4, Optional<T5> o5, Optional<T6> o6, Optional<T7> o7, Function7<T1, T2, T3, T4, T5, T6, T7, Boolean> guard) {
+            this.o1 = o1;
+            this.o2 = o2;
+            this.o3 = o3;
+            this.o4 = o4;
+            this.o5 = o5;
+            this.o6 = o6;
+            this.o7 = o7;
+            this.guard = guard;
+        }
+
+        public For7Optional<T1, T2, T3, T4, T5, T6, T7> filter(Function7<T1, T2, T3, T4, T5, T6, T7, Boolean> predicate) {
+            Objects.requireNonNull(predicate, "predicate is null");
+            Function7<T1, T2, T3, T4, T5, T6, T7, Boolean> existingGuard = this.guard;
+            Function7<T1, T2, T3, T4, T5, T6, T7, Boolean> newGuard = existingGuard == null ? predicate : (t1, t2, t3, t4, t5, t6, t7) -> existingGuard.apply(t1, t2, t3, t4, t5, t6, t7) && predicate.apply(t1, t2, t3, t4, t5, t6, t7);
+            return new For7Optional<>(o1, o2, o3, o4, o5, o6, o7, newGuard);
         }
 
         /**
@@ -466,7 +576,8 @@ public final class ForComprehension {
                         o4.flatMap(t4 ->
                             o5.flatMap(t5 ->
                                 o6.flatMap(t6 ->
-                                    o7.map(t7 -> f.apply(t1, t2, t3, t4, t5, t6, t7))))))));
+                                    o7.flatMap(t7 ->
+                                        (guard != null && !guard.apply(t1, t2, t3, t4, t5, t6, t7)) ? Optional.empty() : Optional.of(f.apply(t1, t2, t3, t4, t5, t6, t7)))))))));
         }
     }
 
@@ -529,6 +640,7 @@ public final class ForComprehension {
         private final Optional<T6> o6;
         private final Optional<T7> o7;
         private final Optional<T8> o8;
+        private final Function8<T1, T2, T3, T4, T5, T6, T7, T8, Boolean> guard;
 
         private For8Optional(Optional<T1> o1, Optional<T2> o2, Optional<T3> o3, Optional<T4> o4, Optional<T5> o5, Optional<T6> o6, Optional<T7> o7, Optional<T8> o8) {
             this.o1 = o1;
@@ -539,6 +651,26 @@ public final class ForComprehension {
             this.o6 = o6;
             this.o7 = o7;
             this.o8 = o8;
+            this.guard = null;
+        }
+
+        private For8Optional(Optional<T1> o1, Optional<T2> o2, Optional<T3> o3, Optional<T4> o4, Optional<T5> o5, Optional<T6> o6, Optional<T7> o7, Optional<T8> o8, Function8<T1, T2, T3, T4, T5, T6, T7, T8, Boolean> guard) {
+            this.o1 = o1;
+            this.o2 = o2;
+            this.o3 = o3;
+            this.o4 = o4;
+            this.o5 = o5;
+            this.o6 = o6;
+            this.o7 = o7;
+            this.o8 = o8;
+            this.guard = guard;
+        }
+
+        public For8Optional<T1, T2, T3, T4, T5, T6, T7, T8> filter(Function8<T1, T2, T3, T4, T5, T6, T7, T8, Boolean> predicate) {
+            Objects.requireNonNull(predicate, "predicate is null");
+            Function8<T1, T2, T3, T4, T5, T6, T7, T8, Boolean> existingGuard = this.guard;
+            Function8<T1, T2, T3, T4, T5, T6, T7, T8, Boolean> newGuard = existingGuard == null ? predicate : (t1, t2, t3, t4, t5, t6, t7, t8) -> existingGuard.apply(t1, t2, t3, t4, t5, t6, t7, t8) && predicate.apply(t1, t2, t3, t4, t5, t6, t7, t8);
+            return new For8Optional<>(o1, o2, o3, o4, o5, o6, o7, o8, newGuard);
         }
 
         /**
@@ -563,7 +695,8 @@ public final class ForComprehension {
                             o5.flatMap(t5 ->
                                 o6.flatMap(t6 ->
                                     o7.flatMap(t7 ->
-                                        o8.map(t8 -> f.apply(t1, t2, t3, t4, t5, t6, t7, t8)))))))));
+                                        o8.flatMap(t8 ->
+                                            (guard != null && !guard.apply(t1, t2, t3, t4, t5, t6, t7, t8)) ? Optional.empty() : Optional.of(f.apply(t1, t2, t3, t4, t5, t6, t7, t8))))))))));
         }
     }
 
@@ -596,10 +729,25 @@ public final class ForComprehension {
 
         private final Stream<T1> s1;
         private final Stream<T2> s2;
+        private final Function2<T1, T2, Boolean> guard;
 
         private For2Stream(Stream<T1> s1, Stream<T2> s2) {
             this.s1 = s1;
             this.s2 = s2;
+            this.guard = null;
+        }
+
+        private For2Stream(Stream<T1> s1, Stream<T2> s2, Function2<T1, T2, Boolean> guard) {
+            this.s1 = s1;
+            this.s2 = s2;
+            this.guard = guard;
+        }
+
+        public For2Stream<T1, T2> filter(Function2<T1, T2, Boolean> predicate) {
+            Objects.requireNonNull(predicate, "predicate is null");
+            Function2<T1, T2, Boolean> existingGuard = this.guard;
+            Function2<T1, T2, Boolean> newGuard = existingGuard == null ? predicate : (t1, t2) -> existingGuard.apply(t1, t2) && predicate.apply(t1, t2);
+            return new For2Stream<>(s1, s2, newGuard);
         }
 
         /**
@@ -617,7 +765,7 @@ public final class ForComprehension {
             List<T2> l2 = s2.collect(Collectors.toList());
 
             return s1.flatMap(t1 ->
-                l2.stream().map(t2 -> f.apply(t1, t2)));
+                l2.stream().filter(t2 -> guard == null || guard.apply(t1, t2)).map(t2 -> f.apply(t1, t2)));
         }
     }
 
@@ -655,11 +803,27 @@ public final class ForComprehension {
         private final Stream<T1> s1;
         private final Stream<T2> s2;
         private final Stream<T3> s3;
+        private final Function3<T1, T2, T3, Boolean> guard;
 
         private For3Stream(Stream<T1> s1, Stream<T2> s2, Stream<T3> s3) {
             this.s1 = s1;
             this.s2 = s2;
             this.s3 = s3;
+            this.guard = null;
+        }
+
+        private For3Stream(Stream<T1> s1, Stream<T2> s2, Stream<T3> s3, Function3<T1, T2, T3, Boolean> guard) {
+            this.s1 = s1;
+            this.s2 = s2;
+            this.s3 = s3;
+            this.guard = guard;
+        }
+
+        public For3Stream<T1, T2, T3> filter(Function3<T1, T2, T3, Boolean> predicate) {
+            Objects.requireNonNull(predicate, "predicate is null");
+            Function3<T1, T2, T3, Boolean> existingGuard = this.guard;
+            Function3<T1, T2, T3, Boolean> newGuard = existingGuard == null ? predicate : (t1, t2, t3) -> existingGuard.apply(t1, t2, t3) && predicate.apply(t1, t2, t3);
+            return new For3Stream<>(s1, s2, s3, newGuard);
         }
 
         /**
@@ -679,7 +843,7 @@ public final class ForComprehension {
 
             return s1.flatMap(t1 ->
                 l2.stream().flatMap(t2 ->
-                    l3.stream().map(t3 -> f.apply(t1, t2, t3))));
+                    l3.stream().filter(t3 -> guard == null || guard.apply(t1, t2, t3)).map(t3 -> f.apply(t1, t2, t3))));
         }
     }
 
@@ -722,12 +886,29 @@ public final class ForComprehension {
         private final Stream<T2> s2;
         private final Stream<T3> s3;
         private final Stream<T4> s4;
+        private final Function4<T1, T2, T3, T4, Boolean> guard;
 
         private For4Stream(Stream<T1> s1, Stream<T2> s2, Stream<T3> s3, Stream<T4> s4) {
             this.s1 = s1;
             this.s2 = s2;
             this.s3 = s3;
             this.s4 = s4;
+            this.guard = null;
+        }
+
+        private For4Stream(Stream<T1> s1, Stream<T2> s2, Stream<T3> s3, Stream<T4> s4, Function4<T1, T2, T3, T4, Boolean> guard) {
+            this.s1 = s1;
+            this.s2 = s2;
+            this.s3 = s3;
+            this.s4 = s4;
+            this.guard = guard;
+        }
+
+        public For4Stream<T1, T2, T3, T4> filter(Function4<T1, T2, T3, T4, Boolean> predicate) {
+            Objects.requireNonNull(predicate, "predicate is null");
+            Function4<T1, T2, T3, T4, Boolean> existingGuard = this.guard;
+            Function4<T1, T2, T3, T4, Boolean> newGuard = existingGuard == null ? predicate : (t1, t2, t3, t4) -> existingGuard.apply(t1, t2, t3, t4) && predicate.apply(t1, t2, t3, t4);
+            return new For4Stream<>(s1, s2, s3, s4, newGuard);
         }
 
         /**
@@ -749,7 +930,7 @@ public final class ForComprehension {
             return s1.flatMap(t1 ->
                 l2.stream().flatMap(t2 ->
                     l3.stream().flatMap(t3 ->
-                        l4.stream().map(t4 -> f.apply(t1, t2, t3, t4)))));
+                        l4.stream().filter(t4 -> guard == null || guard.apply(t1, t2, t3, t4)).map(t4 -> f.apply(t1, t2, t3, t4)))));
         }
     }
 
@@ -797,6 +978,7 @@ public final class ForComprehension {
         private final Stream<T3> s3;
         private final Stream<T4> s4;
         private final Stream<T5> s5;
+        private final Function5<T1, T2, T3, T4, T5, Boolean> guard;
 
         private For5Stream(Stream<T1> s1, Stream<T2> s2, Stream<T3> s3, Stream<T4> s4, Stream<T5> s5) {
             this.s1 = s1;
@@ -804,6 +986,23 @@ public final class ForComprehension {
             this.s3 = s3;
             this.s4 = s4;
             this.s5 = s5;
+            this.guard = null;
+        }
+
+        private For5Stream(Stream<T1> s1, Stream<T2> s2, Stream<T3> s3, Stream<T4> s4, Stream<T5> s5, Function5<T1, T2, T3, T4, T5, Boolean> guard) {
+            this.s1 = s1;
+            this.s2 = s2;
+            this.s3 = s3;
+            this.s4 = s4;
+            this.s5 = s5;
+            this.guard = guard;
+        }
+
+        public For5Stream<T1, T2, T3, T4, T5> filter(Function5<T1, T2, T3, T4, T5, Boolean> predicate) {
+            Objects.requireNonNull(predicate, "predicate is null");
+            Function5<T1, T2, T3, T4, T5, Boolean> existingGuard = this.guard;
+            Function5<T1, T2, T3, T4, T5, Boolean> newGuard = existingGuard == null ? predicate : (t1, t2, t3, t4, t5) -> existingGuard.apply(t1, t2, t3, t4, t5) && predicate.apply(t1, t2, t3, t4, t5);
+            return new For5Stream<>(s1, s2, s3, s4, s5, newGuard);
         }
 
         /**
@@ -827,7 +1026,7 @@ public final class ForComprehension {
                 l2.stream().flatMap(t2 ->
                     l3.stream().flatMap(t3 ->
                         l4.stream().flatMap(t4 ->
-                            l5.stream().map(t5 -> f.apply(t1, t2, t3, t4, t5))))));
+                            l5.stream().filter(t5 -> guard == null || guard.apply(t1, t2, t3, t4, t5)).map(t5 -> f.apply(t1, t2, t3, t4, t5))))));
         }
     }
 
@@ -880,6 +1079,7 @@ public final class ForComprehension {
         private final Stream<T4> s4;
         private final Stream<T5> s5;
         private final Stream<T6> s6;
+        private final Function6<T1, T2, T3, T4, T5, T6, Boolean> guard;
 
         private For6Stream(Stream<T1> s1, Stream<T2> s2, Stream<T3> s3, Stream<T4> s4, Stream<T5> s5, Stream<T6> s6) {
             this.s1 = s1;
@@ -888,6 +1088,24 @@ public final class ForComprehension {
             this.s4 = s4;
             this.s5 = s5;
             this.s6 = s6;
+            this.guard = null;
+        }
+
+        private For6Stream(Stream<T1> s1, Stream<T2> s2, Stream<T3> s3, Stream<T4> s4, Stream<T5> s5, Stream<T6> s6, Function6<T1, T2, T3, T4, T5, T6, Boolean> guard) {
+            this.s1 = s1;
+            this.s2 = s2;
+            this.s3 = s3;
+            this.s4 = s4;
+            this.s5 = s5;
+            this.s6 = s6;
+            this.guard = guard;
+        }
+
+        public For6Stream<T1, T2, T3, T4, T5, T6> filter(Function6<T1, T2, T3, T4, T5, T6, Boolean> predicate) {
+            Objects.requireNonNull(predicate, "predicate is null");
+            Function6<T1, T2, T3, T4, T5, T6, Boolean> existingGuard = this.guard;
+            Function6<T1, T2, T3, T4, T5, T6, Boolean> newGuard = existingGuard == null ? predicate : (t1, t2, t3, t4, t5, t6) -> existingGuard.apply(t1, t2, t3, t4, t5, t6) && predicate.apply(t1, t2, t3, t4, t5, t6);
+            return new For6Stream<>(s1, s2, s3, s4, s5, s6, newGuard);
         }
 
         /**
@@ -913,7 +1131,7 @@ public final class ForComprehension {
                     l3.stream().flatMap(t3 ->
                         l4.stream().flatMap(t4 ->
                             l5.stream().flatMap(t5 ->
-                                l6.stream().map(t6 -> f.apply(t1, t2, t3, t4, t5, t6)))))));
+                                l6.stream().filter(t6 -> guard == null || guard.apply(t1, t2, t3, t4, t5, t6)).map(t6 -> f.apply(t1, t2, t3, t4, t5, t6)))))));
         }
     }
 
@@ -971,6 +1189,7 @@ public final class ForComprehension {
         private final Stream<T5> s5;
         private final Stream<T6> s6;
         private final Stream<T7> s7;
+        private final Function7<T1, T2, T3, T4, T5, T6, T7, Boolean> guard;
 
         private For7Stream(Stream<T1> s1, Stream<T2> s2, Stream<T3> s3, Stream<T4> s4, Stream<T5> s5, Stream<T6> s6, Stream<T7> s7) {
             this.s1 = s1;
@@ -980,6 +1199,25 @@ public final class ForComprehension {
             this.s5 = s5;
             this.s6 = s6;
             this.s7 = s7;
+            this.guard = null;
+        }
+
+        private For7Stream(Stream<T1> s1, Stream<T2> s2, Stream<T3> s3, Stream<T4> s4, Stream<T5> s5, Stream<T6> s6, Stream<T7> s7, Function7<T1, T2, T3, T4, T5, T6, T7, Boolean> guard) {
+            this.s1 = s1;
+            this.s2 = s2;
+            this.s3 = s3;
+            this.s4 = s4;
+            this.s5 = s5;
+            this.s6 = s6;
+            this.s7 = s7;
+            this.guard = guard;
+        }
+
+        public For7Stream<T1, T2, T3, T4, T5, T6, T7> filter(Function7<T1, T2, T3, T4, T5, T6, T7, Boolean> predicate) {
+            Objects.requireNonNull(predicate, "predicate is null");
+            Function7<T1, T2, T3, T4, T5, T6, T7, Boolean> existingGuard = this.guard;
+            Function7<T1, T2, T3, T4, T5, T6, T7, Boolean> newGuard = existingGuard == null ? predicate : (t1, t2, t3, t4, t5, t6, t7) -> existingGuard.apply(t1, t2, t3, t4, t5, t6, t7) && predicate.apply(t1, t2, t3, t4, t5, t6, t7);
+            return new For7Stream<>(s1, s2, s3, s4, s5, s6, s7, newGuard);
         }
 
         /**
@@ -1007,7 +1245,7 @@ public final class ForComprehension {
                         l4.stream().flatMap(t4 ->
                             l5.stream().flatMap(t5 ->
                                 l6.stream().flatMap(t6 ->
-                                    l7.stream().map(t7 -> f.apply(t1, t2, t3, t4, t5, t6, t7))))))));
+                                    l7.stream().filter(t7 -> guard == null || guard.apply(t1, t2, t3, t4, t5, t6, t7)).map(t7 -> f.apply(t1, t2, t3, t4, t5, t6, t7))))))));
         }
     }
 
@@ -1070,6 +1308,7 @@ public final class ForComprehension {
         private final Stream<T6> s6;
         private final Stream<T7> s7;
         private final Stream<T8> s8;
+        private final Function8<T1, T2, T3, T4, T5, T6, T7, T8, Boolean> guard;
 
         private For8Stream(Stream<T1> s1, Stream<T2> s2, Stream<T3> s3, Stream<T4> s4, Stream<T5> s5, Stream<T6> s6, Stream<T7> s7, Stream<T8> s8) {
             this.s1 = s1;
@@ -1080,6 +1319,26 @@ public final class ForComprehension {
             this.s6 = s6;
             this.s7 = s7;
             this.s8 = s8;
+            this.guard = null;
+        }
+
+        private For8Stream(Stream<T1> s1, Stream<T2> s2, Stream<T3> s3, Stream<T4> s4, Stream<T5> s5, Stream<T6> s6, Stream<T7> s7, Stream<T8> s8, Function8<T1, T2, T3, T4, T5, T6, T7, T8, Boolean> guard) {
+            this.s1 = s1;
+            this.s2 = s2;
+            this.s3 = s3;
+            this.s4 = s4;
+            this.s5 = s5;
+            this.s6 = s6;
+            this.s7 = s7;
+            this.s8 = s8;
+            this.guard = guard;
+        }
+
+        public For8Stream<T1, T2, T3, T4, T5, T6, T7, T8> filter(Function8<T1, T2, T3, T4, T5, T6, T7, T8, Boolean> predicate) {
+            Objects.requireNonNull(predicate, "predicate is null");
+            Function8<T1, T2, T3, T4, T5, T6, T7, T8, Boolean> existingGuard = this.guard;
+            Function8<T1, T2, T3, T4, T5, T6, T7, T8, Boolean> newGuard = existingGuard == null ? predicate : (t1, t2, t3, t4, t5, t6, t7, t8) -> existingGuard.apply(t1, t2, t3, t4, t5, t6, t7, t8) && predicate.apply(t1, t2, t3, t4, t5, t6, t7, t8);
+            return new For8Stream<>(s1, s2, s3, s4, s5, s6, s7, s8, newGuard);
         }
 
         /**
@@ -1109,7 +1368,7 @@ public final class ForComprehension {
                             l5.stream().flatMap(t5 ->
                                 l6.stream().flatMap(t6 ->
                                     l7.stream().flatMap(t7 ->
-                                        l8.stream().map(t8 -> f.apply(t1, t2, t3, t4, t5, t6, t7, t8)))))))));
+                                        l8.stream().filter(t8 -> guard == null || guard.apply(t1, t2, t3, t4, t5, t6, t7, t8)).map(t8 -> f.apply(t1, t2, t3, t4, t5, t6, t7, t8)))))))));
         }
     }
 
@@ -1142,10 +1401,25 @@ public final class ForComprehension {
 
         private final Iterable<T1> i1;
         private final Iterable<T2> i2;
+        private final Function2<T1, T2, Boolean> guard;
 
         private For2Iterable(Iterable<T1> i1, Iterable<T2> i2) {
             this.i1 = i1;
             this.i2 = i2;
+            this.guard = null;
+        }
+
+        private For2Iterable(Iterable<T1> i1, Iterable<T2> i2, Function2<T1, T2, Boolean> guard) {
+            this.i1 = i1;
+            this.i2 = i2;
+            this.guard = guard;
+        }
+
+        public For2Iterable<T1, T2> filter(Function2<T1, T2, Boolean> predicate) {
+            Objects.requireNonNull(predicate, "predicate is null");
+            Function2<T1, T2, Boolean> existingGuard = this.guard;
+            Function2<T1, T2, Boolean> newGuard = existingGuard == null ? predicate : (t1, t2) -> existingGuard.apply(t1, t2) && predicate.apply(t1, t2);
+            return new For2Iterable<>(i1, i2, newGuard);
         }
 
         /**
@@ -1163,7 +1437,9 @@ public final class ForComprehension {
             List<R> result = new ArrayList<>();
             for (T1 t1 : i1) {
                 for (T2 t2 : i2) {
-                    result.add(f.apply(t1, t2));
+                    if (guard == null || guard.apply(t1, t2)) {
+                        result.add(f.apply(t1, t2));
+                    }
                 }
             }
             return result;
@@ -1204,11 +1480,27 @@ public final class ForComprehension {
         private final Iterable<T1> i1;
         private final Iterable<T2> i2;
         private final Iterable<T3> i3;
+        private final Function3<T1, T2, T3, Boolean> guard;
 
         private For3Iterable(Iterable<T1> i1, Iterable<T2> i2, Iterable<T3> i3) {
             this.i1 = i1;
             this.i2 = i2;
             this.i3 = i3;
+            this.guard = null;
+        }
+
+        private For3Iterable(Iterable<T1> i1, Iterable<T2> i2, Iterable<T3> i3, Function3<T1, T2, T3, Boolean> guard) {
+            this.i1 = i1;
+            this.i2 = i2;
+            this.i3 = i3;
+            this.guard = guard;
+        }
+
+        public For3Iterable<T1, T2, T3> filter(Function3<T1, T2, T3, Boolean> predicate) {
+            Objects.requireNonNull(predicate, "predicate is null");
+            Function3<T1, T2, T3, Boolean> existingGuard = this.guard;
+            Function3<T1, T2, T3, Boolean> newGuard = existingGuard == null ? predicate : (t1, t2, t3) -> existingGuard.apply(t1, t2, t3) && predicate.apply(t1, t2, t3);
+            return new For3Iterable<>(i1, i2, i3, newGuard);
         }
 
         /**
@@ -1227,7 +1519,9 @@ public final class ForComprehension {
             for (T1 t1 : i1) {
                 for (T2 t2 : i2) {
                     for (T3 t3 : i3) {
-                        result.add(f.apply(t1, t2, t3));
+                        if (guard == null || guard.apply(t1, t2, t3)) {
+                            result.add(f.apply(t1, t2, t3));
+                        }
                     }
                 }
             }
@@ -1274,12 +1568,29 @@ public final class ForComprehension {
         private final Iterable<T2> i2;
         private final Iterable<T3> i3;
         private final Iterable<T4> i4;
+        private final Function4<T1, T2, T3, T4, Boolean> guard;
 
         private For4Iterable(Iterable<T1> i1, Iterable<T2> i2, Iterable<T3> i3, Iterable<T4> i4) {
             this.i1 = i1;
             this.i2 = i2;
             this.i3 = i3;
             this.i4 = i4;
+            this.guard = null;
+        }
+
+        private For4Iterable(Iterable<T1> i1, Iterable<T2> i2, Iterable<T3> i3, Iterable<T4> i4, Function4<T1, T2, T3, T4, Boolean> guard) {
+            this.i1 = i1;
+            this.i2 = i2;
+            this.i3 = i3;
+            this.i4 = i4;
+            this.guard = guard;
+        }
+
+        public For4Iterable<T1, T2, T3, T4> filter(Function4<T1, T2, T3, T4, Boolean> predicate) {
+            Objects.requireNonNull(predicate, "predicate is null");
+            Function4<T1, T2, T3, T4, Boolean> existingGuard = this.guard;
+            Function4<T1, T2, T3, T4, Boolean> newGuard = existingGuard == null ? predicate : (t1, t2, t3, t4) -> existingGuard.apply(t1, t2, t3, t4) && predicate.apply(t1, t2, t3, t4);
+            return new For4Iterable<>(i1, i2, i3, i4, newGuard);
         }
 
         /**
@@ -1299,7 +1610,9 @@ public final class ForComprehension {
                 for (T2 t2 : i2) {
                     for (T3 t3 : i3) {
                         for (T4 t4 : i4) {
-                            result.add(f.apply(t1, t2, t3, t4));
+                            if (guard == null || guard.apply(t1, t2, t3, t4)) {
+                                result.add(f.apply(t1, t2, t3, t4));
+                            }
                         }
                     }
                 }
@@ -1352,6 +1665,7 @@ public final class ForComprehension {
         private final Iterable<T3> i3;
         private final Iterable<T4> i4;
         private final Iterable<T5> i5;
+        private final Function5<T1, T2, T3, T4, T5, Boolean> guard;
 
         private For5Iterable(Iterable<T1> i1, Iterable<T2> i2, Iterable<T3> i3, Iterable<T4> i4, Iterable<T5> i5) {
             this.i1 = i1;
@@ -1359,6 +1673,23 @@ public final class ForComprehension {
             this.i3 = i3;
             this.i4 = i4;
             this.i5 = i5;
+            this.guard = null;
+        }
+
+        private For5Iterable(Iterable<T1> i1, Iterable<T2> i2, Iterable<T3> i3, Iterable<T4> i4, Iterable<T5> i5, Function5<T1, T2, T3, T4, T5, Boolean> guard) {
+            this.i1 = i1;
+            this.i2 = i2;
+            this.i3 = i3;
+            this.i4 = i4;
+            this.i5 = i5;
+            this.guard = guard;
+        }
+
+        public For5Iterable<T1, T2, T3, T4, T5> filter(Function5<T1, T2, T3, T4, T5, Boolean> predicate) {
+            Objects.requireNonNull(predicate, "predicate is null");
+            Function5<T1, T2, T3, T4, T5, Boolean> existingGuard = this.guard;
+            Function5<T1, T2, T3, T4, T5, Boolean> newGuard = existingGuard == null ? predicate : (t1, t2, t3, t4, t5) -> existingGuard.apply(t1, t2, t3, t4, t5) && predicate.apply(t1, t2, t3, t4, t5);
+            return new For5Iterable<>(i1, i2, i3, i4, i5, newGuard);
         }
 
         /**
@@ -1379,7 +1710,9 @@ public final class ForComprehension {
                     for (T3 t3 : i3) {
                         for (T4 t4 : i4) {
                             for (T5 t5 : i5) {
-                                result.add(f.apply(t1, t2, t3, t4, t5));
+                                if (guard == null || guard.apply(t1, t2, t3, t4, t5)) {
+                                    result.add(f.apply(t1, t2, t3, t4, t5));
+                                }
                             }
                         }
                     }
@@ -1438,6 +1771,7 @@ public final class ForComprehension {
         private final Iterable<T4> i4;
         private final Iterable<T5> i5;
         private final Iterable<T6> i6;
+        private final Function6<T1, T2, T3, T4, T5, T6, Boolean> guard;
 
         private For6Iterable(Iterable<T1> i1, Iterable<T2> i2, Iterable<T3> i3, Iterable<T4> i4, Iterable<T5> i5, Iterable<T6> i6) {
             this.i1 = i1;
@@ -1446,6 +1780,24 @@ public final class ForComprehension {
             this.i4 = i4;
             this.i5 = i5;
             this.i6 = i6;
+            this.guard = null;
+        }
+
+        private For6Iterable(Iterable<T1> i1, Iterable<T2> i2, Iterable<T3> i3, Iterable<T4> i4, Iterable<T5> i5, Iterable<T6> i6, Function6<T1, T2, T3, T4, T5, T6, Boolean> guard) {
+            this.i1 = i1;
+            this.i2 = i2;
+            this.i3 = i3;
+            this.i4 = i4;
+            this.i5 = i5;
+            this.i6 = i6;
+            this.guard = guard;
+        }
+
+        public For6Iterable<T1, T2, T3, T4, T5, T6> filter(Function6<T1, T2, T3, T4, T5, T6, Boolean> predicate) {
+            Objects.requireNonNull(predicate, "predicate is null");
+            Function6<T1, T2, T3, T4, T5, T6, Boolean> existingGuard = this.guard;
+            Function6<T1, T2, T3, T4, T5, T6, Boolean> newGuard = existingGuard == null ? predicate : (t1, t2, t3, t4, t5, t6) -> existingGuard.apply(t1, t2, t3, t4, t5, t6) && predicate.apply(t1, t2, t3, t4, t5, t6);
+            return new For6Iterable<>(i1, i2, i3, i4, i5, i6, newGuard);
         }
 
         /**
@@ -1467,7 +1819,9 @@ public final class ForComprehension {
                         for (T4 t4 : i4) {
                             for (T5 t5 : i5) {
                                 for (T6 t6 : i6) {
-                                    result.add(f.apply(t1, t2, t3, t4, t5, t6));
+                                    if (guard == null || guard.apply(t1, t2, t3, t4, t5, t6)) {
+                                        result.add(f.apply(t1, t2, t3, t4, t5, t6));
+                                    }
                                 }
                             }
                         }
@@ -1532,6 +1886,7 @@ public final class ForComprehension {
         private final Iterable<T5> i5;
         private final Iterable<T6> i6;
         private final Iterable<T7> i7;
+        private final Function7<T1, T2, T3, T4, T5, T6, T7, Boolean> guard;
 
         private For7Iterable(Iterable<T1> i1, Iterable<T2> i2, Iterable<T3> i3, Iterable<T4> i4, Iterable<T5> i5, Iterable<T6> i6, Iterable<T7> i7) {
             this.i1 = i1;
@@ -1541,6 +1896,25 @@ public final class ForComprehension {
             this.i5 = i5;
             this.i6 = i6;
             this.i7 = i7;
+            this.guard = null;
+        }
+
+        private For7Iterable(Iterable<T1> i1, Iterable<T2> i2, Iterable<T3> i3, Iterable<T4> i4, Iterable<T5> i5, Iterable<T6> i6, Iterable<T7> i7, Function7<T1, T2, T3, T4, T5, T6, T7, Boolean> guard) {
+            this.i1 = i1;
+            this.i2 = i2;
+            this.i3 = i3;
+            this.i4 = i4;
+            this.i5 = i5;
+            this.i6 = i6;
+            this.i7 = i7;
+            this.guard = guard;
+        }
+
+        public For7Iterable<T1, T2, T3, T4, T5, T6, T7> filter(Function7<T1, T2, T3, T4, T5, T6, T7, Boolean> predicate) {
+            Objects.requireNonNull(predicate, "predicate is null");
+            Function7<T1, T2, T3, T4, T5, T6, T7, Boolean> existingGuard = this.guard;
+            Function7<T1, T2, T3, T4, T5, T6, T7, Boolean> newGuard = existingGuard == null ? predicate : (t1, t2, t3, t4, t5, t6, t7) -> existingGuard.apply(t1, t2, t3, t4, t5, t6, t7) && predicate.apply(t1, t2, t3, t4, t5, t6, t7);
+            return new For7Iterable<>(i1, i2, i3, i4, i5, i6, i7, newGuard);
         }
 
         /**
@@ -1563,7 +1937,9 @@ public final class ForComprehension {
                             for (T5 t5 : i5) {
                                 for (T6 t6 : i6) {
                                     for (T7 t7 : i7) {
-                                        result.add(f.apply(t1, t2, t3, t4, t5, t6, t7));
+                                        if (guard == null || guard.apply(t1, t2, t3, t4, t5, t6, t7)) {
+                                            result.add(f.apply(t1, t2, t3, t4, t5, t6, t7));
+                                        }
                                     }
                                 }
                             }
@@ -1634,6 +2010,7 @@ public final class ForComprehension {
         private final Iterable<T6> i6;
         private final Iterable<T7> i7;
         private final Iterable<T8> i8;
+        private final Function8<T1, T2, T3, T4, T5, T6, T7, T8, Boolean> guard;
 
         private For8Iterable(Iterable<T1> i1, Iterable<T2> i2, Iterable<T3> i3, Iterable<T4> i4, Iterable<T5> i5, Iterable<T6> i6, Iterable<T7> i7, Iterable<T8> i8) {
             this.i1 = i1;
@@ -1644,6 +2021,26 @@ public final class ForComprehension {
             this.i6 = i6;
             this.i7 = i7;
             this.i8 = i8;
+            this.guard = null;
+        }
+
+        private For8Iterable(Iterable<T1> i1, Iterable<T2> i2, Iterable<T3> i3, Iterable<T4> i4, Iterable<T5> i5, Iterable<T6> i6, Iterable<T7> i7, Iterable<T8> i8, Function8<T1, T2, T3, T4, T5, T6, T7, T8, Boolean> guard) {
+            this.i1 = i1;
+            this.i2 = i2;
+            this.i3 = i3;
+            this.i4 = i4;
+            this.i5 = i5;
+            this.i6 = i6;
+            this.i7 = i7;
+            this.i8 = i8;
+            this.guard = guard;
+        }
+
+        public For8Iterable<T1, T2, T3, T4, T5, T6, T7, T8> filter(Function8<T1, T2, T3, T4, T5, T6, T7, T8, Boolean> predicate) {
+            Objects.requireNonNull(predicate, "predicate is null");
+            Function8<T1, T2, T3, T4, T5, T6, T7, T8, Boolean> existingGuard = this.guard;
+            Function8<T1, T2, T3, T4, T5, T6, T7, T8, Boolean> newGuard = existingGuard == null ? predicate : (t1, t2, t3, t4, t5, t6, t7, t8) -> existingGuard.apply(t1, t2, t3, t4, t5, t6, t7, t8) && predicate.apply(t1, t2, t3, t4, t5, t6, t7, t8);
+            return new For8Iterable<>(i1, i2, i3, i4, i5, i6, i7, i8, newGuard);
         }
 
         /**
@@ -1667,7 +2064,9 @@ public final class ForComprehension {
                                 for (T6 t6 : i6) {
                                     for (T7 t7 : i7) {
                                         for (T8 t8 : i8) {
-                                            result.add(f.apply(t1, t2, t3, t4, t5, t6, t7, t8));
+                                            if (guard == null || guard.apply(t1, t2, t3, t4, t5, t6, t7, t8)) {
+                                                result.add(f.apply(t1, t2, t3, t4, t5, t6, t7, t8));
+                                            }
                                         }
                                     }
                                 }
@@ -1690,17 +2089,33 @@ public final class ForComprehension {
 
         private final Optional<T1> o1;
         private final Function1<? super T1, Optional<T2>> o2;
+        private final Function2<T1, T2, Boolean> guard;
 
         private ForLazy2Optional(Optional<T1> o1, Function1<? super T1, Optional<T2>> o2) {
             this.o1 = o1;
             this.o2 = o2;
+            this.guard = null;
+        }
+
+        private ForLazy2Optional(Optional<T1> o1, Function1<? super T1, Optional<T2>> o2, Function2<T1, T2, Boolean> guard) {
+            this.o1 = o1;
+            this.o2 = o2;
+            this.guard = guard;
+        }
+
+        public ForLazy2Optional<T1, T2> filter(Function2<T1, T2, Boolean> predicate) {
+            Objects.requireNonNull(predicate, "predicate is null");
+            Function2<T1, T2, Boolean> existingGuard = this.guard;
+            Function2<T1, T2, Boolean> newGuard = existingGuard == null ? predicate : (t1, t2) -> existingGuard.apply(t1, t2) && predicate.apply(t1, t2);
+            return new ForLazy2Optional<>(o1, o2, newGuard);
         }
 
         public <R> Optional<R> yield(Function2<? super T1, ? super T2, ? extends R> f) {
             Objects.requireNonNull(f, "f is null");
 
             return o1.flatMap(t1 ->
-                o2.apply(t1).map(t2 -> f.apply(t1, t2)));
+                o2.apply(t1).flatMap(t2 ->
+                    (guard != null && !guard.apply(t1, t2)) ? Optional.empty() : Optional.of(f.apply(t1, t2))));
         }
     }
 
@@ -1716,11 +2131,27 @@ public final class ForComprehension {
         private final Optional<T1> o1;
         private final Function1<? super T1, Optional<T2>> o2;
         private final Function2<? super T1, ? super T2, Optional<T3>> o3;
+        private final Function3<T1, T2, T3, Boolean> guard;
 
         private ForLazy3Optional(Optional<T1> o1, Function1<? super T1, Optional<T2>> o2, Function2<? super T1, ? super T2, Optional<T3>> o3) {
             this.o1 = o1;
             this.o2 = o2;
             this.o3 = o3;
+            this.guard = null;
+        }
+
+        private ForLazy3Optional(Optional<T1> o1, Function1<? super T1, Optional<T2>> o2, Function2<? super T1, ? super T2, Optional<T3>> o3, Function3<T1, T2, T3, Boolean> guard) {
+            this.o1 = o1;
+            this.o2 = o2;
+            this.o3 = o3;
+            this.guard = guard;
+        }
+
+        public ForLazy3Optional<T1, T2, T3> filter(Function3<T1, T2, T3, Boolean> predicate) {
+            Objects.requireNonNull(predicate, "predicate is null");
+            Function3<T1, T2, T3, Boolean> existingGuard = this.guard;
+            Function3<T1, T2, T3, Boolean> newGuard = existingGuard == null ? predicate : (t1, t2, t3) -> existingGuard.apply(t1, t2, t3) && predicate.apply(t1, t2, t3);
+            return new ForLazy3Optional<>(o1, o2, o3, newGuard);
         }
 
         public <R> Optional<R> yield(Function3<? super T1, ? super T2, ? super T3, ? extends R> f) {
@@ -1728,7 +2159,8 @@ public final class ForComprehension {
 
             return o1.flatMap(t1 ->
                 o2.apply(t1).flatMap(t2 ->
-                    o3.apply(t1, t2).map(t3 -> f.apply(t1, t2, t3))));
+                    o3.apply(t1, t2).flatMap(t3 ->
+                        (guard != null && !guard.apply(t1, t2, t3)) ? Optional.empty() : Optional.of(f.apply(t1, t2, t3)))));
         }
     }
 
@@ -1746,12 +2178,29 @@ public final class ForComprehension {
         private final Function1<? super T1, Optional<T2>> o2;
         private final Function2<? super T1, ? super T2, Optional<T3>> o3;
         private final Function3<? super T1, ? super T2, ? super T3, Optional<T4>> o4;
+        private final Function4<T1, T2, T3, T4, Boolean> guard;
 
         private ForLazy4Optional(Optional<T1> o1, Function1<? super T1, Optional<T2>> o2, Function2<? super T1, ? super T2, Optional<T3>> o3, Function3<? super T1, ? super T2, ? super T3, Optional<T4>> o4) {
             this.o1 = o1;
             this.o2 = o2;
             this.o3 = o3;
             this.o4 = o4;
+            this.guard = null;
+        }
+
+        private ForLazy4Optional(Optional<T1> o1, Function1<? super T1, Optional<T2>> o2, Function2<? super T1, ? super T2, Optional<T3>> o3, Function3<? super T1, ? super T2, ? super T3, Optional<T4>> o4, Function4<T1, T2, T3, T4, Boolean> guard) {
+            this.o1 = o1;
+            this.o2 = o2;
+            this.o3 = o3;
+            this.o4 = o4;
+            this.guard = guard;
+        }
+
+        public ForLazy4Optional<T1, T2, T3, T4> filter(Function4<T1, T2, T3, T4, Boolean> predicate) {
+            Objects.requireNonNull(predicate, "predicate is null");
+            Function4<T1, T2, T3, T4, Boolean> existingGuard = this.guard;
+            Function4<T1, T2, T3, T4, Boolean> newGuard = existingGuard == null ? predicate : (t1, t2, t3, t4) -> existingGuard.apply(t1, t2, t3, t4) && predicate.apply(t1, t2, t3, t4);
+            return new ForLazy4Optional<>(o1, o2, o3, o4, newGuard);
         }
 
         public <R> Optional<R> yield(Function4<? super T1, ? super T2, ? super T3, ? super T4, ? extends R> f) {
@@ -1760,7 +2209,8 @@ public final class ForComprehension {
             return o1.flatMap(t1 ->
                 o2.apply(t1).flatMap(t2 ->
                     o3.apply(t1, t2).flatMap(t3 ->
-                        o4.apply(t1, t2, t3).map(t4 -> f.apply(t1, t2, t3, t4)))));
+                        o4.apply(t1, t2, t3).flatMap(t4 ->
+                            (guard != null && !guard.apply(t1, t2, t3, t4)) ? Optional.empty() : Optional.of(f.apply(t1, t2, t3, t4))))));
         }
     }
 
@@ -1780,6 +2230,7 @@ public final class ForComprehension {
         private final Function2<? super T1, ? super T2, Optional<T3>> o3;
         private final Function3<? super T1, ? super T2, ? super T3, Optional<T4>> o4;
         private final Function4<? super T1, ? super T2, ? super T3, ? super T4, Optional<T5>> o5;
+        private final Function5<T1, T2, T3, T4, T5, Boolean> guard;
 
         private ForLazy5Optional(Optional<T1> o1, Function1<? super T1, Optional<T2>> o2, Function2<? super T1, ? super T2, Optional<T3>> o3, Function3<? super T1, ? super T2, ? super T3, Optional<T4>> o4, Function4<? super T1, ? super T2, ? super T3, ? super T4, Optional<T5>> o5) {
             this.o1 = o1;
@@ -1787,6 +2238,23 @@ public final class ForComprehension {
             this.o3 = o3;
             this.o4 = o4;
             this.o5 = o5;
+            this.guard = null;
+        }
+
+        private ForLazy5Optional(Optional<T1> o1, Function1<? super T1, Optional<T2>> o2, Function2<? super T1, ? super T2, Optional<T3>> o3, Function3<? super T1, ? super T2, ? super T3, Optional<T4>> o4, Function4<? super T1, ? super T2, ? super T3, ? super T4, Optional<T5>> o5, Function5<T1, T2, T3, T4, T5, Boolean> guard) {
+            this.o1 = o1;
+            this.o2 = o2;
+            this.o3 = o3;
+            this.o4 = o4;
+            this.o5 = o5;
+            this.guard = guard;
+        }
+
+        public ForLazy5Optional<T1, T2, T3, T4, T5> filter(Function5<T1, T2, T3, T4, T5, Boolean> predicate) {
+            Objects.requireNonNull(predicate, "predicate is null");
+            Function5<T1, T2, T3, T4, T5, Boolean> existingGuard = this.guard;
+            Function5<T1, T2, T3, T4, T5, Boolean> newGuard = existingGuard == null ? predicate : (t1, t2, t3, t4, t5) -> existingGuard.apply(t1, t2, t3, t4, t5) && predicate.apply(t1, t2, t3, t4, t5);
+            return new ForLazy5Optional<>(o1, o2, o3, o4, o5, newGuard);
         }
 
         public <R> Optional<R> yield(Function5<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, ? extends R> f) {
@@ -1796,7 +2264,8 @@ public final class ForComprehension {
                 o2.apply(t1).flatMap(t2 ->
                     o3.apply(t1, t2).flatMap(t3 ->
                         o4.apply(t1, t2, t3).flatMap(t4 ->
-                            o5.apply(t1, t2, t3, t4).map(t5 -> f.apply(t1, t2, t3, t4, t5))))));
+                            o5.apply(t1, t2, t3, t4).flatMap(t5 ->
+                                (guard != null && !guard.apply(t1, t2, t3, t4, t5)) ? Optional.empty() : Optional.of(f.apply(t1, t2, t3, t4, t5)))))));
         }
     }
 
@@ -1818,6 +2287,7 @@ public final class ForComprehension {
         private final Function3<? super T1, ? super T2, ? super T3, Optional<T4>> o4;
         private final Function4<? super T1, ? super T2, ? super T3, ? super T4, Optional<T5>> o5;
         private final Function5<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, Optional<T6>> o6;
+        private final Function6<T1, T2, T3, T4, T5, T6, Boolean> guard;
 
         private ForLazy6Optional(Optional<T1> o1, Function1<? super T1, Optional<T2>> o2, Function2<? super T1, ? super T2, Optional<T3>> o3, Function3<? super T1, ? super T2, ? super T3, Optional<T4>> o4, Function4<? super T1, ? super T2, ? super T3, ? super T4, Optional<T5>> o5, Function5<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, Optional<T6>> o6) {
             this.o1 = o1;
@@ -1826,6 +2296,24 @@ public final class ForComprehension {
             this.o4 = o4;
             this.o5 = o5;
             this.o6 = o6;
+            this.guard = null;
+        }
+
+        private ForLazy6Optional(Optional<T1> o1, Function1<? super T1, Optional<T2>> o2, Function2<? super T1, ? super T2, Optional<T3>> o3, Function3<? super T1, ? super T2, ? super T3, Optional<T4>> o4, Function4<? super T1, ? super T2, ? super T3, ? super T4, Optional<T5>> o5, Function5<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, Optional<T6>> o6, Function6<T1, T2, T3, T4, T5, T6, Boolean> guard) {
+            this.o1 = o1;
+            this.o2 = o2;
+            this.o3 = o3;
+            this.o4 = o4;
+            this.o5 = o5;
+            this.o6 = o6;
+            this.guard = guard;
+        }
+
+        public ForLazy6Optional<T1, T2, T3, T4, T5, T6> filter(Function6<T1, T2, T3, T4, T5, T6, Boolean> predicate) {
+            Objects.requireNonNull(predicate, "predicate is null");
+            Function6<T1, T2, T3, T4, T5, T6, Boolean> existingGuard = this.guard;
+            Function6<T1, T2, T3, T4, T5, T6, Boolean> newGuard = existingGuard == null ? predicate : (t1, t2, t3, t4, t5, t6) -> existingGuard.apply(t1, t2, t3, t4, t5, t6) && predicate.apply(t1, t2, t3, t4, t5, t6);
+            return new ForLazy6Optional<>(o1, o2, o3, o4, o5, o6, newGuard);
         }
 
         public <R> Optional<R> yield(Function6<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, ? super T6, ? extends R> f) {
@@ -1836,7 +2324,8 @@ public final class ForComprehension {
                     o3.apply(t1, t2).flatMap(t3 ->
                         o4.apply(t1, t2, t3).flatMap(t4 ->
                             o5.apply(t1, t2, t3, t4).flatMap(t5 ->
-                                o6.apply(t1, t2, t3, t4, t5).map(t6 -> f.apply(t1, t2, t3, t4, t5, t6)))))));
+                                o6.apply(t1, t2, t3, t4, t5).flatMap(t6 ->
+                                    (guard != null && !guard.apply(t1, t2, t3, t4, t5, t6)) ? Optional.empty() : Optional.of(f.apply(t1, t2, t3, t4, t5, t6))))))));
         }
     }
 
@@ -1860,6 +2349,7 @@ public final class ForComprehension {
         private final Function4<? super T1, ? super T2, ? super T3, ? super T4, Optional<T5>> o5;
         private final Function5<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, Optional<T6>> o6;
         private final Function6<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, ? super T6, Optional<T7>> o7;
+        private final Function7<T1, T2, T3, T4, T5, T6, T7, Boolean> guard;
 
         private ForLazy7Optional(Optional<T1> o1, Function1<? super T1, Optional<T2>> o2, Function2<? super T1, ? super T2, Optional<T3>> o3, Function3<? super T1, ? super T2, ? super T3, Optional<T4>> o4, Function4<? super T1, ? super T2, ? super T3, ? super T4, Optional<T5>> o5, Function5<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, Optional<T6>> o6, Function6<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, ? super T6, Optional<T7>> o7) {
             this.o1 = o1;
@@ -1869,6 +2359,25 @@ public final class ForComprehension {
             this.o5 = o5;
             this.o6 = o6;
             this.o7 = o7;
+            this.guard = null;
+        }
+
+        private ForLazy7Optional(Optional<T1> o1, Function1<? super T1, Optional<T2>> o2, Function2<? super T1, ? super T2, Optional<T3>> o3, Function3<? super T1, ? super T2, ? super T3, Optional<T4>> o4, Function4<? super T1, ? super T2, ? super T3, ? super T4, Optional<T5>> o5, Function5<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, Optional<T6>> o6, Function6<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, ? super T6, Optional<T7>> o7, Function7<T1, T2, T3, T4, T5, T6, T7, Boolean> guard) {
+            this.o1 = o1;
+            this.o2 = o2;
+            this.o3 = o3;
+            this.o4 = o4;
+            this.o5 = o5;
+            this.o6 = o6;
+            this.o7 = o7;
+            this.guard = guard;
+        }
+
+        public ForLazy7Optional<T1, T2, T3, T4, T5, T6, T7> filter(Function7<T1, T2, T3, T4, T5, T6, T7, Boolean> predicate) {
+            Objects.requireNonNull(predicate, "predicate is null");
+            Function7<T1, T2, T3, T4, T5, T6, T7, Boolean> existingGuard = this.guard;
+            Function7<T1, T2, T3, T4, T5, T6, T7, Boolean> newGuard = existingGuard == null ? predicate : (t1, t2, t3, t4, t5, t6, t7) -> existingGuard.apply(t1, t2, t3, t4, t5, t6, t7) && predicate.apply(t1, t2, t3, t4, t5, t6, t7);
+            return new ForLazy7Optional<>(o1, o2, o3, o4, o5, o6, o7, newGuard);
         }
 
         public <R> Optional<R> yield(Function7<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, ? super T6, ? super T7, ? extends R> f) {
@@ -1880,7 +2389,8 @@ public final class ForComprehension {
                         o4.apply(t1, t2, t3).flatMap(t4 ->
                             o5.apply(t1, t2, t3, t4).flatMap(t5 ->
                                 o6.apply(t1, t2, t3, t4, t5).flatMap(t6 ->
-                                    o7.apply(t1, t2, t3, t4, t5, t6).map(t7 -> f.apply(t1, t2, t3, t4, t5, t6, t7))))))));
+                                    o7.apply(t1, t2, t3, t4, t5, t6).flatMap(t7 ->
+                                        (guard != null && !guard.apply(t1, t2, t3, t4, t5, t6, t7)) ? Optional.empty() : Optional.of(f.apply(t1, t2, t3, t4, t5, t6, t7)))))))));
         }
     }
 
@@ -1906,6 +2416,7 @@ public final class ForComprehension {
         private final Function5<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, Optional<T6>> o6;
         private final Function6<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, ? super T6, Optional<T7>> o7;
         private final Function7<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, ? super T6, ? super T7, Optional<T8>> o8;
+        private final Function8<T1, T2, T3, T4, T5, T6, T7, T8, Boolean> guard;
 
         private ForLazy8Optional(Optional<T1> o1, Function1<? super T1, Optional<T2>> o2, Function2<? super T1, ? super T2, Optional<T3>> o3, Function3<? super T1, ? super T2, ? super T3, Optional<T4>> o4, Function4<? super T1, ? super T2, ? super T3, ? super T4, Optional<T5>> o5, Function5<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, Optional<T6>> o6, Function6<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, ? super T6, Optional<T7>> o7, Function7<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, ? super T6, ? super T7, Optional<T8>> o8) {
             this.o1 = o1;
@@ -1916,6 +2427,26 @@ public final class ForComprehension {
             this.o6 = o6;
             this.o7 = o7;
             this.o8 = o8;
+            this.guard = null;
+        }
+
+        private ForLazy8Optional(Optional<T1> o1, Function1<? super T1, Optional<T2>> o2, Function2<? super T1, ? super T2, Optional<T3>> o3, Function3<? super T1, ? super T2, ? super T3, Optional<T4>> o4, Function4<? super T1, ? super T2, ? super T3, ? super T4, Optional<T5>> o5, Function5<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, Optional<T6>> o6, Function6<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, ? super T6, Optional<T7>> o7, Function7<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, ? super T6, ? super T7, Optional<T8>> o8, Function8<T1, T2, T3, T4, T5, T6, T7, T8, Boolean> guard) {
+            this.o1 = o1;
+            this.o2 = o2;
+            this.o3 = o3;
+            this.o4 = o4;
+            this.o5 = o5;
+            this.o6 = o6;
+            this.o7 = o7;
+            this.o8 = o8;
+            this.guard = guard;
+        }
+
+        public ForLazy8Optional<T1, T2, T3, T4, T5, T6, T7, T8> filter(Function8<T1, T2, T3, T4, T5, T6, T7, T8, Boolean> predicate) {
+            Objects.requireNonNull(predicate, "predicate is null");
+            Function8<T1, T2, T3, T4, T5, T6, T7, T8, Boolean> existingGuard = this.guard;
+            Function8<T1, T2, T3, T4, T5, T6, T7, T8, Boolean> newGuard = existingGuard == null ? predicate : (t1, t2, t3, t4, t5, t6, t7, t8) -> existingGuard.apply(t1, t2, t3, t4, t5, t6, t7, t8) && predicate.apply(t1, t2, t3, t4, t5, t6, t7, t8);
+            return new ForLazy8Optional<>(o1, o2, o3, o4, o5, o6, o7, o8, newGuard);
         }
 
         public <R> Optional<R> yield(Function8<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, ? super T6, ? super T7, ? super T8, ? extends R> f) {
@@ -1928,7 +2459,8 @@ public final class ForComprehension {
                             o5.apply(t1, t2, t3, t4).flatMap(t5 ->
                                 o6.apply(t1, t2, t3, t4, t5).flatMap(t6 ->
                                     o7.apply(t1, t2, t3, t4, t5, t6).flatMap(t7 ->
-                                        o8.apply(t1, t2, t3, t4, t5, t6, t7).map(t8 -> f.apply(t1, t2, t3, t4, t5, t6, t7, t8)))))))));
+                                        o8.apply(t1, t2, t3, t4, t5, t6, t7).flatMap(t8 ->
+                                            (guard != null && !guard.apply(t1, t2, t3, t4, t5, t6, t7, t8)) ? Optional.empty() : Optional.of(f.apply(t1, t2, t3, t4, t5, t6, t7, t8))))))))));
         }
     }
 
@@ -1942,17 +2474,32 @@ public final class ForComprehension {
 
         private final Stream<T1> s1;
         private final Function1<? super T1, Stream<T2>> s2;
+        private final Function2<T1, T2, Boolean> guard;
 
         private ForLazy2Stream(Stream<T1> s1, Function1<? super T1, Stream<T2>> s2) {
             this.s1 = s1;
             this.s2 = s2;
+            this.guard = null;
+        }
+
+        private ForLazy2Stream(Stream<T1> s1, Function1<? super T1, Stream<T2>> s2, Function2<T1, T2, Boolean> guard) {
+            this.s1 = s1;
+            this.s2 = s2;
+            this.guard = guard;
+        }
+
+        public ForLazy2Stream<T1, T2> filter(Function2<T1, T2, Boolean> predicate) {
+            Objects.requireNonNull(predicate, "predicate is null");
+            Function2<T1, T2, Boolean> existingGuard = this.guard;
+            Function2<T1, T2, Boolean> newGuard = existingGuard == null ? predicate : (t1, t2) -> existingGuard.apply(t1, t2) && predicate.apply(t1, t2);
+            return new ForLazy2Stream<>(s1, s2, newGuard);
         }
 
         public <R> Stream<R> yield(Function2<? super T1, ? super T2, ? extends R> f) {
             Objects.requireNonNull(f, "f is null");
 
             return s1.flatMap(t1 ->
-                s2.apply(t1).map(t2 -> f.apply(t1, t2)));
+                s2.apply(t1).filter(t2 -> guard == null || guard.apply(t1, t2)).map(t2 -> f.apply(t1, t2)));
         }
     }
 
@@ -1968,11 +2515,27 @@ public final class ForComprehension {
         private final Stream<T1> s1;
         private final Function1<? super T1, Stream<T2>> s2;
         private final Function2<? super T1, ? super T2, Stream<T3>> s3;
+        private final Function3<T1, T2, T3, Boolean> guard;
 
         private ForLazy3Stream(Stream<T1> s1, Function1<? super T1, Stream<T2>> s2, Function2<? super T1, ? super T2, Stream<T3>> s3) {
             this.s1 = s1;
             this.s2 = s2;
             this.s3 = s3;
+            this.guard = null;
+        }
+
+        private ForLazy3Stream(Stream<T1> s1, Function1<? super T1, Stream<T2>> s2, Function2<? super T1, ? super T2, Stream<T3>> s3, Function3<T1, T2, T3, Boolean> guard) {
+            this.s1 = s1;
+            this.s2 = s2;
+            this.s3 = s3;
+            this.guard = guard;
+        }
+
+        public ForLazy3Stream<T1, T2, T3> filter(Function3<T1, T2, T3, Boolean> predicate) {
+            Objects.requireNonNull(predicate, "predicate is null");
+            Function3<T1, T2, T3, Boolean> existingGuard = this.guard;
+            Function3<T1, T2, T3, Boolean> newGuard = existingGuard == null ? predicate : (t1, t2, t3) -> existingGuard.apply(t1, t2, t3) && predicate.apply(t1, t2, t3);
+            return new ForLazy3Stream<>(s1, s2, s3, newGuard);
         }
 
         public <R> Stream<R> yield(Function3<? super T1, ? super T2, ? super T3, ? extends R> f) {
@@ -1980,7 +2543,7 @@ public final class ForComprehension {
 
             return s1.flatMap(t1 ->
                 s2.apply(t1).flatMap(t2 ->
-                    s3.apply(t1, t2).map(t3 -> f.apply(t1, t2, t3))));
+                    s3.apply(t1, t2).filter(t3 -> guard == null || guard.apply(t1, t2, t3)).map(t3 -> f.apply(t1, t2, t3))));
         }
     }
 
@@ -1998,12 +2561,29 @@ public final class ForComprehension {
         private final Function1<? super T1, Stream<T2>> s2;
         private final Function2<? super T1, ? super T2, Stream<T3>> s3;
         private final Function3<? super T1, ? super T2, ? super T3, Stream<T4>> s4;
+        private final Function4<T1, T2, T3, T4, Boolean> guard;
 
         private ForLazy4Stream(Stream<T1> s1, Function1<? super T1, Stream<T2>> s2, Function2<? super T1, ? super T2, Stream<T3>> s3, Function3<? super T1, ? super T2, ? super T3, Stream<T4>> s4) {
             this.s1 = s1;
             this.s2 = s2;
             this.s3 = s3;
             this.s4 = s4;
+            this.guard = null;
+        }
+
+        private ForLazy4Stream(Stream<T1> s1, Function1<? super T1, Stream<T2>> s2, Function2<? super T1, ? super T2, Stream<T3>> s3, Function3<? super T1, ? super T2, ? super T3, Stream<T4>> s4, Function4<T1, T2, T3, T4, Boolean> guard) {
+            this.s1 = s1;
+            this.s2 = s2;
+            this.s3 = s3;
+            this.s4 = s4;
+            this.guard = guard;
+        }
+
+        public ForLazy4Stream<T1, T2, T3, T4> filter(Function4<T1, T2, T3, T4, Boolean> predicate) {
+            Objects.requireNonNull(predicate, "predicate is null");
+            Function4<T1, T2, T3, T4, Boolean> existingGuard = this.guard;
+            Function4<T1, T2, T3, T4, Boolean> newGuard = existingGuard == null ? predicate : (t1, t2, t3, t4) -> existingGuard.apply(t1, t2, t3, t4) && predicate.apply(t1, t2, t3, t4);
+            return new ForLazy4Stream<>(s1, s2, s3, s4, newGuard);
         }
 
         public <R> Stream<R> yield(Function4<? super T1, ? super T2, ? super T3, ? super T4, ? extends R> f) {
@@ -2012,7 +2592,7 @@ public final class ForComprehension {
             return s1.flatMap(t1 ->
                 s2.apply(t1).flatMap(t2 ->
                     s3.apply(t1, t2).flatMap(t3 ->
-                        s4.apply(t1, t2, t3).map(t4 -> f.apply(t1, t2, t3, t4)))));
+                        s4.apply(t1, t2, t3).filter(t4 -> guard == null || guard.apply(t1, t2, t3, t4)).map(t4 -> f.apply(t1, t2, t3, t4)))));
         }
     }
 
@@ -2032,6 +2612,7 @@ public final class ForComprehension {
         private final Function2<? super T1, ? super T2, Stream<T3>> s3;
         private final Function3<? super T1, ? super T2, ? super T3, Stream<T4>> s4;
         private final Function4<? super T1, ? super T2, ? super T3, ? super T4, Stream<T5>> s5;
+        private final Function5<T1, T2, T3, T4, T5, Boolean> guard;
 
         private ForLazy5Stream(Stream<T1> s1, Function1<? super T1, Stream<T2>> s2, Function2<? super T1, ? super T2, Stream<T3>> s3, Function3<? super T1, ? super T2, ? super T3, Stream<T4>> s4, Function4<? super T1, ? super T2, ? super T3, ? super T4, Stream<T5>> s5) {
             this.s1 = s1;
@@ -2039,6 +2620,23 @@ public final class ForComprehension {
             this.s3 = s3;
             this.s4 = s4;
             this.s5 = s5;
+            this.guard = null;
+        }
+
+        private ForLazy5Stream(Stream<T1> s1, Function1<? super T1, Stream<T2>> s2, Function2<? super T1, ? super T2, Stream<T3>> s3, Function3<? super T1, ? super T2, ? super T3, Stream<T4>> s4, Function4<? super T1, ? super T2, ? super T3, ? super T4, Stream<T5>> s5, Function5<T1, T2, T3, T4, T5, Boolean> guard) {
+            this.s1 = s1;
+            this.s2 = s2;
+            this.s3 = s3;
+            this.s4 = s4;
+            this.s5 = s5;
+            this.guard = guard;
+        }
+
+        public ForLazy5Stream<T1, T2, T3, T4, T5> filter(Function5<T1, T2, T3, T4, T5, Boolean> predicate) {
+            Objects.requireNonNull(predicate, "predicate is null");
+            Function5<T1, T2, T3, T4, T5, Boolean> existingGuard = this.guard;
+            Function5<T1, T2, T3, T4, T5, Boolean> newGuard = existingGuard == null ? predicate : (t1, t2, t3, t4, t5) -> existingGuard.apply(t1, t2, t3, t4, t5) && predicate.apply(t1, t2, t3, t4, t5);
+            return new ForLazy5Stream<>(s1, s2, s3, s4, s5, newGuard);
         }
 
         public <R> Stream<R> yield(Function5<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, ? extends R> f) {
@@ -2048,7 +2646,7 @@ public final class ForComprehension {
                 s2.apply(t1).flatMap(t2 ->
                     s3.apply(t1, t2).flatMap(t3 ->
                         s4.apply(t1, t2, t3).flatMap(t4 ->
-                            s5.apply(t1, t2, t3, t4).map(t5 -> f.apply(t1, t2, t3, t4, t5))))));
+                            s5.apply(t1, t2, t3, t4).filter(t5 -> guard == null || guard.apply(t1, t2, t3, t4, t5)).map(t5 -> f.apply(t1, t2, t3, t4, t5))))));
         }
     }
 
@@ -2070,6 +2668,7 @@ public final class ForComprehension {
         private final Function3<? super T1, ? super T2, ? super T3, Stream<T4>> s4;
         private final Function4<? super T1, ? super T2, ? super T3, ? super T4, Stream<T5>> s5;
         private final Function5<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, Stream<T6>> s6;
+        private final Function6<T1, T2, T3, T4, T5, T6, Boolean> guard;
 
         private ForLazy6Stream(Stream<T1> s1, Function1<? super T1, Stream<T2>> s2, Function2<? super T1, ? super T2, Stream<T3>> s3, Function3<? super T1, ? super T2, ? super T3, Stream<T4>> s4, Function4<? super T1, ? super T2, ? super T3, ? super T4, Stream<T5>> s5, Function5<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, Stream<T6>> s6) {
             this.s1 = s1;
@@ -2078,6 +2677,24 @@ public final class ForComprehension {
             this.s4 = s4;
             this.s5 = s5;
             this.s6 = s6;
+            this.guard = null;
+        }
+
+        private ForLazy6Stream(Stream<T1> s1, Function1<? super T1, Stream<T2>> s2, Function2<? super T1, ? super T2, Stream<T3>> s3, Function3<? super T1, ? super T2, ? super T3, Stream<T4>> s4, Function4<? super T1, ? super T2, ? super T3, ? super T4, Stream<T5>> s5, Function5<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, Stream<T6>> s6, Function6<T1, T2, T3, T4, T5, T6, Boolean> guard) {
+            this.s1 = s1;
+            this.s2 = s2;
+            this.s3 = s3;
+            this.s4 = s4;
+            this.s5 = s5;
+            this.s6 = s6;
+            this.guard = guard;
+        }
+
+        public ForLazy6Stream<T1, T2, T3, T4, T5, T6> filter(Function6<T1, T2, T3, T4, T5, T6, Boolean> predicate) {
+            Objects.requireNonNull(predicate, "predicate is null");
+            Function6<T1, T2, T3, T4, T5, T6, Boolean> existingGuard = this.guard;
+            Function6<T1, T2, T3, T4, T5, T6, Boolean> newGuard = existingGuard == null ? predicate : (t1, t2, t3, t4, t5, t6) -> existingGuard.apply(t1, t2, t3, t4, t5, t6) && predicate.apply(t1, t2, t3, t4, t5, t6);
+            return new ForLazy6Stream<>(s1, s2, s3, s4, s5, s6, newGuard);
         }
 
         public <R> Stream<R> yield(Function6<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, ? super T6, ? extends R> f) {
@@ -2088,7 +2705,7 @@ public final class ForComprehension {
                     s3.apply(t1, t2).flatMap(t3 ->
                         s4.apply(t1, t2, t3).flatMap(t4 ->
                             s5.apply(t1, t2, t3, t4).flatMap(t5 ->
-                                s6.apply(t1, t2, t3, t4, t5).map(t6 -> f.apply(t1, t2, t3, t4, t5, t6)))))));
+                                s6.apply(t1, t2, t3, t4, t5).filter(t6 -> guard == null || guard.apply(t1, t2, t3, t4, t5, t6)).map(t6 -> f.apply(t1, t2, t3, t4, t5, t6)))))));
         }
     }
 
@@ -2112,6 +2729,7 @@ public final class ForComprehension {
         private final Function4<? super T1, ? super T2, ? super T3, ? super T4, Stream<T5>> s5;
         private final Function5<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, Stream<T6>> s6;
         private final Function6<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, ? super T6, Stream<T7>> s7;
+        private final Function7<T1, T2, T3, T4, T5, T6, T7, Boolean> guard;
 
         private ForLazy7Stream(Stream<T1> s1, Function1<? super T1, Stream<T2>> s2, Function2<? super T1, ? super T2, Stream<T3>> s3, Function3<? super T1, ? super T2, ? super T3, Stream<T4>> s4, Function4<? super T1, ? super T2, ? super T3, ? super T4, Stream<T5>> s5, Function5<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, Stream<T6>> s6, Function6<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, ? super T6, Stream<T7>> s7) {
             this.s1 = s1;
@@ -2121,6 +2739,25 @@ public final class ForComprehension {
             this.s5 = s5;
             this.s6 = s6;
             this.s7 = s7;
+            this.guard = null;
+        }
+
+        private ForLazy7Stream(Stream<T1> s1, Function1<? super T1, Stream<T2>> s2, Function2<? super T1, ? super T2, Stream<T3>> s3, Function3<? super T1, ? super T2, ? super T3, Stream<T4>> s4, Function4<? super T1, ? super T2, ? super T3, ? super T4, Stream<T5>> s5, Function5<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, Stream<T6>> s6, Function6<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, ? super T6, Stream<T7>> s7, Function7<T1, T2, T3, T4, T5, T6, T7, Boolean> guard) {
+            this.s1 = s1;
+            this.s2 = s2;
+            this.s3 = s3;
+            this.s4 = s4;
+            this.s5 = s5;
+            this.s6 = s6;
+            this.s7 = s7;
+            this.guard = guard;
+        }
+
+        public ForLazy7Stream<T1, T2, T3, T4, T5, T6, T7> filter(Function7<T1, T2, T3, T4, T5, T6, T7, Boolean> predicate) {
+            Objects.requireNonNull(predicate, "predicate is null");
+            Function7<T1, T2, T3, T4, T5, T6, T7, Boolean> existingGuard = this.guard;
+            Function7<T1, T2, T3, T4, T5, T6, T7, Boolean> newGuard = existingGuard == null ? predicate : (t1, t2, t3, t4, t5, t6, t7) -> existingGuard.apply(t1, t2, t3, t4, t5, t6, t7) && predicate.apply(t1, t2, t3, t4, t5, t6, t7);
+            return new ForLazy7Stream<>(s1, s2, s3, s4, s5, s6, s7, newGuard);
         }
 
         public <R> Stream<R> yield(Function7<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, ? super T6, ? super T7, ? extends R> f) {
@@ -2132,7 +2769,7 @@ public final class ForComprehension {
                         s4.apply(t1, t2, t3).flatMap(t4 ->
                             s5.apply(t1, t2, t3, t4).flatMap(t5 ->
                                 s6.apply(t1, t2, t3, t4, t5).flatMap(t6 ->
-                                    s7.apply(t1, t2, t3, t4, t5, t6).map(t7 -> f.apply(t1, t2, t3, t4, t5, t6, t7))))))));
+                                    s7.apply(t1, t2, t3, t4, t5, t6).filter(t7 -> guard == null || guard.apply(t1, t2, t3, t4, t5, t6, t7)).map(t7 -> f.apply(t1, t2, t3, t4, t5, t6, t7))))))));
         }
     }
 
@@ -2158,6 +2795,7 @@ public final class ForComprehension {
         private final Function5<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, Stream<T6>> s6;
         private final Function6<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, ? super T6, Stream<T7>> s7;
         private final Function7<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, ? super T6, ? super T7, Stream<T8>> s8;
+        private final Function8<T1, T2, T3, T4, T5, T6, T7, T8, Boolean> guard;
 
         private ForLazy8Stream(Stream<T1> s1, Function1<? super T1, Stream<T2>> s2, Function2<? super T1, ? super T2, Stream<T3>> s3, Function3<? super T1, ? super T2, ? super T3, Stream<T4>> s4, Function4<? super T1, ? super T2, ? super T3, ? super T4, Stream<T5>> s5, Function5<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, Stream<T6>> s6, Function6<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, ? super T6, Stream<T7>> s7, Function7<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, ? super T6, ? super T7, Stream<T8>> s8) {
             this.s1 = s1;
@@ -2168,6 +2806,26 @@ public final class ForComprehension {
             this.s6 = s6;
             this.s7 = s7;
             this.s8 = s8;
+            this.guard = null;
+        }
+
+        private ForLazy8Stream(Stream<T1> s1, Function1<? super T1, Stream<T2>> s2, Function2<? super T1, ? super T2, Stream<T3>> s3, Function3<? super T1, ? super T2, ? super T3, Stream<T4>> s4, Function4<? super T1, ? super T2, ? super T3, ? super T4, Stream<T5>> s5, Function5<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, Stream<T6>> s6, Function6<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, ? super T6, Stream<T7>> s7, Function7<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, ? super T6, ? super T7, Stream<T8>> s8, Function8<T1, T2, T3, T4, T5, T6, T7, T8, Boolean> guard) {
+            this.s1 = s1;
+            this.s2 = s2;
+            this.s3 = s3;
+            this.s4 = s4;
+            this.s5 = s5;
+            this.s6 = s6;
+            this.s7 = s7;
+            this.s8 = s8;
+            this.guard = guard;
+        }
+
+        public ForLazy8Stream<T1, T2, T3, T4, T5, T6, T7, T8> filter(Function8<T1, T2, T3, T4, T5, T6, T7, T8, Boolean> predicate) {
+            Objects.requireNonNull(predicate, "predicate is null");
+            Function8<T1, T2, T3, T4, T5, T6, T7, T8, Boolean> existingGuard = this.guard;
+            Function8<T1, T2, T3, T4, T5, T6, T7, T8, Boolean> newGuard = existingGuard == null ? predicate : (t1, t2, t3, t4, t5, t6, t7, t8) -> existingGuard.apply(t1, t2, t3, t4, t5, t6, t7, t8) && predicate.apply(t1, t2, t3, t4, t5, t6, t7, t8);
+            return new ForLazy8Stream<>(s1, s2, s3, s4, s5, s6, s7, s8, newGuard);
         }
 
         public <R> Stream<R> yield(Function8<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, ? super T6, ? super T7, ? super T8, ? extends R> f) {
@@ -2180,7 +2838,7 @@ public final class ForComprehension {
                             s5.apply(t1, t2, t3, t4).flatMap(t5 ->
                                 s6.apply(t1, t2, t3, t4, t5).flatMap(t6 ->
                                     s7.apply(t1, t2, t3, t4, t5, t6).flatMap(t7 ->
-                                        s8.apply(t1, t2, t3, t4, t5, t6, t7).map(t8 -> f.apply(t1, t2, t3, t4, t5, t6, t7, t8)))))))));
+                                        s8.apply(t1, t2, t3, t4, t5, t6, t7).filter(t8 -> guard == null || guard.apply(t1, t2, t3, t4, t5, t6, t7, t8)).map(t8 -> f.apply(t1, t2, t3, t4, t5, t6, t7, t8)))))))));
         }
     }
 
@@ -2194,10 +2852,25 @@ public final class ForComprehension {
 
         private final Iterable<T1> i1;
         private final Function1<? super T1, Iterable<T2>> i2;
+        private final Function2<T1, T2, Boolean> guard;
 
         private ForLazy2Iterable(Iterable<T1> i1, Function1<? super T1, Iterable<T2>> i2) {
             this.i1 = i1;
             this.i2 = i2;
+            this.guard = null;
+        }
+
+        private ForLazy2Iterable(Iterable<T1> i1, Function1<? super T1, Iterable<T2>> i2, Function2<T1, T2, Boolean> guard) {
+            this.i1 = i1;
+            this.i2 = i2;
+            this.guard = guard;
+        }
+
+        public ForLazy2Iterable<T1, T2> filter(Function2<T1, T2, Boolean> predicate) {
+            Objects.requireNonNull(predicate, "predicate is null");
+            Function2<T1, T2, Boolean> existingGuard = this.guard;
+            Function2<T1, T2, Boolean> newGuard = existingGuard == null ? predicate : (t1, t2) -> existingGuard.apply(t1, t2) && predicate.apply(t1, t2);
+            return new ForLazy2Iterable<>(i1, i2, newGuard);
         }
 
         public <R> List<R> yield(Function2<? super T1, ? super T2, ? extends R> f) {
@@ -2206,7 +2879,9 @@ public final class ForComprehension {
             List<R> result = new ArrayList<>();
             for (T1 t1 : i1) {
                 for (T2 t2 : i2.apply(t1)) {
-                    result.add(f.apply(t1, t2));
+                    if (guard == null || guard.apply(t1, t2)) {
+                        result.add(f.apply(t1, t2));
+                    }
                 }
             }
             return Collections.unmodifiableList(result);
@@ -2225,11 +2900,27 @@ public final class ForComprehension {
         private final Iterable<T1> i1;
         private final Function1<? super T1, Iterable<T2>> i2;
         private final Function2<? super T1, ? super T2, Iterable<T3>> i3;
+        private final Function3<T1, T2, T3, Boolean> guard;
 
         private ForLazy3Iterable(Iterable<T1> i1, Function1<? super T1, Iterable<T2>> i2, Function2<? super T1, ? super T2, Iterable<T3>> i3) {
             this.i1 = i1;
             this.i2 = i2;
             this.i3 = i3;
+            this.guard = null;
+        }
+
+        private ForLazy3Iterable(Iterable<T1> i1, Function1<? super T1, Iterable<T2>> i2, Function2<? super T1, ? super T2, Iterable<T3>> i3, Function3<T1, T2, T3, Boolean> guard) {
+            this.i1 = i1;
+            this.i2 = i2;
+            this.i3 = i3;
+            this.guard = guard;
+        }
+
+        public ForLazy3Iterable<T1, T2, T3> filter(Function3<T1, T2, T3, Boolean> predicate) {
+            Objects.requireNonNull(predicate, "predicate is null");
+            Function3<T1, T2, T3, Boolean> existingGuard = this.guard;
+            Function3<T1, T2, T3, Boolean> newGuard = existingGuard == null ? predicate : (t1, t2, t3) -> existingGuard.apply(t1, t2, t3) && predicate.apply(t1, t2, t3);
+            return new ForLazy3Iterable<>(i1, i2, i3, newGuard);
         }
 
         public <R> List<R> yield(Function3<? super T1, ? super T2, ? super T3, ? extends R> f) {
@@ -2239,7 +2930,9 @@ public final class ForComprehension {
             for (T1 t1 : i1) {
                 for (T2 t2 : i2.apply(t1)) {
                     for (T3 t3 : i3.apply(t1, t2)) {
-                        result.add(f.apply(t1, t2, t3));
+                        if (guard == null || guard.apply(t1, t2, t3)) {
+                            result.add(f.apply(t1, t2, t3));
+                        }
                     }
                 }
             }
@@ -2261,12 +2954,29 @@ public final class ForComprehension {
         private final Function1<? super T1, Iterable<T2>> i2;
         private final Function2<? super T1, ? super T2, Iterable<T3>> i3;
         private final Function3<? super T1, ? super T2, ? super T3, Iterable<T4>> i4;
+        private final Function4<T1, T2, T3, T4, Boolean> guard;
 
         private ForLazy4Iterable(Iterable<T1> i1, Function1<? super T1, Iterable<T2>> i2, Function2<? super T1, ? super T2, Iterable<T3>> i3, Function3<? super T1, ? super T2, ? super T3, Iterable<T4>> i4) {
             this.i1 = i1;
             this.i2 = i2;
             this.i3 = i3;
             this.i4 = i4;
+            this.guard = null;
+        }
+
+        private ForLazy4Iterable(Iterable<T1> i1, Function1<? super T1, Iterable<T2>> i2, Function2<? super T1, ? super T2, Iterable<T3>> i3, Function3<? super T1, ? super T2, ? super T3, Iterable<T4>> i4, Function4<T1, T2, T3, T4, Boolean> guard) {
+            this.i1 = i1;
+            this.i2 = i2;
+            this.i3 = i3;
+            this.i4 = i4;
+            this.guard = guard;
+        }
+
+        public ForLazy4Iterable<T1, T2, T3, T4> filter(Function4<T1, T2, T3, T4, Boolean> predicate) {
+            Objects.requireNonNull(predicate, "predicate is null");
+            Function4<T1, T2, T3, T4, Boolean> existingGuard = this.guard;
+            Function4<T1, T2, T3, T4, Boolean> newGuard = existingGuard == null ? predicate : (t1, t2, t3, t4) -> existingGuard.apply(t1, t2, t3, t4) && predicate.apply(t1, t2, t3, t4);
+            return new ForLazy4Iterable<>(i1, i2, i3, i4, newGuard);
         }
 
         public <R> List<R> yield(Function4<? super T1, ? super T2, ? super T3, ? super T4, ? extends R> f) {
@@ -2277,7 +2987,9 @@ public final class ForComprehension {
                 for (T2 t2 : i2.apply(t1)) {
                     for (T3 t3 : i3.apply(t1, t2)) {
                         for (T4 t4 : i4.apply(t1, t2, t3)) {
-                            result.add(f.apply(t1, t2, t3, t4));
+                            if (guard == null || guard.apply(t1, t2, t3, t4)) {
+                                result.add(f.apply(t1, t2, t3, t4));
+                            }
                         }
                     }
                 }
@@ -2302,6 +3014,7 @@ public final class ForComprehension {
         private final Function2<? super T1, ? super T2, Iterable<T3>> i3;
         private final Function3<? super T1, ? super T2, ? super T3, Iterable<T4>> i4;
         private final Function4<? super T1, ? super T2, ? super T3, ? super T4, Iterable<T5>> i5;
+        private final Function5<T1, T2, T3, T4, T5, Boolean> guard;
 
         private ForLazy5Iterable(Iterable<T1> i1, Function1<? super T1, Iterable<T2>> i2, Function2<? super T1, ? super T2, Iterable<T3>> i3, Function3<? super T1, ? super T2, ? super T3, Iterable<T4>> i4, Function4<? super T1, ? super T2, ? super T3, ? super T4, Iterable<T5>> i5) {
             this.i1 = i1;
@@ -2309,6 +3022,23 @@ public final class ForComprehension {
             this.i3 = i3;
             this.i4 = i4;
             this.i5 = i5;
+            this.guard = null;
+        }
+
+        private ForLazy5Iterable(Iterable<T1> i1, Function1<? super T1, Iterable<T2>> i2, Function2<? super T1, ? super T2, Iterable<T3>> i3, Function3<? super T1, ? super T2, ? super T3, Iterable<T4>> i4, Function4<? super T1, ? super T2, ? super T3, ? super T4, Iterable<T5>> i5, Function5<T1, T2, T3, T4, T5, Boolean> guard) {
+            this.i1 = i1;
+            this.i2 = i2;
+            this.i3 = i3;
+            this.i4 = i4;
+            this.i5 = i5;
+            this.guard = guard;
+        }
+
+        public ForLazy5Iterable<T1, T2, T3, T4, T5> filter(Function5<T1, T2, T3, T4, T5, Boolean> predicate) {
+            Objects.requireNonNull(predicate, "predicate is null");
+            Function5<T1, T2, T3, T4, T5, Boolean> existingGuard = this.guard;
+            Function5<T1, T2, T3, T4, T5, Boolean> newGuard = existingGuard == null ? predicate : (t1, t2, t3, t4, t5) -> existingGuard.apply(t1, t2, t3, t4, t5) && predicate.apply(t1, t2, t3, t4, t5);
+            return new ForLazy5Iterable<>(i1, i2, i3, i4, i5, newGuard);
         }
 
         public <R> List<R> yield(Function5<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, ? extends R> f) {
@@ -2320,7 +3050,9 @@ public final class ForComprehension {
                     for (T3 t3 : i3.apply(t1, t2)) {
                         for (T4 t4 : i4.apply(t1, t2, t3)) {
                             for (T5 t5 : i5.apply(t1, t2, t3, t4)) {
-                                result.add(f.apply(t1, t2, t3, t4, t5));
+                                if (guard == null || guard.apply(t1, t2, t3, t4, t5)) {
+                                    result.add(f.apply(t1, t2, t3, t4, t5));
+                                }
                             }
                         }
                     }
@@ -2348,6 +3080,7 @@ public final class ForComprehension {
         private final Function3<? super T1, ? super T2, ? super T3, Iterable<T4>> i4;
         private final Function4<? super T1, ? super T2, ? super T3, ? super T4, Iterable<T5>> i5;
         private final Function5<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, Iterable<T6>> i6;
+        private final Function6<T1, T2, T3, T4, T5, T6, Boolean> guard;
 
         private ForLazy6Iterable(Iterable<T1> i1, Function1<? super T1, Iterable<T2>> i2, Function2<? super T1, ? super T2, Iterable<T3>> i3, Function3<? super T1, ? super T2, ? super T3, Iterable<T4>> i4, Function4<? super T1, ? super T2, ? super T3, ? super T4, Iterable<T5>> i5, Function5<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, Iterable<T6>> i6) {
             this.i1 = i1;
@@ -2356,6 +3089,24 @@ public final class ForComprehension {
             this.i4 = i4;
             this.i5 = i5;
             this.i6 = i6;
+            this.guard = null;
+        }
+
+        private ForLazy6Iterable(Iterable<T1> i1, Function1<? super T1, Iterable<T2>> i2, Function2<? super T1, ? super T2, Iterable<T3>> i3, Function3<? super T1, ? super T2, ? super T3, Iterable<T4>> i4, Function4<? super T1, ? super T2, ? super T3, ? super T4, Iterable<T5>> i5, Function5<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, Iterable<T6>> i6, Function6<T1, T2, T3, T4, T5, T6, Boolean> guard) {
+            this.i1 = i1;
+            this.i2 = i2;
+            this.i3 = i3;
+            this.i4 = i4;
+            this.i5 = i5;
+            this.i6 = i6;
+            this.guard = guard;
+        }
+
+        public ForLazy6Iterable<T1, T2, T3, T4, T5, T6> filter(Function6<T1, T2, T3, T4, T5, T6, Boolean> predicate) {
+            Objects.requireNonNull(predicate, "predicate is null");
+            Function6<T1, T2, T3, T4, T5, T6, Boolean> existingGuard = this.guard;
+            Function6<T1, T2, T3, T4, T5, T6, Boolean> newGuard = existingGuard == null ? predicate : (t1, t2, t3, t4, t5, t6) -> existingGuard.apply(t1, t2, t3, t4, t5, t6) && predicate.apply(t1, t2, t3, t4, t5, t6);
+            return new ForLazy6Iterable<>(i1, i2, i3, i4, i5, i6, newGuard);
         }
 
         public <R> List<R> yield(Function6<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, ? super T6, ? extends R> f) {
@@ -2368,7 +3119,9 @@ public final class ForComprehension {
                         for (T4 t4 : i4.apply(t1, t2, t3)) {
                             for (T5 t5 : i5.apply(t1, t2, t3, t4)) {
                                 for (T6 t6 : i6.apply(t1, t2, t3, t4, t5)) {
-                                    result.add(f.apply(t1, t2, t3, t4, t5, t6));
+                                    if (guard == null || guard.apply(t1, t2, t3, t4, t5, t6)) {
+                                        result.add(f.apply(t1, t2, t3, t4, t5, t6));
+                                    }
                                 }
                             }
                         }
@@ -2399,6 +3152,7 @@ public final class ForComprehension {
         private final Function4<? super T1, ? super T2, ? super T3, ? super T4, Iterable<T5>> i5;
         private final Function5<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, Iterable<T6>> i6;
         private final Function6<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, ? super T6, Iterable<T7>> i7;
+        private final Function7<T1, T2, T3, T4, T5, T6, T7, Boolean> guard;
 
         private ForLazy7Iterable(Iterable<T1> i1, Function1<? super T1, Iterable<T2>> i2, Function2<? super T1, ? super T2, Iterable<T3>> i3, Function3<? super T1, ? super T2, ? super T3, Iterable<T4>> i4, Function4<? super T1, ? super T2, ? super T3, ? super T4, Iterable<T5>> i5, Function5<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, Iterable<T6>> i6, Function6<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, ? super T6, Iterable<T7>> i7) {
             this.i1 = i1;
@@ -2408,6 +3162,25 @@ public final class ForComprehension {
             this.i5 = i5;
             this.i6 = i6;
             this.i7 = i7;
+            this.guard = null;
+        }
+
+        private ForLazy7Iterable(Iterable<T1> i1, Function1<? super T1, Iterable<T2>> i2, Function2<? super T1, ? super T2, Iterable<T3>> i3, Function3<? super T1, ? super T2, ? super T3, Iterable<T4>> i4, Function4<? super T1, ? super T2, ? super T3, ? super T4, Iterable<T5>> i5, Function5<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, Iterable<T6>> i6, Function6<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, ? super T6, Iterable<T7>> i7, Function7<T1, T2, T3, T4, T5, T6, T7, Boolean> guard) {
+            this.i1 = i1;
+            this.i2 = i2;
+            this.i3 = i3;
+            this.i4 = i4;
+            this.i5 = i5;
+            this.i6 = i6;
+            this.i7 = i7;
+            this.guard = guard;
+        }
+
+        public ForLazy7Iterable<T1, T2, T3, T4, T5, T6, T7> filter(Function7<T1, T2, T3, T4, T5, T6, T7, Boolean> predicate) {
+            Objects.requireNonNull(predicate, "predicate is null");
+            Function7<T1, T2, T3, T4, T5, T6, T7, Boolean> existingGuard = this.guard;
+            Function7<T1, T2, T3, T4, T5, T6, T7, Boolean> newGuard = existingGuard == null ? predicate : (t1, t2, t3, t4, t5, t6, t7) -> existingGuard.apply(t1, t2, t3, t4, t5, t6, t7) && predicate.apply(t1, t2, t3, t4, t5, t6, t7);
+            return new ForLazy7Iterable<>(i1, i2, i3, i4, i5, i6, i7, newGuard);
         }
 
         public <R> List<R> yield(Function7<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, ? super T6, ? super T7, ? extends R> f) {
@@ -2421,7 +3194,9 @@ public final class ForComprehension {
                             for (T5 t5 : i5.apply(t1, t2, t3, t4)) {
                                 for (T6 t6 : i6.apply(t1, t2, t3, t4, t5)) {
                                     for (T7 t7 : i7.apply(t1, t2, t3, t4, t5, t6)) {
-                                        result.add(f.apply(t1, t2, t3, t4, t5, t6, t7));
+                                        if (guard == null || guard.apply(t1, t2, t3, t4, t5, t6, t7)) {
+                                            result.add(f.apply(t1, t2, t3, t4, t5, t6, t7));
+                                        }
                                     }
                                 }
                             }
@@ -2455,6 +3230,7 @@ public final class ForComprehension {
         private final Function5<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, Iterable<T6>> i6;
         private final Function6<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, ? super T6, Iterable<T7>> i7;
         private final Function7<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, ? super T6, ? super T7, Iterable<T8>> i8;
+        private final Function8<T1, T2, T3, T4, T5, T6, T7, T8, Boolean> guard;
 
         private ForLazy8Iterable(Iterable<T1> i1, Function1<? super T1, Iterable<T2>> i2, Function2<? super T1, ? super T2, Iterable<T3>> i3, Function3<? super T1, ? super T2, ? super T3, Iterable<T4>> i4, Function4<? super T1, ? super T2, ? super T3, ? super T4, Iterable<T5>> i5, Function5<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, Iterable<T6>> i6, Function6<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, ? super T6, Iterable<T7>> i7, Function7<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, ? super T6, ? super T7, Iterable<T8>> i8) {
             this.i1 = i1;
@@ -2465,6 +3241,26 @@ public final class ForComprehension {
             this.i6 = i6;
             this.i7 = i7;
             this.i8 = i8;
+            this.guard = null;
+        }
+
+        private ForLazy8Iterable(Iterable<T1> i1, Function1<? super T1, Iterable<T2>> i2, Function2<? super T1, ? super T2, Iterable<T3>> i3, Function3<? super T1, ? super T2, ? super T3, Iterable<T4>> i4, Function4<? super T1, ? super T2, ? super T3, ? super T4, Iterable<T5>> i5, Function5<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, Iterable<T6>> i6, Function6<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, ? super T6, Iterable<T7>> i7, Function7<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, ? super T6, ? super T7, Iterable<T8>> i8, Function8<T1, T2, T3, T4, T5, T6, T7, T8, Boolean> guard) {
+            this.i1 = i1;
+            this.i2 = i2;
+            this.i3 = i3;
+            this.i4 = i4;
+            this.i5 = i5;
+            this.i6 = i6;
+            this.i7 = i7;
+            this.i8 = i8;
+            this.guard = guard;
+        }
+
+        public ForLazy8Iterable<T1, T2, T3, T4, T5, T6, T7, T8> filter(Function8<T1, T2, T3, T4, T5, T6, T7, T8, Boolean> predicate) {
+            Objects.requireNonNull(predicate, "predicate is null");
+            Function8<T1, T2, T3, T4, T5, T6, T7, T8, Boolean> existingGuard = this.guard;
+            Function8<T1, T2, T3, T4, T5, T6, T7, T8, Boolean> newGuard = existingGuard == null ? predicate : (t1, t2, t3, t4, t5, t6, t7, t8) -> existingGuard.apply(t1, t2, t3, t4, t5, t6, t7, t8) && predicate.apply(t1, t2, t3, t4, t5, t6, t7, t8);
+            return new ForLazy8Iterable<>(i1, i2, i3, i4, i5, i6, i7, i8, newGuard);
         }
 
         public <R> List<R> yield(Function8<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, ? super T6, ? super T7, ? super T8, ? extends R> f) {
@@ -2479,7 +3275,9 @@ public final class ForComprehension {
                                 for (T6 t6 : i6.apply(t1, t2, t3, t4, t5)) {
                                     for (T7 t7 : i7.apply(t1, t2, t3, t4, t5, t6)) {
                                         for (T8 t8 : i8.apply(t1, t2, t3, t4, t5, t6, t7)) {
-                                            result.add(f.apply(t1, t2, t3, t4, t5, t6, t7, t8));
+                                            if (guard == null || guard.apply(t1, t2, t3, t4, t5, t6, t7, t8)) {
+                                                result.add(f.apply(t1, t2, t3, t4, t5, t6, t7, t8));
+                                            }
                                         }
                                     }
                                 }
