@@ -85,9 +85,13 @@ class ForComprehensionGenerator {
         var tparams = typeParams(arity);
         var methodParams = params(arity, ct.typeName, ct.prefix);
         var ctorArgs = argNamesPrefixed(arity, ct.prefix);
-        var fields = fields(arity, ct.typeName, ct.prefix);
+        var allFields = fields(arity, ct.typeName, ct.prefix) + "\n" + guardField(arity);
         var ctorParams = params(arity, ct.typeName, ct.prefix);
         var nnp = nullChecks(arity, ct.prefix);
+        var assignFirst = assignFields(arity, ct.prefix) + "\nthis.guard = null;";
+        var className = "For%d%s".formatted(arity, ct.typeName);
+        var secondCtor = guardConstructor(arity, ct.typeName, ct.prefix);
+        var filterMethodStr = filterMethod(arity, className, ct.prefix);
         var yield = eagerYieldChain(arity, ct);
 
         return """
@@ -119,6 +123,10 @@ class ForComprehensionGenerator {
           %s
               }
 
+          %s
+
+          %s
+
               /**
                * Produces the result of the for-comprehension by applying the given function
                * to the %s.
@@ -148,9 +156,11 @@ class ForComprehensionGenerator {
           arity, ct.typeName, "s",
           javadocTypeParams(arity, ct.javadocNoun),
           arity, ct.typeName, tparams,
-          Generator.indent(fields, 4),
+          Generator.indent(allFields, 4),
           arity, ct.typeName, ctorParams,
-          Generator.indent(assignFields(arity, ct.prefix), 8),
+          Generator.indent(assignFirst, 8),
+          Generator.indent(secondCtor, 4),
+          Generator.indent(filterMethodStr, 4),
           eagerYieldJavadocSubject(ct),
           eagerYieldJavadocExtra(ct),
           eagerYieldJavadocReturn(ct),
@@ -192,9 +202,9 @@ class ForComprehensionGenerator {
 
     private static String eagerYieldChain(int arity, ContainerType ct) {
         return switch (ct) {
-            case OPTIONAL -> yieldFlatMapChain(arity, "o");
-            case STREAM -> yieldStreamChain(arity);
-            case ITERABLE -> yieldForLoopChain(arity, "i");
+            case OPTIONAL -> guardedYieldFlatMapChain(arity, "o");
+            case STREAM -> guardedYieldStreamChain(arity);
+            case ITERABLE -> guardedYieldForLoopChain(arity, "i");
         };
     }
 
@@ -202,8 +212,12 @@ class ForComprehensionGenerator {
         var tparams = typeParams(arity);
         var methodParams = lazyParams(arity, ct.typeName, ct.prefix);
         var ctorArgs = argNamesPrefixed(arity, ct.prefix);
-        var fields = lazyFields(arity, ct.typeName, ct.prefix);
+        var allFields = lazyFields(arity, ct.typeName, ct.prefix) + "\n" + guardField(arity);
         var nnp = nullChecks(arity, ct.prefix);
+        var assignFirst = assignFields(arity, ct.prefix) + "\nthis.guard = null;";
+        var className = "ForLazy%d%s".formatted(arity, ct.typeName);
+        var secondCtor = lazyGuardConstructor(arity, ct.typeName, ct.prefix);
+        var filterMethodStr = filterMethod(arity, className, ct.prefix);
         var yield = lazyYieldChain(arity, ct);
 
         return """
@@ -220,6 +234,10 @@ class ForComprehensionGenerator {
           %s
               }
 
+          %s
+
+          %s
+
               public <R> %s yield(Function%d<%s> f) {
                   Objects.requireNonNull(f, "f is null");
 
@@ -233,9 +251,11 @@ class ForComprehensionGenerator {
           Generator.indent(nnp, 4),
           arity, ct.typeName, ctorArgs,
           arity, ct.typeName, tparams,
-          Generator.indent(fields, 4),
+          Generator.indent(allFields, 4),
           arity, ct.typeName, methodParams,
-          Generator.indent(assignFields(arity, ct.prefix), 8),
+          Generator.indent(assignFirst, 8),
+          Generator.indent(secondCtor, 4),
+          Generator.indent(filterMethodStr, 4),
           ct.returnType, arity, tparamsWithRWildcard(arity),
           Generator.indent(yield, 8)
         );
@@ -243,38 +263,83 @@ class ForComprehensionGenerator {
 
     private static String lazyYieldChain(int arity, ContainerType ct) {
         return switch (ct) {
-            case OPTIONAL, STREAM -> yieldLazyFlatMapChain(arity, ct.prefix);
-            case ITERABLE -> yieldLazyIterableChain(arity);
+            case OPTIONAL -> guardedLazyYieldOptionalChain(arity);
+            case STREAM -> guardedLazyYieldStreamChain(arity);
+            case ITERABLE -> guardedLazyYieldIterableChain(arity);
         };
     }
 
-    private static String yieldFlatMapChain(int arity, String prefix) {
-        if (arity == 1) {
-            return "return %s1.map(t1 -> f.apply(t1));".formatted(prefix);
-        }
+    private static String guardField(int arity) {
+        return "private final Function%d<%s, Boolean> guard;".formatted(arity, typeParams(arity));
+    }
 
+    private static String guardConstructor(int arity, String typeName, String prefix) {
+        var funcType = "Function%d<%s, Boolean>".formatted(arity, typeParams(arity));
+        var ctorParams = params(arity, typeName, prefix) + ", " + funcType + " guard";
+        var assignBody = assignFields(arity, prefix) + "\nthis.guard = guard;";
+        return """
+          private For%d%s(%s) {
+          %s
+          }
+          """.formatted(arity, typeName, ctorParams, Generator.indent(assignBody, 4));
+    }
+
+    private static String lazyGuardConstructor(int arity, String typeName, String prefix) {
+        var funcType = "Function%d<%s, Boolean>".formatted(arity, typeParams(arity));
+        var ctorParams = lazyParams(arity, typeName, prefix) + ", " + funcType + " guard";
+        var assignBody = assignFields(arity, prefix) + "\nthis.guard = guard;";
+        return """
+          private ForLazy%d%s(%s) {
+          %s
+          }
+          """.formatted(arity, typeName, ctorParams, Generator.indent(assignBody, 4));
+    }
+
+    private static String filterMethod(int arity, String className, String prefix) {
+        var tparams = typeParams(arity);
+        var funcType = "Function%d<%s, Boolean>".formatted(arity, tparams);
+        var lambdaParams = IntStream.rangeClosed(1, arity)
+          .mapToObj(i -> "t" + i)
+          .collect(Collectors.joining(", "));
+        var andLambda = "(%s) -> existingGuard.apply(%s) && predicate.apply(%s)"
+          .formatted(lambdaParams, lambdaParams, lambdaParams);
+        var ctorArgs = argNamesPrefixed(arity, prefix) + ", newGuard";
+        return """
+          public %s<%s> filter(%s predicate) {
+              Objects.requireNonNull(predicate, "predicate is null");
+              %s existingGuard = this.guard;
+              %s newGuard = existingGuard == null ? predicate : %s;
+              return new %s<>(%s);
+          }
+          """.formatted(
+          className, tparams,
+          funcType,
+          funcType,
+          funcType,
+          andLambda,
+          className, ctorArgs
+        );
+    }
+
+    private static String guardedYieldFlatMapChain(int arity, String prefix) {
         var args = IntStream.rangeClosed(1, arity)
           .mapToObj(i -> "t" + i)
           .collect(Collectors.joining(", "));
 
         var sb = new StringBuilder("return %s1.flatMap(t1 ->\n".formatted(prefix));
-        for (int i = 2; i < arity; i++) {
+        for (int i = 2; i <= arity; i++) {
             sb.append(" ".repeat((i - 1) * 4));
             sb.append("%s%d.flatMap(t%d ->\n".formatted(prefix, i, i));
         }
-        sb.append(" ".repeat((arity - 1) * 4));
-        sb.append("%s%d.map(t%d -> f.apply(%s))".formatted(prefix, arity, arity, args));
-        sb.append(")".repeat(arity - 1));
+        sb.append(" ".repeat(arity * 4));
+        sb.append("(guard != null && !guard.apply(%s)) ? Optional.empty() : Optional.of(f.apply(%s))"
+          .formatted(args, args));
+        sb.append(")".repeat(arity));
         sb.append(";");
-
         return sb.toString();
     }
 
-    private static String yieldStreamChain(int arity) {
-        if (arity == 1) {
-            return "return s1.map(t1 -> f.apply(t1));";
-        }
-
+    private static String guardedYieldStreamChain(int arity) {
         var args = IntStream.rangeClosed(1, arity)
           .mapToObj(i -> "t" + i)
           .collect(Collectors.joining(", "));
@@ -289,14 +354,14 @@ class ForComprehensionGenerator {
             sb.append("l%d.stream().flatMap(t%d ->\n".formatted(i, i));
         }
         sb.append(" ".repeat((arity - 1) * 4));
-        sb.append("l%d.stream().map(t%d -> f.apply(%s))".formatted(arity, arity, args));
+        sb.append("l%d.stream().filter(t%d -> guard == null || guard.apply(%s)).map(t%d -> f.apply(%s))"
+          .formatted(arity, arity, args, arity, args));
         sb.append(")".repeat(arity - 1));
         sb.append(";");
-
         return collections + "\n\n" + sb.toString();
     }
 
-    private static String yieldForLoopChain(int arity, String prefix) {
+    private static String guardedYieldForLoopChain(int arity, String prefix) {
         var args = IntStream.rangeClosed(1, arity)
           .mapToObj(i -> "t" + i)
           .collect(Collectors.joining(", "));
@@ -305,7 +370,9 @@ class ForComprehensionGenerator {
           .mapToObj(i -> " ".repeat((i - 1) * 4) + "for (T%d t%d : %s%d) {".formatted(i, i, prefix, i))
           .collect(Collectors.joining("\n"));
 
-        var body = " ".repeat(arity * 4) + "result.add(f.apply(" + args + "));";
+        var body = " ".repeat(arity * 4) + "if (guard == null || guard.apply(" + args + ")) {\n"
+          + " ".repeat((arity + 1) * 4) + "result.add(f.apply(" + args + "));\n"
+          + " ".repeat(arity * 4) + "}";
 
         var closes = IntStream.range(0, arity)
           .map(i -> arity - 1 - i)
@@ -313,6 +380,79 @@ class ForComprehensionGenerator {
           .collect(Collectors.joining("\n"));
 
         return "List<R> result = new ArrayList<>();\n" + loops + "\n" + body + "\n" + closes + "\nreturn result;";
+    }
+
+    private static String guardedLazyYieldOptionalChain(int arity) {
+        var args = IntStream.rangeClosed(1, arity)
+          .mapToObj(i -> "t" + i)
+          .collect(Collectors.joining(", "));
+
+        var sb = new StringBuilder("return o1.flatMap(t1 ->\n");
+        for (int i = 2; i <= arity; i++) {
+            var applyArgs = IntStream.rangeClosed(1, i - 1)
+              .mapToObj(j -> "t" + j)
+              .collect(Collectors.joining(", "));
+            sb.append(" ".repeat((i - 1) * 4));
+            sb.append("o%d.apply(%s).flatMap(t%d ->\n".formatted(i, applyArgs, i));
+        }
+        sb.append(" ".repeat(arity * 4));
+        sb.append("(guard != null && !guard.apply(%s)) ? Optional.empty() : Optional.of(f.apply(%s))"
+          .formatted(args, args));
+        sb.append(")".repeat(arity));
+        sb.append(";");
+        return sb.toString();
+    }
+
+    private static String guardedLazyYieldStreamChain(int arity) {
+        var args = IntStream.rangeClosed(1, arity)
+          .mapToObj(i -> "t" + i)
+          .collect(Collectors.joining(", "));
+
+        var sb = new StringBuilder("return s1.flatMap(t1 ->\n");
+        for (int i = 2; i < arity; i++) {
+            var applyArgs = IntStream.rangeClosed(1, i - 1)
+              .mapToObj(j -> "t" + j)
+              .collect(Collectors.joining(", "));
+            sb.append(" ".repeat((i - 1) * 4));
+            sb.append("s%d.apply(%s).flatMap(t%d ->\n".formatted(i, applyArgs, i));
+        }
+        var lastApplyArgs = IntStream.rangeClosed(1, arity - 1)
+          .mapToObj(j -> "t" + j)
+          .collect(Collectors.joining(", "));
+        sb.append(" ".repeat((arity - 1) * 4));
+        sb.append("s%d.apply(%s).filter(t%d -> guard == null || guard.apply(%s)).map(t%d -> f.apply(%s))"
+          .formatted(arity, lastApplyArgs, arity, args, arity, args));
+        sb.append(")".repeat(arity - 1));
+        sb.append(";");
+        return sb.toString();
+    }
+
+    private static String guardedLazyYieldIterableChain(int arity) {
+        var args = IntStream.rangeClosed(1, arity)
+          .mapToObj(i -> "t" + i)
+          .collect(Collectors.joining(", "));
+
+        var sb = new StringBuilder("List<R> result = new ArrayList<>();\n");
+        sb.append("for (T1 t1 : i1) {\n");
+        for (int i = 2; i <= arity; i++) {
+            var applyArgs = IntStream.rangeClosed(1, i - 1)
+              .mapToObj(j -> "t" + j)
+              .collect(Collectors.joining(", "));
+            sb.append(" ".repeat((i - 1) * 4));
+            sb.append("for (T%d t%d : i%d.apply(%s)) {\n".formatted(i, i, i, applyArgs));
+        }
+        sb.append(" ".repeat(arity * 4));
+        sb.append("if (guard == null || guard.apply(%s)) {\n".formatted(args));
+        sb.append(" ".repeat((arity + 1) * 4));
+        sb.append("result.add(f.apply(%s));\n".formatted(args));
+        sb.append(" ".repeat(arity * 4));
+        sb.append("}\n");
+        for (int i = arity; i >= 1; i--) {
+            sb.append(" ".repeat((i - 1) * 4));
+            sb.append("}\n");
+        }
+        sb.append("return Collections.unmodifiableList(result);");
+        return sb.toString();
     }
 
     private static String typeParams(int arity) {
@@ -389,53 +529,6 @@ class ForComprehensionGenerator {
               .collect(Collectors.joining(", "));
             sb.append("\nprivate final Function%d<%s, %s<T%d>> %s%d;".formatted(i - 1, funcParams, typeName, i, prefix, i));
         }
-        return sb.toString();
-    }
-
-    private static String yieldLazyFlatMapChain(int arity, String prefix) {
-        var args = IntStream.rangeClosed(1, arity)
-          .mapToObj(i -> "t" + i)
-          .collect(Collectors.joining(", "));
-
-        var sb = new StringBuilder("return %s1.flatMap(t1 ->\n".formatted(prefix));
-        for (int i = 2; i < arity; i++) {
-            var applyArgs = IntStream.rangeClosed(1, i - 1)
-              .mapToObj(j -> "t" + j)
-              .collect(Collectors.joining(", "));
-            sb.append(" ".repeat((i - 1) * 4));
-            sb.append("%s%d.apply(%s).flatMap(t%d ->\n".formatted(prefix, i, applyArgs, i));
-        }
-        var lastApplyArgs = IntStream.rangeClosed(1, arity - 1)
-          .mapToObj(j -> "t" + j)
-          .collect(Collectors.joining(", "));
-        sb.append(" ".repeat((arity - 1) * 4));
-        sb.append("%s%d.apply(%s).map(t%d -> f.apply(%s))".formatted(prefix, arity, lastApplyArgs, arity, args));
-        sb.append(")".repeat(arity - 1));
-        sb.append(";");
-        return sb.toString();
-    }
-
-    private static String yieldLazyIterableChain(int arity) {
-        var args = IntStream.rangeClosed(1, arity)
-          .mapToObj(i -> "t" + i)
-          .collect(Collectors.joining(", "));
-
-        var sb = new StringBuilder("List<R> result = new ArrayList<>();\n");
-        sb.append("for (T1 t1 : i1) {\n");
-        for (int i = 2; i <= arity; i++) {
-            var applyArgs = IntStream.rangeClosed(1, i - 1)
-              .mapToObj(j -> "t" + j)
-              .collect(Collectors.joining(", "));
-            sb.append(" ".repeat((i - 1) * 4));
-            sb.append("for (T%d t%d : i%d.apply(%s)) {\n".formatted(i, i, i, applyArgs));
-        }
-        sb.append(" ".repeat(arity * 4));
-        sb.append("result.add(f.apply(%s));\n".formatted(args));
-        for (int i = arity; i >= 1; i--) {
-            sb.append(" ".repeat((i - 1) * 4));
-            sb.append("}\n");
-        }
-        sb.append("return Collections.unmodifiableList(result);");
         return sb.toString();
     }
 }

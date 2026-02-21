@@ -7,7 +7,7 @@ A fluent for-comprehension API for Java, inspired by Scala's for-expressions. It
 or collection-like types in a type-safe and readable manner.
 
 > **Note:** This project is a **proof of concept (PoC)** under active development. The current implementation supports
-> `Optional`, `Stream`, and `Iterable`, with both **eager** and **lazy** evaluation.
+> `Optional`, `Stream`, and `Iterable`, with both **eager** and **lazy** evaluation, and optional **filter/guard clauses**.
 
 ## Usage
 
@@ -45,6 +45,82 @@ Optional<Integer> area = forc(
 
 // area -> Optional[12]
 ```
+
+### Filter / guard clauses
+
+All comprehension types support an optional `.filter()` step that acts as a guard, keeping only
+combinations where the predicate holds. Multiple `.filter()` calls are AND-composed.
+
+**Optional** - guard failure produces `Optional.empty()`:
+
+```java
+Optional<Integer> width  = Optional.of(4);
+Optional<Integer> height = Optional.of(3);
+
+Optional<Integer> area = forc(width, height)
+  .filter((w, h) -> w > h)
+  .yield((w, h) -> w * h);
+
+// area -> Optional[12]  (4 > 3, so the guard passes)
+```
+
+```java
+Optional<Integer> area = forc(Optional.of(2), Optional.of(3))
+  .filter((w, h) -> w > h)
+  .yield((w, h) -> w * h);
+
+// area -> Optional.empty()  (2 > 3 is false, guard fails)
+```
+
+**Stream / Iterable** - guard filters the cartesian product:
+
+```java
+Stream<String> roles  = Stream.of("admin", "user");
+Stream<String> scopes = Stream.of("read", "write");
+
+Stream<String> allowed = forc(roles, scopes)
+  .filter((role, scope) -> !(role.equals("user") && scope.equals("write")))
+  .yield((role, scope) -> role + ":" + scope);
+
+// allowed -> ["admin:read", "admin:write", "user:read"]
+```
+
+`.filter()` works the same way on **lazy** comprehensions:
+
+```java
+// Optional - guard is applied after all values are bound
+Optional<Integer> area = forc(
+    Optional.of(4),
+    w -> Optional.of(w - 2)          // height depends on width
+  ).filter((w, h) -> w > h)
+   .yield((w, h) -> w * h);
+
+// area -> Optional[8]  (4 > 2, guard passes)
+```
+
+```java
+// Stream - filter applied to the lazily-generated cartesian product
+Stream<String> result = forc(
+    Stream.of("admin", "user"),
+    role -> Stream.of(role + ":read", role + ":write")
+  ).filter((role, permission) -> !permission.equals("user:write"))
+   .yield((role, permission) -> permission);
+
+// result -> ["admin:read", "admin:write", "user:read"]
+```
+
+```java
+// Iterable
+List<String> result = forc(
+    List.of("admin", "user"),
+    role -> List.of(role + ":read", role + ":write")
+  ).filter((role, permission) -> !permission.equals("user:write"))
+   .yield((role, permission) -> permission);
+
+// result -> ["admin:read", "admin:write", "user:read"]
+```
+
+`.filter()` is available for all arities and container types.
 
 ### Stream
 
