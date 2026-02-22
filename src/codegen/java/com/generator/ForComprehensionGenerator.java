@@ -29,13 +29,13 @@ class ForComprehensionGenerator {
           .map(ct -> Generator.indent(IntStream.rangeClosed(2, arity)
             .mapToObj(a -> generateEager(a, ct))
             .collect(Collectors.joining("\n")), 4))
-          .collect(Collectors.toList());
+          .toList();
 
         var lazySections = Arrays.stream(ContainerType.values())
           .map(ct -> Generator.indent(IntStream.rangeClosed(2, arity)
             .mapToObj(a -> generateLazy(a, ct))
             .collect(Collectors.joining("\n")), 4))
-          .collect(Collectors.toList());
+          .toList();
 
         return """
           package com.pivovarit.forc;
@@ -328,13 +328,13 @@ class ForComprehensionGenerator {
 
         var sb = new StringBuilder("return %s1.flatMap(t1 ->\n".formatted(prefix));
         for (int i = 2; i <= arity; i++) {
-            sb.append(" ".repeat((i - 1) * 4));
+            sb.repeat(" ", (i - 1) * 4);
             sb.append("%s%d.flatMap(t%d ->\n".formatted(prefix, i, i));
         }
-        sb.append(" ".repeat(arity * 4));
+        sb.repeat(" ", arity * 4);
         sb.append("(guard != null && !guard.apply(%s)) ? Optional.empty() : Optional.of(f.apply(%s))"
           .formatted(args, args));
-        sb.append(")".repeat(arity));
+        sb.repeat(")", arity);
         sb.append(";");
         return sb.toString();
     }
@@ -350,15 +350,14 @@ class ForComprehensionGenerator {
 
         var sb = new StringBuilder("return s1.flatMap(t1 ->\n");
         for (int i = 2; i < arity; i++) {
-            sb.append(" ".repeat((i - 1) * 4));
+            sb.repeat(" ", (i - 1) * 4);
             sb.append("l%d.stream().flatMap(t%d ->\n".formatted(i, i));
         }
-        sb.append(" ".repeat((arity - 1) * 4));
-        sb.append("l%d.stream().filter(t%d -> guard == null || guard.apply(%s)).map(t%d -> f.apply(%s))"
-          .formatted(arity, arity, args, arity, args));
-        sb.append(")".repeat(arity - 1));
+        sb.repeat(" ", (arity - 1) * 4);
+        sb.append("l%d.stream().filter(t%d -> guard == null || guard.apply(%s)).map(t%d -> f.apply(%s))".formatted(arity, arity, args, arity, args));
+        sb.repeat(")", arity - 1);
         sb.append(";");
-        return collections + "\n\n" + sb.toString();
+        return collections + "\n\n" + sb;
     }
 
     private static String guardedYieldForLoopChain(int arity, String prefix) {
@@ -370,9 +369,7 @@ class ForComprehensionGenerator {
           .mapToObj(i -> " ".repeat((i - 1) * 4) + "for (T%d t%d : %s%d) {".formatted(i, i, prefix, i))
           .collect(Collectors.joining("\n"));
 
-        var body = " ".repeat(arity * 4) + "if (guard == null || guard.apply(" + args + ")) {\n"
-          + " ".repeat((arity + 1) * 4) + "result.add(f.apply(" + args + "));\n"
-          + " ".repeat(arity * 4) + "}";
+        var body = "%sif (guard == null || guard.apply(%s)) {\n%sresult.add(f.apply(%s));\n%s}".formatted(" ".repeat(arity * 4), args, " ".repeat((arity + 1) * 4), args, " ".repeat(arity * 4));
 
         var closes = IntStream.range(0, arity)
           .map(i -> arity - 1 - i)
@@ -392,13 +389,12 @@ class ForComprehensionGenerator {
             var applyArgs = IntStream.rangeClosed(1, i - 1)
               .mapToObj(j -> "t" + j)
               .collect(Collectors.joining(", "));
-            sb.append(" ".repeat((i - 1) * 4));
+            sb.repeat(" ", (i - 1) * 4);
             sb.append("o%d.apply(%s).flatMap(t%d ->\n".formatted(i, applyArgs, i));
         }
-        sb.append(" ".repeat(arity * 4));
-        sb.append("(guard != null && !guard.apply(%s)) ? Optional.empty() : Optional.of(f.apply(%s))"
-          .formatted(args, args));
-        sb.append(")".repeat(arity));
+        sb.repeat(" ", arity * 4);
+        sb.append("(guard != null && !guard.apply(%s)) ? Optional.empty() : Optional.of(f.apply(%s))".formatted(args, args));
+        sb.repeat(")", arity);
         sb.append(";");
         return sb.toString();
     }
@@ -413,16 +409,15 @@ class ForComprehensionGenerator {
             var applyArgs = IntStream.rangeClosed(1, i - 1)
               .mapToObj(j -> "t" + j)
               .collect(Collectors.joining(", "));
-            sb.append(" ".repeat((i - 1) * 4));
+            sb.repeat(" ", (i - 1) * 4);
             sb.append("s%d.apply(%s).flatMap(t%d ->\n".formatted(i, applyArgs, i));
         }
         var lastApplyArgs = IntStream.rangeClosed(1, arity - 1)
           .mapToObj(j -> "t" + j)
           .collect(Collectors.joining(", "));
-        sb.append(" ".repeat((arity - 1) * 4));
-        sb.append("s%d.apply(%s).filter(t%d -> guard == null || guard.apply(%s)).map(t%d -> f.apply(%s))"
-          .formatted(arity, lastApplyArgs, arity, args, arity, args));
-        sb.append(")".repeat(arity - 1));
+        sb.repeat(" ", (arity - 1) * 4);
+        sb.append("s%d.apply(%s).filter(t%d -> guard == null || guard.apply(%s)).map(t%d -> f.apply(%s))".formatted(arity, lastApplyArgs, arity, args, arity, args));
+        sb.repeat(")", arity - 1);
         sb.append(";");
         return sb.toString();
     }
@@ -438,17 +433,17 @@ class ForComprehensionGenerator {
             var applyArgs = IntStream.rangeClosed(1, i - 1)
               .mapToObj(j -> "t" + j)
               .collect(Collectors.joining(", "));
-            sb.append(" ".repeat((i - 1) * 4));
+            sb.repeat(" ", (i - 1) * 4);
             sb.append("for (T%d t%d : i%d.apply(%s)) {\n".formatted(i, i, i, applyArgs));
         }
-        sb.append(" ".repeat(arity * 4));
+        sb.repeat(" ", arity * 4);
         sb.append("if (guard == null || guard.apply(%s)) {\n".formatted(args));
-        sb.append(" ".repeat((arity + 1) * 4));
+        sb.repeat(" ", (arity + 1) * 4);
         sb.append("result.add(f.apply(%s));\n".formatted(args));
-        sb.append(" ".repeat(arity * 4));
+        sb.repeat(" ", arity * 4);
         sb.append("}\n");
         for (int i = arity; i >= 1; i--) {
-            sb.append(" ".repeat((i - 1) * 4));
+            sb.repeat(" ", (i - 1) * 4);
             sb.append("}\n");
         }
         sb.append("return Collections.unmodifiableList(result);");
