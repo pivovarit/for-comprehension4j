@@ -16,8 +16,8 @@ class ForComprehensionTestGenerator {
             var eagerTests = new StringBuilder();
             var lazyTests = new StringBuilder();
             for (int i = 2; i <= arity; i++) {
-                eagerTests.append(wrapInArityNested(i, generateEagerTest(i, ct) + generateEagerEmptyTest(i, ct)));
-                lazyTests.append(wrapInArityNested(i, generateLazyTest(i, ct) + generateLazyEmptyTest(i, ct)));
+                eagerTests.append(wrapInArityNested(i, generateEagerTest(i, ct) + generateEagerEmptyTest(i, ct) + generateEagerFilterTest(i, ct)));
+                lazyTests.append(wrapInArityNested(i, generateLazyTest(i, ct) + generateLazyEmptyTest(i, ct) + generateLazyFilterTest(i, ct)));
             }
             eagerSections.add(eagerTests.toString());
             lazySections.add(lazyTests.toString());
@@ -210,6 +210,115 @@ class ForComprehensionTestGenerator {
           """.formatted(arity, lazyArgs(arity, 1, ct), lambda, lazyArgs(arity, arity, ct), lambda);
             default -> "";
         };
+    }
+
+    private static String generateEagerFilterTest(int arity, ContainerType ct) {
+        var lambda = yieldLambda(arity);
+        return switch (ct) {
+            case OPTIONAL -> {
+                var declarations = IntStream.rangeClosed(1, arity)
+                  .mapToObj(i -> Generator.indent("Optional<Integer> o%d = Optional.of(%d);".formatted(i, i), 8))
+                  .collect(Collectors.joining("\n"));
+                var allArgs = forcArgs(arity, "o");
+                var sum = arity * (arity + 1) / 2;
+                yield """
+
+              @Test
+              void shouldTestEagerOptionalFilter%d() {
+          %s
+                  assertThat(ForComprehension.forc(%s).filter(%s).yield(%s)).hasValue(%d);
+                  assertThat(ForComprehension.forc(%s).filter(%s).yield(%s)).isEmpty();
+              }
+          """.formatted(arity, declarations, allArgs, filterLambdaSum(arity), lambda, sum,
+                        allArgs, filterLambdaAlwaysFalse(arity), lambda);
+            }
+            case STREAM -> """
+
+              @Test
+              void shouldTestEagerStreamFilter%d() {
+                  assertThat(ForComprehension.forc(%s).filter(%s).yield(%s))
+                      .containsExactly(%s);
+                  assertThat(ForComprehension.forc(%s).filter(%s).yield(%s))
+                      .isEmpty();
+              }
+          """.formatted(arity, creationArgs(arity, ct), filterLambdaT1Eq1(arity), lambda, expectedCartesianValuesFilteredByT1(arity),
+                        creationArgs(arity, ct), filterLambdaAlwaysFalse(arity), lambda);
+            case ITERABLE -> """
+
+              @Test
+              void shouldTestEagerIterableFilter%d() {
+                  assertThat(ForComprehension.forc(%s).filter(%s).yield(%s))
+                      .containsExactly(%s);
+                  assertThat(ForComprehension.forc(%s).filter(%s).yield(%s))
+                      .isEmpty();
+              }
+          """.formatted(arity, creationArgs(arity, ct), filterLambdaT1Eq1(arity), lambda, expectedCartesianValuesFilteredByT1(arity),
+                        creationArgs(arity, ct), filterLambdaAlwaysFalse(arity), lambda);
+        };
+    }
+
+    private static String generateLazyFilterTest(int arity, ContainerType ct) {
+        var lambda = yieldLambda(arity);
+        return switch (ct) {
+            case OPTIONAL -> {
+                var sum = arity * (arity + 1) / 2;
+                var allArgs = lazyArgs(arity, 0, ct);
+                yield """
+
+              @Test
+              void shouldTestLazyOptionalFilter%d() {
+                  Optional<Integer> o1 = Optional.of(1);
+                  assertThat(ForComprehension.forc(%s).filter(%s).yield(%s)).hasValue(%d);
+                  assertThat(ForComprehension.forc(%s).filter(%s).yield(%s)).isEmpty();
+              }
+          """.formatted(arity, allArgs, filterLambdaSum(arity), lambda, sum,
+                        allArgs, filterLambdaAlwaysFalse(arity), lambda);
+            }
+            case STREAM -> """
+
+              @Test
+              void shouldTestLazyStreamFilter%d() {
+                  assertThat(ForComprehension.forc(%s).filter(%s).yield(%s))
+                      .containsExactly(%s);
+                  assertThat(ForComprehension.forc(%s).filter(%s).yield(%s))
+                      .isEmpty();
+              }
+          """.formatted(arity, lazyArgs(arity, 0, ct), filterLambdaT1Eq1(arity), lambda, expectedCartesianValuesFilteredByT1(arity),
+                        lazyArgs(arity, 0, ct), filterLambdaAlwaysFalse(arity), lambda);
+            case ITERABLE -> """
+
+              @Test
+              void shouldTestLazyIterableFilter%d() {
+                  assertThat(ForComprehension.forc(%s).filter(%s).yield(%s))
+                      .containsExactly(%s);
+                  assertThat(ForComprehension.forc(%s).filter(%s).yield(%s))
+                      .isEmpty();
+              }
+          """.formatted(arity, lazyArgs(arity, 0, ct), filterLambdaT1Eq1(arity), lambda, expectedCartesianValuesFilteredByT1(arity),
+                        lazyArgs(arity, 0, ct), filterLambdaAlwaysFalse(arity), lambda);
+        };
+    }
+
+    private static String filterLambdaSum(int arity) {
+        int sum = arity * (arity + 1) / 2;
+        String params = IntStream.rangeClosed(1, arity).mapToObj(i -> "t" + i).collect(Collectors.joining(", "));
+        String sumExpr = IntStream.rangeClosed(1, arity).mapToObj(i -> "t" + i).collect(Collectors.joining(" + "));
+        return "(%s) -> %s == %d".formatted(params, sumExpr, sum);
+    }
+
+    private static String filterLambdaAlwaysFalse(int arity) {
+        String params = IntStream.rangeClosed(1, arity).mapToObj(i -> "t" + i).collect(Collectors.joining(", "));
+        return "(%s) -> false".formatted(params);
+    }
+
+    private static String filterLambdaT1Eq1(int arity) {
+        String params = IntStream.rangeClosed(1, arity).mapToObj(i -> "t" + i).collect(Collectors.joining(", "));
+        return "(%s) -> t1 == 1".formatted(params);
+    }
+
+    private static String expectedCartesianValuesFilteredByT1(int arity) {
+        long base = IntStream.rangeClosed(3, arity).mapToLong(i -> (long) Math.pow(10, i - 1)).sum();
+        return "%d, %d".formatted(1 + 10 + base, 1 + 20 + base);
     }
 
     private static String lazyLambdaParams(int position) {
