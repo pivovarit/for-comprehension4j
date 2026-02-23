@@ -221,11 +221,26 @@ class ForComprehensionGenerator {
         var yield = lazyYieldChain(arity, ct);
 
         return """
+          /**
+           * Creates a lazy for-comprehension over %d {@link %s} value%s.
+           * <p>
+           * %s
+           *
+           * %s
+           * %s
+           * @return a lazy for-comprehension over %d %s value%s
+           * @throws NullPointerException if any argument is {@code null}
+           */
           public static <%s> ForLazy%d%s<%s> forc(%s) {
           %s
               return new ForLazy%d%s<>(%s);
           }
 
+          /**
+           * Represents a for-comprehension over %d lazily evaluated {@link %s} value%s.
+           *
+           * %s
+           */
           public static final class ForLazy%d%s<%s> {
 
           %s
@@ -238,6 +253,15 @@ class ForComprehensionGenerator {
 
           %s
 
+              /**
+               * Produces the result of the for-comprehension by applying the given function
+               * to the %s.
+               *%s
+               * @param f the combining function
+               * @param <R> the result type
+               * @return %s
+               * @throws NullPointerException if the function is {@code null}
+               */
               public <R> %s yield(Function%d<%s> f) {
                   Objects.requireNonNull(f, "f is null");
 
@@ -245,20 +269,46 @@ class ForComprehensionGenerator {
               }
           }
           """.formatted(
+          arity, ct.typeName, "s",
+          lazyJavadocDescription(ct),
+          lazyJavadocParams(arity, ct.prefix, ct.javadocNoun),
+          javadocTypeParams(arity, ct.javadocNoun),
+          arity, ct.typeName.toLowerCase(), "s",
           tparams,
           arity, ct.typeName, tparams,
           methodParams,
           Generator.indent(nnp, 4),
           arity, ct.typeName, ctorArgs,
+          arity, ct.typeName, "s",
+          javadocTypeParams(arity, ct.javadocNoun),
           arity, ct.typeName, tparams,
           Generator.indent(allFields, 4),
           arity, ct.typeName, methodParams,
           Generator.indent(assignFirst, 8),
           Generator.indent(secondCtor, 4),
           Generator.indent(filterMethodStr, 4),
+          eagerYieldJavadocSubject(ct),
+          eagerYieldJavadocExtra(ct),
+          eagerYieldJavadocReturn(ct),
           ct.returnType, arity, tparamsWithRWildcard(arity),
           Generator.indent(yield, 8)
         );
+    }
+
+    private static String lazyJavadocDescription(ContainerType ct) {
+        return switch (ct) {
+            case OPTIONAL -> "Each subsequent optional is computed lazily as a function of the preceding values.";
+            case STREAM -> "Each subsequent stream is computed lazily as a function of the preceding values.";
+            case ITERABLE -> "Each subsequent iterable is computed lazily as a function of the preceding values.";
+        };
+    }
+
+    private static String lazyJavadocParams(int arity, String prefix, String description) {
+        var sb = new StringBuilder("@param %s1 the initial %s".formatted(prefix, description));
+        for (int i = 2; i <= arity; i++) {
+            sb.append("\n * @param %s%d a function producing the %s %s".formatted(prefix, i, Generator.ordinal(i), description));
+        }
+        return sb.toString();
     }
 
     private static String lazyYieldChain(int arity, ContainerType ct) {
@@ -305,6 +355,15 @@ class ForComprehensionGenerator {
           .formatted(lambdaParams, lambdaParams, lambdaParams);
         var ctorArgs = argNamesPrefixed(arity, prefix) + ", newGuard";
         return """
+          /**
+           * Adds a filter predicate to this for-comprehension.
+           * <p>
+           * Multiple calls to this method will combine predicates using logical AND.
+           *
+           * @param predicate the filter predicate
+           * @return a new for-comprehension with the filter applied
+           * @throws NullPointerException if the predicate is {@code null}
+           */
           public %s<%s> filter(%s predicate) {
               Objects.requireNonNull(predicate, "predicate is null");
               %s existingGuard = this.guard;
