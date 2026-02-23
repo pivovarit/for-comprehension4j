@@ -10,6 +10,7 @@ public class Generator {
     private static final String PACKAGE_NAME = "com/pivovarit/forc";
     private static final String API_FILE_NAME = "ForComprehension.java";
     private static final String TEST_FILE_NAME = "ForComprehensionTest.java";
+    private static final String FUNCTION_TEST_FILE_NAME = "FunctionTypeTest.java";
 
     private static final int ARITY = 8;
 
@@ -23,6 +24,7 @@ public class Generator {
 
         Files.writeString(dir.resolve(API_FILE_NAME), header() + ForComprehensionGenerator.generate(ARITY));
         Files.writeString(testDir.resolve(TEST_FILE_NAME), header() + ForComprehensionTestGenerator.generate(ARITY));
+        Files.writeString(testDir.resolve(FUNCTION_TEST_FILE_NAME), header() + FunctionTypeTestGenerator.generate(ARITY));
     }
 
     static String ordinal(int i) {
