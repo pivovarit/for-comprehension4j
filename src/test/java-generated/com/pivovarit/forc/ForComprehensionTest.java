@@ -50,6 +50,14 @@ class ForComprehensionTest {
                 assertThat(ForComprehension.forc(o1, o2).filter((t1, t2) -> t1 + t2 == 3).yield((t1, t2) -> t1 + t2)).hasValue(3);
                 assertThat(ForComprehension.forc(o1, o2).filter((t1, t2) -> false).yield((t1, t2) -> t1 + t2)).isEmpty();
             }
+
+            @Test
+            void shouldTestEagerOptionalChainedFilter2() {
+                Optional<Integer> o1 = Optional.of(1);
+                Optional<Integer> o2 = Optional.of(2);
+                assertThat(ForComprehension.forc(o1, o2).filter((t1, t2) -> t1 + t2 == 3).filter((t1, t2) -> t1 == 1).yield((t1, t2) -> t1 + t2)).hasValue(3);
+                assertThat(ForComprehension.forc(o1, o2).filter((t1, t2) -> t1 + t2 == 3).filter((t1, t2) -> false).yield((t1, t2) -> t1 + t2)).isEmpty();
+            }
         }
 
         @Nested
@@ -73,6 +81,15 @@ class ForComprehensionTest {
                 Optional<Integer> o3 = Optional.of(3);
                 assertThat(ForComprehension.forc(o1, o2, o3).filter((t1, t2, t3) -> t1 + t2 + t3 == 6).yield((t1, t2, t3) -> t1 + t2 + t3)).hasValue(6);
                 assertThat(ForComprehension.forc(o1, o2, o3).filter((t1, t2, t3) -> false).yield((t1, t2, t3) -> t1 + t2 + t3)).isEmpty();
+            }
+
+            @Test
+            void shouldTestEagerOptionalChainedFilter3() {
+                Optional<Integer> o1 = Optional.of(1);
+                Optional<Integer> o2 = Optional.of(2);
+                Optional<Integer> o3 = Optional.of(3);
+                assertThat(ForComprehension.forc(o1, o2, o3).filter((t1, t2, t3) -> t1 + t2 + t3 == 6).filter((t1, t2, t3) -> t1 == 1).yield((t1, t2, t3) -> t1 + t2 + t3)).hasValue(6);
+                assertThat(ForComprehension.forc(o1, o2, o3).filter((t1, t2, t3) -> t1 + t2 + t3 == 6).filter((t1, t2, t3) -> false).yield((t1, t2, t3) -> t1 + t2 + t3)).isEmpty();
             }
         }
 
@@ -99,6 +116,16 @@ class ForComprehensionTest {
                 Optional<Integer> o4 = Optional.of(4);
                 assertThat(ForComprehension.forc(o1, o2, o3, o4).filter((t1, t2, t3, t4) -> t1 + t2 + t3 + t4 == 10).yield((t1, t2, t3, t4) -> t1 + t2 + t3 + t4)).hasValue(10);
                 assertThat(ForComprehension.forc(o1, o2, o3, o4).filter((t1, t2, t3, t4) -> false).yield((t1, t2, t3, t4) -> t1 + t2 + t3 + t4)).isEmpty();
+            }
+
+            @Test
+            void shouldTestEagerOptionalChainedFilter4() {
+                Optional<Integer> o1 = Optional.of(1);
+                Optional<Integer> o2 = Optional.of(2);
+                Optional<Integer> o3 = Optional.of(3);
+                Optional<Integer> o4 = Optional.of(4);
+                assertThat(ForComprehension.forc(o1, o2, o3, o4).filter((t1, t2, t3, t4) -> t1 + t2 + t3 + t4 == 10).filter((t1, t2, t3, t4) -> t1 == 1).yield((t1, t2, t3, t4) -> t1 + t2 + t3 + t4)).hasValue(10);
+                assertThat(ForComprehension.forc(o1, o2, o3, o4).filter((t1, t2, t3, t4) -> t1 + t2 + t3 + t4 == 10).filter((t1, t2, t3, t4) -> false).yield((t1, t2, t3, t4) -> t1 + t2 + t3 + t4)).isEmpty();
             }
         }
 
@@ -127,6 +154,17 @@ class ForComprehensionTest {
                 Optional<Integer> o5 = Optional.of(5);
                 assertThat(ForComprehension.forc(o1, o2, o3, o4, o5).filter((t1, t2, t3, t4, t5) -> t1 + t2 + t3 + t4 + t5 == 15).yield((t1, t2, t3, t4, t5) -> t1 + t2 + t3 + t4 + t5)).hasValue(15);
                 assertThat(ForComprehension.forc(o1, o2, o3, o4, o5).filter((t1, t2, t3, t4, t5) -> false).yield((t1, t2, t3, t4, t5) -> t1 + t2 + t3 + t4 + t5)).isEmpty();
+            }
+
+            @Test
+            void shouldTestEagerOptionalChainedFilter5() {
+                Optional<Integer> o1 = Optional.of(1);
+                Optional<Integer> o2 = Optional.of(2);
+                Optional<Integer> o3 = Optional.of(3);
+                Optional<Integer> o4 = Optional.of(4);
+                Optional<Integer> o5 = Optional.of(5);
+                assertThat(ForComprehension.forc(o1, o2, o3, o4, o5).filter((t1, t2, t3, t4, t5) -> t1 + t2 + t3 + t4 + t5 == 15).filter((t1, t2, t3, t4, t5) -> t1 == 1).yield((t1, t2, t3, t4, t5) -> t1 + t2 + t3 + t4 + t5)).hasValue(15);
+                assertThat(ForComprehension.forc(o1, o2, o3, o4, o5).filter((t1, t2, t3, t4, t5) -> t1 + t2 + t3 + t4 + t5 == 15).filter((t1, t2, t3, t4, t5) -> false).yield((t1, t2, t3, t4, t5) -> t1 + t2 + t3 + t4 + t5)).isEmpty();
             }
         }
 
@@ -157,6 +195,18 @@ class ForComprehensionTest {
                 Optional<Integer> o6 = Optional.of(6);
                 assertThat(ForComprehension.forc(o1, o2, o3, o4, o5, o6).filter((t1, t2, t3, t4, t5, t6) -> t1 + t2 + t3 + t4 + t5 + t6 == 21).yield((t1, t2, t3, t4, t5, t6) -> t1 + t2 + t3 + t4 + t5 + t6)).hasValue(21);
                 assertThat(ForComprehension.forc(o1, o2, o3, o4, o5, o6).filter((t1, t2, t3, t4, t5, t6) -> false).yield((t1, t2, t3, t4, t5, t6) -> t1 + t2 + t3 + t4 + t5 + t6)).isEmpty();
+            }
+
+            @Test
+            void shouldTestEagerOptionalChainedFilter6() {
+                Optional<Integer> o1 = Optional.of(1);
+                Optional<Integer> o2 = Optional.of(2);
+                Optional<Integer> o3 = Optional.of(3);
+                Optional<Integer> o4 = Optional.of(4);
+                Optional<Integer> o5 = Optional.of(5);
+                Optional<Integer> o6 = Optional.of(6);
+                assertThat(ForComprehension.forc(o1, o2, o3, o4, o5, o6).filter((t1, t2, t3, t4, t5, t6) -> t1 + t2 + t3 + t4 + t5 + t6 == 21).filter((t1, t2, t3, t4, t5, t6) -> t1 == 1).yield((t1, t2, t3, t4, t5, t6) -> t1 + t2 + t3 + t4 + t5 + t6)).hasValue(21);
+                assertThat(ForComprehension.forc(o1, o2, o3, o4, o5, o6).filter((t1, t2, t3, t4, t5, t6) -> t1 + t2 + t3 + t4 + t5 + t6 == 21).filter((t1, t2, t3, t4, t5, t6) -> false).yield((t1, t2, t3, t4, t5, t6) -> t1 + t2 + t3 + t4 + t5 + t6)).isEmpty();
             }
         }
 
@@ -189,6 +239,19 @@ class ForComprehensionTest {
                 Optional<Integer> o7 = Optional.of(7);
                 assertThat(ForComprehension.forc(o1, o2, o3, o4, o5, o6, o7).filter((t1, t2, t3, t4, t5, t6, t7) -> t1 + t2 + t3 + t4 + t5 + t6 + t7 == 28).yield((t1, t2, t3, t4, t5, t6, t7) -> t1 + t2 + t3 + t4 + t5 + t6 + t7)).hasValue(28);
                 assertThat(ForComprehension.forc(o1, o2, o3, o4, o5, o6, o7).filter((t1, t2, t3, t4, t5, t6, t7) -> false).yield((t1, t2, t3, t4, t5, t6, t7) -> t1 + t2 + t3 + t4 + t5 + t6 + t7)).isEmpty();
+            }
+
+            @Test
+            void shouldTestEagerOptionalChainedFilter7() {
+                Optional<Integer> o1 = Optional.of(1);
+                Optional<Integer> o2 = Optional.of(2);
+                Optional<Integer> o3 = Optional.of(3);
+                Optional<Integer> o4 = Optional.of(4);
+                Optional<Integer> o5 = Optional.of(5);
+                Optional<Integer> o6 = Optional.of(6);
+                Optional<Integer> o7 = Optional.of(7);
+                assertThat(ForComprehension.forc(o1, o2, o3, o4, o5, o6, o7).filter((t1, t2, t3, t4, t5, t6, t7) -> t1 + t2 + t3 + t4 + t5 + t6 + t7 == 28).filter((t1, t2, t3, t4, t5, t6, t7) -> t1 == 1).yield((t1, t2, t3, t4, t5, t6, t7) -> t1 + t2 + t3 + t4 + t5 + t6 + t7)).hasValue(28);
+                assertThat(ForComprehension.forc(o1, o2, o3, o4, o5, o6, o7).filter((t1, t2, t3, t4, t5, t6, t7) -> t1 + t2 + t3 + t4 + t5 + t6 + t7 == 28).filter((t1, t2, t3, t4, t5, t6, t7) -> false).yield((t1, t2, t3, t4, t5, t6, t7) -> t1 + t2 + t3 + t4 + t5 + t6 + t7)).isEmpty();
             }
         }
 
@@ -224,6 +287,20 @@ class ForComprehensionTest {
                 assertThat(ForComprehension.forc(o1, o2, o3, o4, o5, o6, o7, o8).filter((t1, t2, t3, t4, t5, t6, t7, t8) -> t1 + t2 + t3 + t4 + t5 + t6 + t7 + t8 == 36).yield((t1, t2, t3, t4, t5, t6, t7, t8) -> t1 + t2 + t3 + t4 + t5 + t6 + t7 + t8)).hasValue(36);
                 assertThat(ForComprehension.forc(o1, o2, o3, o4, o5, o6, o7, o8).filter((t1, t2, t3, t4, t5, t6, t7, t8) -> false).yield((t1, t2, t3, t4, t5, t6, t7, t8) -> t1 + t2 + t3 + t4 + t5 + t6 + t7 + t8)).isEmpty();
             }
+
+            @Test
+            void shouldTestEagerOptionalChainedFilter8() {
+                Optional<Integer> o1 = Optional.of(1);
+                Optional<Integer> o2 = Optional.of(2);
+                Optional<Integer> o3 = Optional.of(3);
+                Optional<Integer> o4 = Optional.of(4);
+                Optional<Integer> o5 = Optional.of(5);
+                Optional<Integer> o6 = Optional.of(6);
+                Optional<Integer> o7 = Optional.of(7);
+                Optional<Integer> o8 = Optional.of(8);
+                assertThat(ForComprehension.forc(o1, o2, o3, o4, o5, o6, o7, o8).filter((t1, t2, t3, t4, t5, t6, t7, t8) -> t1 + t2 + t3 + t4 + t5 + t6 + t7 + t8 == 36).filter((t1, t2, t3, t4, t5, t6, t7, t8) -> t1 == 1).yield((t1, t2, t3, t4, t5, t6, t7, t8) -> t1 + t2 + t3 + t4 + t5 + t6 + t7 + t8)).hasValue(36);
+                assertThat(ForComprehension.forc(o1, o2, o3, o4, o5, o6, o7, o8).filter((t1, t2, t3, t4, t5, t6, t7, t8) -> t1 + t2 + t3 + t4 + t5 + t6 + t7 + t8 == 36).filter((t1, t2, t3, t4, t5, t6, t7, t8) -> false).yield((t1, t2, t3, t4, t5, t6, t7, t8) -> t1 + t2 + t3 + t4 + t5 + t6 + t7 + t8)).isEmpty();
+            }
         }
     }
 
@@ -253,6 +330,14 @@ class ForComprehensionTest {
                 assertThat(ForComprehension.forc(Stream.of(1, 2), Stream.of(10, 20)).filter((t1, t2) -> false).yield((t1, t2) -> t1 + t2))
                     .isEmpty();
             }
+
+            @Test
+            void shouldTestEagerStreamChainedFilter2() {
+                assertThat(ForComprehension.forc(Stream.of(1, 2), Stream.of(10, 20)).filter((t1, t2) -> t1 == 1).filter((t1, t2) -> t2 == 10).yield((t1, t2) -> t1 + t2))
+                    .containsExactly(11);
+                assertThat(ForComprehension.forc(Stream.of(1, 2), Stream.of(10, 20)).filter((t1, t2) -> t1 == 1).filter((t1, t2) -> false).yield((t1, t2) -> t1 + t2))
+                    .isEmpty();
+            }
         }
 
         @Nested
@@ -276,6 +361,14 @@ class ForComprehensionTest {
                 assertThat(ForComprehension.forc(Stream.of(1, 2), Stream.of(10, 20), Stream.of(100)).filter((t1, t2, t3) -> t1 == 1).yield((t1, t2, t3) -> t1 + t2 + t3))
                     .containsExactly(111, 121);
                 assertThat(ForComprehension.forc(Stream.of(1, 2), Stream.of(10, 20), Stream.of(100)).filter((t1, t2, t3) -> false).yield((t1, t2, t3) -> t1 + t2 + t3))
+                    .isEmpty();
+            }
+
+            @Test
+            void shouldTestEagerStreamChainedFilter3() {
+                assertThat(ForComprehension.forc(Stream.of(1, 2), Stream.of(10, 20), Stream.of(100)).filter((t1, t2, t3) -> t1 == 1).filter((t1, t2, t3) -> t2 == 10).yield((t1, t2, t3) -> t1 + t2 + t3))
+                    .containsExactly(111);
+                assertThat(ForComprehension.forc(Stream.of(1, 2), Stream.of(10, 20), Stream.of(100)).filter((t1, t2, t3) -> t1 == 1).filter((t1, t2, t3) -> false).yield((t1, t2, t3) -> t1 + t2 + t3))
                     .isEmpty();
             }
         }
@@ -303,6 +396,14 @@ class ForComprehensionTest {
                 assertThat(ForComprehension.forc(Stream.of(1, 2), Stream.of(10, 20), Stream.of(100), Stream.of(1000)).filter((t1, t2, t3, t4) -> false).yield((t1, t2, t3, t4) -> t1 + t2 + t3 + t4))
                     .isEmpty();
             }
+
+            @Test
+            void shouldTestEagerStreamChainedFilter4() {
+                assertThat(ForComprehension.forc(Stream.of(1, 2), Stream.of(10, 20), Stream.of(100), Stream.of(1000)).filter((t1, t2, t3, t4) -> t1 == 1).filter((t1, t2, t3, t4) -> t2 == 10).yield((t1, t2, t3, t4) -> t1 + t2 + t3 + t4))
+                    .containsExactly(1111);
+                assertThat(ForComprehension.forc(Stream.of(1, 2), Stream.of(10, 20), Stream.of(100), Stream.of(1000)).filter((t1, t2, t3, t4) -> t1 == 1).filter((t1, t2, t3, t4) -> false).yield((t1, t2, t3, t4) -> t1 + t2 + t3 + t4))
+                    .isEmpty();
+            }
         }
 
         @Nested
@@ -326,6 +427,14 @@ class ForComprehensionTest {
                 assertThat(ForComprehension.forc(Stream.of(1, 2), Stream.of(10, 20), Stream.of(100), Stream.of(1000), Stream.of(10000)).filter((t1, t2, t3, t4, t5) -> t1 == 1).yield((t1, t2, t3, t4, t5) -> t1 + t2 + t3 + t4 + t5))
                     .containsExactly(11111, 11121);
                 assertThat(ForComprehension.forc(Stream.of(1, 2), Stream.of(10, 20), Stream.of(100), Stream.of(1000), Stream.of(10000)).filter((t1, t2, t3, t4, t5) -> false).yield((t1, t2, t3, t4, t5) -> t1 + t2 + t3 + t4 + t5))
+                    .isEmpty();
+            }
+
+            @Test
+            void shouldTestEagerStreamChainedFilter5() {
+                assertThat(ForComprehension.forc(Stream.of(1, 2), Stream.of(10, 20), Stream.of(100), Stream.of(1000), Stream.of(10000)).filter((t1, t2, t3, t4, t5) -> t1 == 1).filter((t1, t2, t3, t4, t5) -> t2 == 10).yield((t1, t2, t3, t4, t5) -> t1 + t2 + t3 + t4 + t5))
+                    .containsExactly(11111);
+                assertThat(ForComprehension.forc(Stream.of(1, 2), Stream.of(10, 20), Stream.of(100), Stream.of(1000), Stream.of(10000)).filter((t1, t2, t3, t4, t5) -> t1 == 1).filter((t1, t2, t3, t4, t5) -> false).yield((t1, t2, t3, t4, t5) -> t1 + t2 + t3 + t4 + t5))
                     .isEmpty();
             }
         }
@@ -353,6 +462,14 @@ class ForComprehensionTest {
                 assertThat(ForComprehension.forc(Stream.of(1, 2), Stream.of(10, 20), Stream.of(100), Stream.of(1000), Stream.of(10000), Stream.of(100000)).filter((t1, t2, t3, t4, t5, t6) -> false).yield((t1, t2, t3, t4, t5, t6) -> t1 + t2 + t3 + t4 + t5 + t6))
                     .isEmpty();
             }
+
+            @Test
+            void shouldTestEagerStreamChainedFilter6() {
+                assertThat(ForComprehension.forc(Stream.of(1, 2), Stream.of(10, 20), Stream.of(100), Stream.of(1000), Stream.of(10000), Stream.of(100000)).filter((t1, t2, t3, t4, t5, t6) -> t1 == 1).filter((t1, t2, t3, t4, t5, t6) -> t2 == 10).yield((t1, t2, t3, t4, t5, t6) -> t1 + t2 + t3 + t4 + t5 + t6))
+                    .containsExactly(111111);
+                assertThat(ForComprehension.forc(Stream.of(1, 2), Stream.of(10, 20), Stream.of(100), Stream.of(1000), Stream.of(10000), Stream.of(100000)).filter((t1, t2, t3, t4, t5, t6) -> t1 == 1).filter((t1, t2, t3, t4, t5, t6) -> false).yield((t1, t2, t3, t4, t5, t6) -> t1 + t2 + t3 + t4 + t5 + t6))
+                    .isEmpty();
+            }
         }
 
         @Nested
@@ -378,6 +495,14 @@ class ForComprehensionTest {
                 assertThat(ForComprehension.forc(Stream.of(1, 2), Stream.of(10, 20), Stream.of(100), Stream.of(1000), Stream.of(10000), Stream.of(100000), Stream.of(1000000)).filter((t1, t2, t3, t4, t5, t6, t7) -> false).yield((t1, t2, t3, t4, t5, t6, t7) -> t1 + t2 + t3 + t4 + t5 + t6 + t7))
                     .isEmpty();
             }
+
+            @Test
+            void shouldTestEagerStreamChainedFilter7() {
+                assertThat(ForComprehension.forc(Stream.of(1, 2), Stream.of(10, 20), Stream.of(100), Stream.of(1000), Stream.of(10000), Stream.of(100000), Stream.of(1000000)).filter((t1, t2, t3, t4, t5, t6, t7) -> t1 == 1).filter((t1, t2, t3, t4, t5, t6, t7) -> t2 == 10).yield((t1, t2, t3, t4, t5, t6, t7) -> t1 + t2 + t3 + t4 + t5 + t6 + t7))
+                    .containsExactly(1111111);
+                assertThat(ForComprehension.forc(Stream.of(1, 2), Stream.of(10, 20), Stream.of(100), Stream.of(1000), Stream.of(10000), Stream.of(100000), Stream.of(1000000)).filter((t1, t2, t3, t4, t5, t6, t7) -> t1 == 1).filter((t1, t2, t3, t4, t5, t6, t7) -> false).yield((t1, t2, t3, t4, t5, t6, t7) -> t1 + t2 + t3 + t4 + t5 + t6 + t7))
+                    .isEmpty();
+            }
         }
 
         @Nested
@@ -401,6 +526,14 @@ class ForComprehensionTest {
                 assertThat(ForComprehension.forc(Stream.of(1, 2), Stream.of(10, 20), Stream.of(100), Stream.of(1000), Stream.of(10000), Stream.of(100000), Stream.of(1000000), Stream.of(10000000)).filter((t1, t2, t3, t4, t5, t6, t7, t8) -> t1 == 1).yield((t1, t2, t3, t4, t5, t6, t7, t8) -> t1 + t2 + t3 + t4 + t5 + t6 + t7 + t8))
                     .containsExactly(11111111, 11111121);
                 assertThat(ForComprehension.forc(Stream.of(1, 2), Stream.of(10, 20), Stream.of(100), Stream.of(1000), Stream.of(10000), Stream.of(100000), Stream.of(1000000), Stream.of(10000000)).filter((t1, t2, t3, t4, t5, t6, t7, t8) -> false).yield((t1, t2, t3, t4, t5, t6, t7, t8) -> t1 + t2 + t3 + t4 + t5 + t6 + t7 + t8))
+                    .isEmpty();
+            }
+
+            @Test
+            void shouldTestEagerStreamChainedFilter8() {
+                assertThat(ForComprehension.forc(Stream.of(1, 2), Stream.of(10, 20), Stream.of(100), Stream.of(1000), Stream.of(10000), Stream.of(100000), Stream.of(1000000), Stream.of(10000000)).filter((t1, t2, t3, t4, t5, t6, t7, t8) -> t1 == 1).filter((t1, t2, t3, t4, t5, t6, t7, t8) -> t2 == 10).yield((t1, t2, t3, t4, t5, t6, t7, t8) -> t1 + t2 + t3 + t4 + t5 + t6 + t7 + t8))
+                    .containsExactly(11111111);
+                assertThat(ForComprehension.forc(Stream.of(1, 2), Stream.of(10, 20), Stream.of(100), Stream.of(1000), Stream.of(10000), Stream.of(100000), Stream.of(1000000), Stream.of(10000000)).filter((t1, t2, t3, t4, t5, t6, t7, t8) -> t1 == 1).filter((t1, t2, t3, t4, t5, t6, t7, t8) -> false).yield((t1, t2, t3, t4, t5, t6, t7, t8) -> t1 + t2 + t3 + t4 + t5 + t6 + t7 + t8))
                     .isEmpty();
             }
         }
@@ -430,6 +563,14 @@ class ForComprehensionTest {
                 assertThat(ForComprehension.forc(List.of(1, 2), List.of(10, 20)).filter((t1, t2) -> false).yield((t1, t2) -> t1 + t2))
                     .isEmpty();
             }
+
+            @Test
+            void shouldTestEagerIterableChainedFilter2() {
+                assertThat(ForComprehension.forc(List.of(1, 2), List.of(10, 20)).filter((t1, t2) -> t1 == 1).filter((t1, t2) -> t2 == 10).yield((t1, t2) -> t1 + t2))
+                    .containsExactly(11);
+                assertThat(ForComprehension.forc(List.of(1, 2), List.of(10, 20)).filter((t1, t2) -> t1 == 1).filter((t1, t2) -> false).yield((t1, t2) -> t1 + t2))
+                    .isEmpty();
+            }
         }
 
         @Nested
@@ -451,6 +592,14 @@ class ForComprehensionTest {
                 assertThat(ForComprehension.forc(List.of(1, 2), List.of(10, 20), List.of(100)).filter((t1, t2, t3) -> t1 == 1).yield((t1, t2, t3) -> t1 + t2 + t3))
                     .containsExactly(111, 121);
                 assertThat(ForComprehension.forc(List.of(1, 2), List.of(10, 20), List.of(100)).filter((t1, t2, t3) -> false).yield((t1, t2, t3) -> t1 + t2 + t3))
+                    .isEmpty();
+            }
+
+            @Test
+            void shouldTestEagerIterableChainedFilter3() {
+                assertThat(ForComprehension.forc(List.of(1, 2), List.of(10, 20), List.of(100)).filter((t1, t2, t3) -> t1 == 1).filter((t1, t2, t3) -> t2 == 10).yield((t1, t2, t3) -> t1 + t2 + t3))
+                    .containsExactly(111);
+                assertThat(ForComprehension.forc(List.of(1, 2), List.of(10, 20), List.of(100)).filter((t1, t2, t3) -> t1 == 1).filter((t1, t2, t3) -> false).yield((t1, t2, t3) -> t1 + t2 + t3))
                     .isEmpty();
             }
         }
@@ -476,6 +625,14 @@ class ForComprehensionTest {
                 assertThat(ForComprehension.forc(List.of(1, 2), List.of(10, 20), List.of(100), List.of(1000)).filter((t1, t2, t3, t4) -> false).yield((t1, t2, t3, t4) -> t1 + t2 + t3 + t4))
                     .isEmpty();
             }
+
+            @Test
+            void shouldTestEagerIterableChainedFilter4() {
+                assertThat(ForComprehension.forc(List.of(1, 2), List.of(10, 20), List.of(100), List.of(1000)).filter((t1, t2, t3, t4) -> t1 == 1).filter((t1, t2, t3, t4) -> t2 == 10).yield((t1, t2, t3, t4) -> t1 + t2 + t3 + t4))
+                    .containsExactly(1111);
+                assertThat(ForComprehension.forc(List.of(1, 2), List.of(10, 20), List.of(100), List.of(1000)).filter((t1, t2, t3, t4) -> t1 == 1).filter((t1, t2, t3, t4) -> false).yield((t1, t2, t3, t4) -> t1 + t2 + t3 + t4))
+                    .isEmpty();
+            }
         }
 
         @Nested
@@ -497,6 +654,14 @@ class ForComprehensionTest {
                 assertThat(ForComprehension.forc(List.of(1, 2), List.of(10, 20), List.of(100), List.of(1000), List.of(10000)).filter((t1, t2, t3, t4, t5) -> t1 == 1).yield((t1, t2, t3, t4, t5) -> t1 + t2 + t3 + t4 + t5))
                     .containsExactly(11111, 11121);
                 assertThat(ForComprehension.forc(List.of(1, 2), List.of(10, 20), List.of(100), List.of(1000), List.of(10000)).filter((t1, t2, t3, t4, t5) -> false).yield((t1, t2, t3, t4, t5) -> t1 + t2 + t3 + t4 + t5))
+                    .isEmpty();
+            }
+
+            @Test
+            void shouldTestEagerIterableChainedFilter5() {
+                assertThat(ForComprehension.forc(List.of(1, 2), List.of(10, 20), List.of(100), List.of(1000), List.of(10000)).filter((t1, t2, t3, t4, t5) -> t1 == 1).filter((t1, t2, t3, t4, t5) -> t2 == 10).yield((t1, t2, t3, t4, t5) -> t1 + t2 + t3 + t4 + t5))
+                    .containsExactly(11111);
+                assertThat(ForComprehension.forc(List.of(1, 2), List.of(10, 20), List.of(100), List.of(1000), List.of(10000)).filter((t1, t2, t3, t4, t5) -> t1 == 1).filter((t1, t2, t3, t4, t5) -> false).yield((t1, t2, t3, t4, t5) -> t1 + t2 + t3 + t4 + t5))
                     .isEmpty();
             }
         }
@@ -522,6 +687,14 @@ class ForComprehensionTest {
                 assertThat(ForComprehension.forc(List.of(1, 2), List.of(10, 20), List.of(100), List.of(1000), List.of(10000), List.of(100000)).filter((t1, t2, t3, t4, t5, t6) -> false).yield((t1, t2, t3, t4, t5, t6) -> t1 + t2 + t3 + t4 + t5 + t6))
                     .isEmpty();
             }
+
+            @Test
+            void shouldTestEagerIterableChainedFilter6() {
+                assertThat(ForComprehension.forc(List.of(1, 2), List.of(10, 20), List.of(100), List.of(1000), List.of(10000), List.of(100000)).filter((t1, t2, t3, t4, t5, t6) -> t1 == 1).filter((t1, t2, t3, t4, t5, t6) -> t2 == 10).yield((t1, t2, t3, t4, t5, t6) -> t1 + t2 + t3 + t4 + t5 + t6))
+                    .containsExactly(111111);
+                assertThat(ForComprehension.forc(List.of(1, 2), List.of(10, 20), List.of(100), List.of(1000), List.of(10000), List.of(100000)).filter((t1, t2, t3, t4, t5, t6) -> t1 == 1).filter((t1, t2, t3, t4, t5, t6) -> false).yield((t1, t2, t3, t4, t5, t6) -> t1 + t2 + t3 + t4 + t5 + t6))
+                    .isEmpty();
+            }
         }
 
         @Nested
@@ -545,6 +718,14 @@ class ForComprehensionTest {
                 assertThat(ForComprehension.forc(List.of(1, 2), List.of(10, 20), List.of(100), List.of(1000), List.of(10000), List.of(100000), List.of(1000000)).filter((t1, t2, t3, t4, t5, t6, t7) -> false).yield((t1, t2, t3, t4, t5, t6, t7) -> t1 + t2 + t3 + t4 + t5 + t6 + t7))
                     .isEmpty();
             }
+
+            @Test
+            void shouldTestEagerIterableChainedFilter7() {
+                assertThat(ForComprehension.forc(List.of(1, 2), List.of(10, 20), List.of(100), List.of(1000), List.of(10000), List.of(100000), List.of(1000000)).filter((t1, t2, t3, t4, t5, t6, t7) -> t1 == 1).filter((t1, t2, t3, t4, t5, t6, t7) -> t2 == 10).yield((t1, t2, t3, t4, t5, t6, t7) -> t1 + t2 + t3 + t4 + t5 + t6 + t7))
+                    .containsExactly(1111111);
+                assertThat(ForComprehension.forc(List.of(1, 2), List.of(10, 20), List.of(100), List.of(1000), List.of(10000), List.of(100000), List.of(1000000)).filter((t1, t2, t3, t4, t5, t6, t7) -> t1 == 1).filter((t1, t2, t3, t4, t5, t6, t7) -> false).yield((t1, t2, t3, t4, t5, t6, t7) -> t1 + t2 + t3 + t4 + t5 + t6 + t7))
+                    .isEmpty();
+            }
         }
 
         @Nested
@@ -566,6 +747,14 @@ class ForComprehensionTest {
                 assertThat(ForComprehension.forc(List.of(1, 2), List.of(10, 20), List.of(100), List.of(1000), List.of(10000), List.of(100000), List.of(1000000), List.of(10000000)).filter((t1, t2, t3, t4, t5, t6, t7, t8) -> t1 == 1).yield((t1, t2, t3, t4, t5, t6, t7, t8) -> t1 + t2 + t3 + t4 + t5 + t6 + t7 + t8))
                     .containsExactly(11111111, 11111121);
                 assertThat(ForComprehension.forc(List.of(1, 2), List.of(10, 20), List.of(100), List.of(1000), List.of(10000), List.of(100000), List.of(1000000), List.of(10000000)).filter((t1, t2, t3, t4, t5, t6, t7, t8) -> false).yield((t1, t2, t3, t4, t5, t6, t7, t8) -> t1 + t2 + t3 + t4 + t5 + t6 + t7 + t8))
+                    .isEmpty();
+            }
+
+            @Test
+            void shouldTestEagerIterableChainedFilter8() {
+                assertThat(ForComprehension.forc(List.of(1, 2), List.of(10, 20), List.of(100), List.of(1000), List.of(10000), List.of(100000), List.of(1000000), List.of(10000000)).filter((t1, t2, t3, t4, t5, t6, t7, t8) -> t1 == 1).filter((t1, t2, t3, t4, t5, t6, t7, t8) -> t2 == 10).yield((t1, t2, t3, t4, t5, t6, t7, t8) -> t1 + t2 + t3 + t4 + t5 + t6 + t7 + t8))
+                    .containsExactly(11111111);
+                assertThat(ForComprehension.forc(List.of(1, 2), List.of(10, 20), List.of(100), List.of(1000), List.of(10000), List.of(100000), List.of(1000000), List.of(10000000)).filter((t1, t2, t3, t4, t5, t6, t7, t8) -> t1 == 1).filter((t1, t2, t3, t4, t5, t6, t7, t8) -> false).yield((t1, t2, t3, t4, t5, t6, t7, t8) -> t1 + t2 + t3 + t4 + t5 + t6 + t7 + t8))
                     .isEmpty();
             }
         }
@@ -592,6 +781,13 @@ class ForComprehensionTest {
                 assertThat(ForComprehension.forc(o1, v1 -> Optional.of(2)).filter((t1, t2) -> t1 + t2 == 3).yield((t1, t2) -> t1 + t2)).hasValue(3);
                 assertThat(ForComprehension.forc(o1, v1 -> Optional.of(2)).filter((t1, t2) -> false).yield((t1, t2) -> t1 + t2)).isEmpty();
             }
+
+            @Test
+            void shouldTestLazyOptionalChainedFilter2() {
+                Optional<Integer> o1 = Optional.of(1);
+                assertThat(ForComprehension.forc(o1, v1 -> Optional.of(2)).filter((t1, t2) -> t1 + t2 == 3).filter((t1, t2) -> t1 == 1).yield((t1, t2) -> t1 + t2)).hasValue(3);
+                assertThat(ForComprehension.forc(o1, v1 -> Optional.of(2)).filter((t1, t2) -> t1 + t2 == 3).filter((t1, t2) -> false).yield((t1, t2) -> t1 + t2)).isEmpty();
+            }
         }
 
         @Nested
@@ -611,6 +807,13 @@ class ForComprehensionTest {
                 Optional<Integer> o1 = Optional.of(1);
                 assertThat(ForComprehension.forc(o1, v1 -> Optional.of(2), (v1, v2) -> Optional.of(3)).filter((t1, t2, t3) -> t1 + t2 + t3 == 6).yield((t1, t2, t3) -> t1 + t2 + t3)).hasValue(6);
                 assertThat(ForComprehension.forc(o1, v1 -> Optional.of(2), (v1, v2) -> Optional.of(3)).filter((t1, t2, t3) -> false).yield((t1, t2, t3) -> t1 + t2 + t3)).isEmpty();
+            }
+
+            @Test
+            void shouldTestLazyOptionalChainedFilter3() {
+                Optional<Integer> o1 = Optional.of(1);
+                assertThat(ForComprehension.forc(o1, v1 -> Optional.of(2), (v1, v2) -> Optional.of(3)).filter((t1, t2, t3) -> t1 + t2 + t3 == 6).filter((t1, t2, t3) -> t1 == 1).yield((t1, t2, t3) -> t1 + t2 + t3)).hasValue(6);
+                assertThat(ForComprehension.forc(o1, v1 -> Optional.of(2), (v1, v2) -> Optional.of(3)).filter((t1, t2, t3) -> t1 + t2 + t3 == 6).filter((t1, t2, t3) -> false).yield((t1, t2, t3) -> t1 + t2 + t3)).isEmpty();
             }
         }
 
@@ -632,6 +835,13 @@ class ForComprehensionTest {
                 assertThat(ForComprehension.forc(o1, v1 -> Optional.of(2), (v1, v2) -> Optional.of(3), (v1, v2, v3) -> Optional.of(4)).filter((t1, t2, t3, t4) -> t1 + t2 + t3 + t4 == 10).yield((t1, t2, t3, t4) -> t1 + t2 + t3 + t4)).hasValue(10);
                 assertThat(ForComprehension.forc(o1, v1 -> Optional.of(2), (v1, v2) -> Optional.of(3), (v1, v2, v3) -> Optional.of(4)).filter((t1, t2, t3, t4) -> false).yield((t1, t2, t3, t4) -> t1 + t2 + t3 + t4)).isEmpty();
             }
+
+            @Test
+            void shouldTestLazyOptionalChainedFilter4() {
+                Optional<Integer> o1 = Optional.of(1);
+                assertThat(ForComprehension.forc(o1, v1 -> Optional.of(2), (v1, v2) -> Optional.of(3), (v1, v2, v3) -> Optional.of(4)).filter((t1, t2, t3, t4) -> t1 + t2 + t3 + t4 == 10).filter((t1, t2, t3, t4) -> t1 == 1).yield((t1, t2, t3, t4) -> t1 + t2 + t3 + t4)).hasValue(10);
+                assertThat(ForComprehension.forc(o1, v1 -> Optional.of(2), (v1, v2) -> Optional.of(3), (v1, v2, v3) -> Optional.of(4)).filter((t1, t2, t3, t4) -> t1 + t2 + t3 + t4 == 10).filter((t1, t2, t3, t4) -> false).yield((t1, t2, t3, t4) -> t1 + t2 + t3 + t4)).isEmpty();
+            }
         }
 
         @Nested
@@ -651,6 +861,13 @@ class ForComprehensionTest {
                 Optional<Integer> o1 = Optional.of(1);
                 assertThat(ForComprehension.forc(o1, v1 -> Optional.of(2), (v1, v2) -> Optional.of(3), (v1, v2, v3) -> Optional.of(4), (v1, v2, v3, v4) -> Optional.of(5)).filter((t1, t2, t3, t4, t5) -> t1 + t2 + t3 + t4 + t5 == 15).yield((t1, t2, t3, t4, t5) -> t1 + t2 + t3 + t4 + t5)).hasValue(15);
                 assertThat(ForComprehension.forc(o1, v1 -> Optional.of(2), (v1, v2) -> Optional.of(3), (v1, v2, v3) -> Optional.of(4), (v1, v2, v3, v4) -> Optional.of(5)).filter((t1, t2, t3, t4, t5) -> false).yield((t1, t2, t3, t4, t5) -> t1 + t2 + t3 + t4 + t5)).isEmpty();
+            }
+
+            @Test
+            void shouldTestLazyOptionalChainedFilter5() {
+                Optional<Integer> o1 = Optional.of(1);
+                assertThat(ForComprehension.forc(o1, v1 -> Optional.of(2), (v1, v2) -> Optional.of(3), (v1, v2, v3) -> Optional.of(4), (v1, v2, v3, v4) -> Optional.of(5)).filter((t1, t2, t3, t4, t5) -> t1 + t2 + t3 + t4 + t5 == 15).filter((t1, t2, t3, t4, t5) -> t1 == 1).yield((t1, t2, t3, t4, t5) -> t1 + t2 + t3 + t4 + t5)).hasValue(15);
+                assertThat(ForComprehension.forc(o1, v1 -> Optional.of(2), (v1, v2) -> Optional.of(3), (v1, v2, v3) -> Optional.of(4), (v1, v2, v3, v4) -> Optional.of(5)).filter((t1, t2, t3, t4, t5) -> t1 + t2 + t3 + t4 + t5 == 15).filter((t1, t2, t3, t4, t5) -> false).yield((t1, t2, t3, t4, t5) -> t1 + t2 + t3 + t4 + t5)).isEmpty();
             }
         }
 
@@ -672,6 +889,13 @@ class ForComprehensionTest {
                 assertThat(ForComprehension.forc(o1, v1 -> Optional.of(2), (v1, v2) -> Optional.of(3), (v1, v2, v3) -> Optional.of(4), (v1, v2, v3, v4) -> Optional.of(5), (v1, v2, v3, v4, v5) -> Optional.of(6)).filter((t1, t2, t3, t4, t5, t6) -> t1 + t2 + t3 + t4 + t5 + t6 == 21).yield((t1, t2, t3, t4, t5, t6) -> t1 + t2 + t3 + t4 + t5 + t6)).hasValue(21);
                 assertThat(ForComprehension.forc(o1, v1 -> Optional.of(2), (v1, v2) -> Optional.of(3), (v1, v2, v3) -> Optional.of(4), (v1, v2, v3, v4) -> Optional.of(5), (v1, v2, v3, v4, v5) -> Optional.of(6)).filter((t1, t2, t3, t4, t5, t6) -> false).yield((t1, t2, t3, t4, t5, t6) -> t1 + t2 + t3 + t4 + t5 + t6)).isEmpty();
             }
+
+            @Test
+            void shouldTestLazyOptionalChainedFilter6() {
+                Optional<Integer> o1 = Optional.of(1);
+                assertThat(ForComprehension.forc(o1, v1 -> Optional.of(2), (v1, v2) -> Optional.of(3), (v1, v2, v3) -> Optional.of(4), (v1, v2, v3, v4) -> Optional.of(5), (v1, v2, v3, v4, v5) -> Optional.of(6)).filter((t1, t2, t3, t4, t5, t6) -> t1 + t2 + t3 + t4 + t5 + t6 == 21).filter((t1, t2, t3, t4, t5, t6) -> t1 == 1).yield((t1, t2, t3, t4, t5, t6) -> t1 + t2 + t3 + t4 + t5 + t6)).hasValue(21);
+                assertThat(ForComprehension.forc(o1, v1 -> Optional.of(2), (v1, v2) -> Optional.of(3), (v1, v2, v3) -> Optional.of(4), (v1, v2, v3, v4) -> Optional.of(5), (v1, v2, v3, v4, v5) -> Optional.of(6)).filter((t1, t2, t3, t4, t5, t6) -> t1 + t2 + t3 + t4 + t5 + t6 == 21).filter((t1, t2, t3, t4, t5, t6) -> false).yield((t1, t2, t3, t4, t5, t6) -> t1 + t2 + t3 + t4 + t5 + t6)).isEmpty();
+            }
         }
 
         @Nested
@@ -692,6 +916,13 @@ class ForComprehensionTest {
                 assertThat(ForComprehension.forc(o1, v1 -> Optional.of(2), (v1, v2) -> Optional.of(3), (v1, v2, v3) -> Optional.of(4), (v1, v2, v3, v4) -> Optional.of(5), (v1, v2, v3, v4, v5) -> Optional.of(6), (v1, v2, v3, v4, v5, v6) -> Optional.of(7)).filter((t1, t2, t3, t4, t5, t6, t7) -> t1 + t2 + t3 + t4 + t5 + t6 + t7 == 28).yield((t1, t2, t3, t4, t5, t6, t7) -> t1 + t2 + t3 + t4 + t5 + t6 + t7)).hasValue(28);
                 assertThat(ForComprehension.forc(o1, v1 -> Optional.of(2), (v1, v2) -> Optional.of(3), (v1, v2, v3) -> Optional.of(4), (v1, v2, v3, v4) -> Optional.of(5), (v1, v2, v3, v4, v5) -> Optional.of(6), (v1, v2, v3, v4, v5, v6) -> Optional.of(7)).filter((t1, t2, t3, t4, t5, t6, t7) -> false).yield((t1, t2, t3, t4, t5, t6, t7) -> t1 + t2 + t3 + t4 + t5 + t6 + t7)).isEmpty();
             }
+
+            @Test
+            void shouldTestLazyOptionalChainedFilter7() {
+                Optional<Integer> o1 = Optional.of(1);
+                assertThat(ForComprehension.forc(o1, v1 -> Optional.of(2), (v1, v2) -> Optional.of(3), (v1, v2, v3) -> Optional.of(4), (v1, v2, v3, v4) -> Optional.of(5), (v1, v2, v3, v4, v5) -> Optional.of(6), (v1, v2, v3, v4, v5, v6) -> Optional.of(7)).filter((t1, t2, t3, t4, t5, t6, t7) -> t1 + t2 + t3 + t4 + t5 + t6 + t7 == 28).filter((t1, t2, t3, t4, t5, t6, t7) -> t1 == 1).yield((t1, t2, t3, t4, t5, t6, t7) -> t1 + t2 + t3 + t4 + t5 + t6 + t7)).hasValue(28);
+                assertThat(ForComprehension.forc(o1, v1 -> Optional.of(2), (v1, v2) -> Optional.of(3), (v1, v2, v3) -> Optional.of(4), (v1, v2, v3, v4) -> Optional.of(5), (v1, v2, v3, v4, v5) -> Optional.of(6), (v1, v2, v3, v4, v5, v6) -> Optional.of(7)).filter((t1, t2, t3, t4, t5, t6, t7) -> t1 + t2 + t3 + t4 + t5 + t6 + t7 == 28).filter((t1, t2, t3, t4, t5, t6, t7) -> false).yield((t1, t2, t3, t4, t5, t6, t7) -> t1 + t2 + t3 + t4 + t5 + t6 + t7)).isEmpty();
+            }
         }
 
         @Nested
@@ -711,6 +942,13 @@ class ForComprehensionTest {
                 Optional<Integer> o1 = Optional.of(1);
                 assertThat(ForComprehension.forc(o1, v1 -> Optional.of(2), (v1, v2) -> Optional.of(3), (v1, v2, v3) -> Optional.of(4), (v1, v2, v3, v4) -> Optional.of(5), (v1, v2, v3, v4, v5) -> Optional.of(6), (v1, v2, v3, v4, v5, v6) -> Optional.of(7), (v1, v2, v3, v4, v5, v6, v7) -> Optional.of(8)).filter((t1, t2, t3, t4, t5, t6, t7, t8) -> t1 + t2 + t3 + t4 + t5 + t6 + t7 + t8 == 36).yield((t1, t2, t3, t4, t5, t6, t7, t8) -> t1 + t2 + t3 + t4 + t5 + t6 + t7 + t8)).hasValue(36);
                 assertThat(ForComprehension.forc(o1, v1 -> Optional.of(2), (v1, v2) -> Optional.of(3), (v1, v2, v3) -> Optional.of(4), (v1, v2, v3, v4) -> Optional.of(5), (v1, v2, v3, v4, v5) -> Optional.of(6), (v1, v2, v3, v4, v5, v6) -> Optional.of(7), (v1, v2, v3, v4, v5, v6, v7) -> Optional.of(8)).filter((t1, t2, t3, t4, t5, t6, t7, t8) -> false).yield((t1, t2, t3, t4, t5, t6, t7, t8) -> t1 + t2 + t3 + t4 + t5 + t6 + t7 + t8)).isEmpty();
+            }
+
+            @Test
+            void shouldTestLazyOptionalChainedFilter8() {
+                Optional<Integer> o1 = Optional.of(1);
+                assertThat(ForComprehension.forc(o1, v1 -> Optional.of(2), (v1, v2) -> Optional.of(3), (v1, v2, v3) -> Optional.of(4), (v1, v2, v3, v4) -> Optional.of(5), (v1, v2, v3, v4, v5) -> Optional.of(6), (v1, v2, v3, v4, v5, v6) -> Optional.of(7), (v1, v2, v3, v4, v5, v6, v7) -> Optional.of(8)).filter((t1, t2, t3, t4, t5, t6, t7, t8) -> t1 + t2 + t3 + t4 + t5 + t6 + t7 + t8 == 36).filter((t1, t2, t3, t4, t5, t6, t7, t8) -> t1 == 1).yield((t1, t2, t3, t4, t5, t6, t7, t8) -> t1 + t2 + t3 + t4 + t5 + t6 + t7 + t8)).hasValue(36);
+                assertThat(ForComprehension.forc(o1, v1 -> Optional.of(2), (v1, v2) -> Optional.of(3), (v1, v2, v3) -> Optional.of(4), (v1, v2, v3, v4) -> Optional.of(5), (v1, v2, v3, v4, v5) -> Optional.of(6), (v1, v2, v3, v4, v5, v6) -> Optional.of(7), (v1, v2, v3, v4, v5, v6, v7) -> Optional.of(8)).filter((t1, t2, t3, t4, t5, t6, t7, t8) -> t1 + t2 + t3 + t4 + t5 + t6 + t7 + t8 == 36).filter((t1, t2, t3, t4, t5, t6, t7, t8) -> false).yield((t1, t2, t3, t4, t5, t6, t7, t8) -> t1 + t2 + t3 + t4 + t5 + t6 + t7 + t8)).isEmpty();
             }
         }
     }
@@ -741,6 +979,14 @@ class ForComprehensionTest {
                 assertThat(ForComprehension.forc(Stream.of(1, 2), v1 -> Stream.of(10, 20)).filter((t1, t2) -> false).yield((t1, t2) -> t1 + t2))
                     .isEmpty();
             }
+
+            @Test
+            void shouldTestLazyStreamChainedFilter2() {
+                assertThat(ForComprehension.forc(Stream.of(1, 2), v1 -> Stream.of(10, 20)).filter((t1, t2) -> t1 == 1).filter((t1, t2) -> t2 == 10).yield((t1, t2) -> t1 + t2))
+                    .containsExactly(11);
+                assertThat(ForComprehension.forc(Stream.of(1, 2), v1 -> Stream.of(10, 20)).filter((t1, t2) -> t1 == 1).filter((t1, t2) -> false).yield((t1, t2) -> t1 + t2))
+                    .isEmpty();
+            }
         }
 
         @Nested
@@ -764,6 +1010,14 @@ class ForComprehensionTest {
                 assertThat(ForComprehension.forc(Stream.of(1, 2), v1 -> Stream.of(10, 20), (v1, v2) -> Stream.of(100)).filter((t1, t2, t3) -> t1 == 1).yield((t1, t2, t3) -> t1 + t2 + t3))
                     .containsExactly(111, 121);
                 assertThat(ForComprehension.forc(Stream.of(1, 2), v1 -> Stream.of(10, 20), (v1, v2) -> Stream.of(100)).filter((t1, t2, t3) -> false).yield((t1, t2, t3) -> t1 + t2 + t3))
+                    .isEmpty();
+            }
+
+            @Test
+            void shouldTestLazyStreamChainedFilter3() {
+                assertThat(ForComprehension.forc(Stream.of(1, 2), v1 -> Stream.of(10, 20), (v1, v2) -> Stream.of(100)).filter((t1, t2, t3) -> t1 == 1).filter((t1, t2, t3) -> t2 == 10).yield((t1, t2, t3) -> t1 + t2 + t3))
+                    .containsExactly(111);
+                assertThat(ForComprehension.forc(Stream.of(1, 2), v1 -> Stream.of(10, 20), (v1, v2) -> Stream.of(100)).filter((t1, t2, t3) -> t1 == 1).filter((t1, t2, t3) -> false).yield((t1, t2, t3) -> t1 + t2 + t3))
                     .isEmpty();
             }
         }
@@ -791,6 +1045,14 @@ class ForComprehensionTest {
                 assertThat(ForComprehension.forc(Stream.of(1, 2), v1 -> Stream.of(10, 20), (v1, v2) -> Stream.of(100), (v1, v2, v3) -> Stream.of(1000)).filter((t1, t2, t3, t4) -> false).yield((t1, t2, t3, t4) -> t1 + t2 + t3 + t4))
                     .isEmpty();
             }
+
+            @Test
+            void shouldTestLazyStreamChainedFilter4() {
+                assertThat(ForComprehension.forc(Stream.of(1, 2), v1 -> Stream.of(10, 20), (v1, v2) -> Stream.of(100), (v1, v2, v3) -> Stream.of(1000)).filter((t1, t2, t3, t4) -> t1 == 1).filter((t1, t2, t3, t4) -> t2 == 10).yield((t1, t2, t3, t4) -> t1 + t2 + t3 + t4))
+                    .containsExactly(1111);
+                assertThat(ForComprehension.forc(Stream.of(1, 2), v1 -> Stream.of(10, 20), (v1, v2) -> Stream.of(100), (v1, v2, v3) -> Stream.of(1000)).filter((t1, t2, t3, t4) -> t1 == 1).filter((t1, t2, t3, t4) -> false).yield((t1, t2, t3, t4) -> t1 + t2 + t3 + t4))
+                    .isEmpty();
+            }
         }
 
         @Nested
@@ -814,6 +1076,14 @@ class ForComprehensionTest {
                 assertThat(ForComprehension.forc(Stream.of(1, 2), v1 -> Stream.of(10, 20), (v1, v2) -> Stream.of(100), (v1, v2, v3) -> Stream.of(1000), (v1, v2, v3, v4) -> Stream.of(10000)).filter((t1, t2, t3, t4, t5) -> t1 == 1).yield((t1, t2, t3, t4, t5) -> t1 + t2 + t3 + t4 + t5))
                     .containsExactly(11111, 11121);
                 assertThat(ForComprehension.forc(Stream.of(1, 2), v1 -> Stream.of(10, 20), (v1, v2) -> Stream.of(100), (v1, v2, v3) -> Stream.of(1000), (v1, v2, v3, v4) -> Stream.of(10000)).filter((t1, t2, t3, t4, t5) -> false).yield((t1, t2, t3, t4, t5) -> t1 + t2 + t3 + t4 + t5))
+                    .isEmpty();
+            }
+
+            @Test
+            void shouldTestLazyStreamChainedFilter5() {
+                assertThat(ForComprehension.forc(Stream.of(1, 2), v1 -> Stream.of(10, 20), (v1, v2) -> Stream.of(100), (v1, v2, v3) -> Stream.of(1000), (v1, v2, v3, v4) -> Stream.of(10000)).filter((t1, t2, t3, t4, t5) -> t1 == 1).filter((t1, t2, t3, t4, t5) -> t2 == 10).yield((t1, t2, t3, t4, t5) -> t1 + t2 + t3 + t4 + t5))
+                    .containsExactly(11111);
+                assertThat(ForComprehension.forc(Stream.of(1, 2), v1 -> Stream.of(10, 20), (v1, v2) -> Stream.of(100), (v1, v2, v3) -> Stream.of(1000), (v1, v2, v3, v4) -> Stream.of(10000)).filter((t1, t2, t3, t4, t5) -> t1 == 1).filter((t1, t2, t3, t4, t5) -> false).yield((t1, t2, t3, t4, t5) -> t1 + t2 + t3 + t4 + t5))
                     .isEmpty();
             }
         }
@@ -841,6 +1111,14 @@ class ForComprehensionTest {
                 assertThat(ForComprehension.forc(Stream.of(1, 2), v1 -> Stream.of(10, 20), (v1, v2) -> Stream.of(100), (v1, v2, v3) -> Stream.of(1000), (v1, v2, v3, v4) -> Stream.of(10000), (v1, v2, v3, v4, v5) -> Stream.of(100000)).filter((t1, t2, t3, t4, t5, t6) -> false).yield((t1, t2, t3, t4, t5, t6) -> t1 + t2 + t3 + t4 + t5 + t6))
                     .isEmpty();
             }
+
+            @Test
+            void shouldTestLazyStreamChainedFilter6() {
+                assertThat(ForComprehension.forc(Stream.of(1, 2), v1 -> Stream.of(10, 20), (v1, v2) -> Stream.of(100), (v1, v2, v3) -> Stream.of(1000), (v1, v2, v3, v4) -> Stream.of(10000), (v1, v2, v3, v4, v5) -> Stream.of(100000)).filter((t1, t2, t3, t4, t5, t6) -> t1 == 1).filter((t1, t2, t3, t4, t5, t6) -> t2 == 10).yield((t1, t2, t3, t4, t5, t6) -> t1 + t2 + t3 + t4 + t5 + t6))
+                    .containsExactly(111111);
+                assertThat(ForComprehension.forc(Stream.of(1, 2), v1 -> Stream.of(10, 20), (v1, v2) -> Stream.of(100), (v1, v2, v3) -> Stream.of(1000), (v1, v2, v3, v4) -> Stream.of(10000), (v1, v2, v3, v4, v5) -> Stream.of(100000)).filter((t1, t2, t3, t4, t5, t6) -> t1 == 1).filter((t1, t2, t3, t4, t5, t6) -> false).yield((t1, t2, t3, t4, t5, t6) -> t1 + t2 + t3 + t4 + t5 + t6))
+                    .isEmpty();
+            }
         }
 
         @Nested
@@ -866,6 +1144,14 @@ class ForComprehensionTest {
                 assertThat(ForComprehension.forc(Stream.of(1, 2), v1 -> Stream.of(10, 20), (v1, v2) -> Stream.of(100), (v1, v2, v3) -> Stream.of(1000), (v1, v2, v3, v4) -> Stream.of(10000), (v1, v2, v3, v4, v5) -> Stream.of(100000), (v1, v2, v3, v4, v5, v6) -> Stream.of(1000000)).filter((t1, t2, t3, t4, t5, t6, t7) -> false).yield((t1, t2, t3, t4, t5, t6, t7) -> t1 + t2 + t3 + t4 + t5 + t6 + t7))
                     .isEmpty();
             }
+
+            @Test
+            void shouldTestLazyStreamChainedFilter7() {
+                assertThat(ForComprehension.forc(Stream.of(1, 2), v1 -> Stream.of(10, 20), (v1, v2) -> Stream.of(100), (v1, v2, v3) -> Stream.of(1000), (v1, v2, v3, v4) -> Stream.of(10000), (v1, v2, v3, v4, v5) -> Stream.of(100000), (v1, v2, v3, v4, v5, v6) -> Stream.of(1000000)).filter((t1, t2, t3, t4, t5, t6, t7) -> t1 == 1).filter((t1, t2, t3, t4, t5, t6, t7) -> t2 == 10).yield((t1, t2, t3, t4, t5, t6, t7) -> t1 + t2 + t3 + t4 + t5 + t6 + t7))
+                    .containsExactly(1111111);
+                assertThat(ForComprehension.forc(Stream.of(1, 2), v1 -> Stream.of(10, 20), (v1, v2) -> Stream.of(100), (v1, v2, v3) -> Stream.of(1000), (v1, v2, v3, v4) -> Stream.of(10000), (v1, v2, v3, v4, v5) -> Stream.of(100000), (v1, v2, v3, v4, v5, v6) -> Stream.of(1000000)).filter((t1, t2, t3, t4, t5, t6, t7) -> t1 == 1).filter((t1, t2, t3, t4, t5, t6, t7) -> false).yield((t1, t2, t3, t4, t5, t6, t7) -> t1 + t2 + t3 + t4 + t5 + t6 + t7))
+                    .isEmpty();
+            }
         }
 
         @Nested
@@ -889,6 +1175,14 @@ class ForComprehensionTest {
                 assertThat(ForComprehension.forc(Stream.of(1, 2), v1 -> Stream.of(10, 20), (v1, v2) -> Stream.of(100), (v1, v2, v3) -> Stream.of(1000), (v1, v2, v3, v4) -> Stream.of(10000), (v1, v2, v3, v4, v5) -> Stream.of(100000), (v1, v2, v3, v4, v5, v6) -> Stream.of(1000000), (v1, v2, v3, v4, v5, v6, v7) -> Stream.of(10000000)).filter((t1, t2, t3, t4, t5, t6, t7, t8) -> t1 == 1).yield((t1, t2, t3, t4, t5, t6, t7, t8) -> t1 + t2 + t3 + t4 + t5 + t6 + t7 + t8))
                     .containsExactly(11111111, 11111121);
                 assertThat(ForComprehension.forc(Stream.of(1, 2), v1 -> Stream.of(10, 20), (v1, v2) -> Stream.of(100), (v1, v2, v3) -> Stream.of(1000), (v1, v2, v3, v4) -> Stream.of(10000), (v1, v2, v3, v4, v5) -> Stream.of(100000), (v1, v2, v3, v4, v5, v6) -> Stream.of(1000000), (v1, v2, v3, v4, v5, v6, v7) -> Stream.of(10000000)).filter((t1, t2, t3, t4, t5, t6, t7, t8) -> false).yield((t1, t2, t3, t4, t5, t6, t7, t8) -> t1 + t2 + t3 + t4 + t5 + t6 + t7 + t8))
+                    .isEmpty();
+            }
+
+            @Test
+            void shouldTestLazyStreamChainedFilter8() {
+                assertThat(ForComprehension.forc(Stream.of(1, 2), v1 -> Stream.of(10, 20), (v1, v2) -> Stream.of(100), (v1, v2, v3) -> Stream.of(1000), (v1, v2, v3, v4) -> Stream.of(10000), (v1, v2, v3, v4, v5) -> Stream.of(100000), (v1, v2, v3, v4, v5, v6) -> Stream.of(1000000), (v1, v2, v3, v4, v5, v6, v7) -> Stream.of(10000000)).filter((t1, t2, t3, t4, t5, t6, t7, t8) -> t1 == 1).filter((t1, t2, t3, t4, t5, t6, t7, t8) -> t2 == 10).yield((t1, t2, t3, t4, t5, t6, t7, t8) -> t1 + t2 + t3 + t4 + t5 + t6 + t7 + t8))
+                    .containsExactly(11111111);
+                assertThat(ForComprehension.forc(Stream.of(1, 2), v1 -> Stream.of(10, 20), (v1, v2) -> Stream.of(100), (v1, v2, v3) -> Stream.of(1000), (v1, v2, v3, v4) -> Stream.of(10000), (v1, v2, v3, v4, v5) -> Stream.of(100000), (v1, v2, v3, v4, v5, v6) -> Stream.of(1000000), (v1, v2, v3, v4, v5, v6, v7) -> Stream.of(10000000)).filter((t1, t2, t3, t4, t5, t6, t7, t8) -> t1 == 1).filter((t1, t2, t3, t4, t5, t6, t7, t8) -> false).yield((t1, t2, t3, t4, t5, t6, t7, t8) -> t1 + t2 + t3 + t4 + t5 + t6 + t7 + t8))
                     .isEmpty();
             }
         }
@@ -918,6 +1212,14 @@ class ForComprehensionTest {
                 assertThat(ForComprehension.forc(List.of(1, 2), v1 -> List.of(10, 20)).filter((t1, t2) -> false).yield((t1, t2) -> t1 + t2))
                     .isEmpty();
             }
+
+            @Test
+            void shouldTestLazyIterableChainedFilter2() {
+                assertThat(ForComprehension.forc(List.of(1, 2), v1 -> List.of(10, 20)).filter((t1, t2) -> t1 == 1).filter((t1, t2) -> t2 == 10).yield((t1, t2) -> t1 + t2))
+                    .containsExactly(11);
+                assertThat(ForComprehension.forc(List.of(1, 2), v1 -> List.of(10, 20)).filter((t1, t2) -> t1 == 1).filter((t1, t2) -> false).yield((t1, t2) -> t1 + t2))
+                    .isEmpty();
+            }
         }
 
         @Nested
@@ -939,6 +1241,14 @@ class ForComprehensionTest {
                 assertThat(ForComprehension.forc(List.of(1, 2), v1 -> List.of(10, 20), (v1, v2) -> List.of(100)).filter((t1, t2, t3) -> t1 == 1).yield((t1, t2, t3) -> t1 + t2 + t3))
                     .containsExactly(111, 121);
                 assertThat(ForComprehension.forc(List.of(1, 2), v1 -> List.of(10, 20), (v1, v2) -> List.of(100)).filter((t1, t2, t3) -> false).yield((t1, t2, t3) -> t1 + t2 + t3))
+                    .isEmpty();
+            }
+
+            @Test
+            void shouldTestLazyIterableChainedFilter3() {
+                assertThat(ForComprehension.forc(List.of(1, 2), v1 -> List.of(10, 20), (v1, v2) -> List.of(100)).filter((t1, t2, t3) -> t1 == 1).filter((t1, t2, t3) -> t2 == 10).yield((t1, t2, t3) -> t1 + t2 + t3))
+                    .containsExactly(111);
+                assertThat(ForComprehension.forc(List.of(1, 2), v1 -> List.of(10, 20), (v1, v2) -> List.of(100)).filter((t1, t2, t3) -> t1 == 1).filter((t1, t2, t3) -> false).yield((t1, t2, t3) -> t1 + t2 + t3))
                     .isEmpty();
             }
         }
@@ -964,6 +1274,14 @@ class ForComprehensionTest {
                 assertThat(ForComprehension.forc(List.of(1, 2), v1 -> List.of(10, 20), (v1, v2) -> List.of(100), (v1, v2, v3) -> List.of(1000)).filter((t1, t2, t3, t4) -> false).yield((t1, t2, t3, t4) -> t1 + t2 + t3 + t4))
                     .isEmpty();
             }
+
+            @Test
+            void shouldTestLazyIterableChainedFilter4() {
+                assertThat(ForComprehension.forc(List.of(1, 2), v1 -> List.of(10, 20), (v1, v2) -> List.of(100), (v1, v2, v3) -> List.of(1000)).filter((t1, t2, t3, t4) -> t1 == 1).filter((t1, t2, t3, t4) -> t2 == 10).yield((t1, t2, t3, t4) -> t1 + t2 + t3 + t4))
+                    .containsExactly(1111);
+                assertThat(ForComprehension.forc(List.of(1, 2), v1 -> List.of(10, 20), (v1, v2) -> List.of(100), (v1, v2, v3) -> List.of(1000)).filter((t1, t2, t3, t4) -> t1 == 1).filter((t1, t2, t3, t4) -> false).yield((t1, t2, t3, t4) -> t1 + t2 + t3 + t4))
+                    .isEmpty();
+            }
         }
 
         @Nested
@@ -985,6 +1303,14 @@ class ForComprehensionTest {
                 assertThat(ForComprehension.forc(List.of(1, 2), v1 -> List.of(10, 20), (v1, v2) -> List.of(100), (v1, v2, v3) -> List.of(1000), (v1, v2, v3, v4) -> List.of(10000)).filter((t1, t2, t3, t4, t5) -> t1 == 1).yield((t1, t2, t3, t4, t5) -> t1 + t2 + t3 + t4 + t5))
                     .containsExactly(11111, 11121);
                 assertThat(ForComprehension.forc(List.of(1, 2), v1 -> List.of(10, 20), (v1, v2) -> List.of(100), (v1, v2, v3) -> List.of(1000), (v1, v2, v3, v4) -> List.of(10000)).filter((t1, t2, t3, t4, t5) -> false).yield((t1, t2, t3, t4, t5) -> t1 + t2 + t3 + t4 + t5))
+                    .isEmpty();
+            }
+
+            @Test
+            void shouldTestLazyIterableChainedFilter5() {
+                assertThat(ForComprehension.forc(List.of(1, 2), v1 -> List.of(10, 20), (v1, v2) -> List.of(100), (v1, v2, v3) -> List.of(1000), (v1, v2, v3, v4) -> List.of(10000)).filter((t1, t2, t3, t4, t5) -> t1 == 1).filter((t1, t2, t3, t4, t5) -> t2 == 10).yield((t1, t2, t3, t4, t5) -> t1 + t2 + t3 + t4 + t5))
+                    .containsExactly(11111);
+                assertThat(ForComprehension.forc(List.of(1, 2), v1 -> List.of(10, 20), (v1, v2) -> List.of(100), (v1, v2, v3) -> List.of(1000), (v1, v2, v3, v4) -> List.of(10000)).filter((t1, t2, t3, t4, t5) -> t1 == 1).filter((t1, t2, t3, t4, t5) -> false).yield((t1, t2, t3, t4, t5) -> t1 + t2 + t3 + t4 + t5))
                     .isEmpty();
             }
         }
@@ -1010,6 +1336,14 @@ class ForComprehensionTest {
                 assertThat(ForComprehension.forc(List.of(1, 2), v1 -> List.of(10, 20), (v1, v2) -> List.of(100), (v1, v2, v3) -> List.of(1000), (v1, v2, v3, v4) -> List.of(10000), (v1, v2, v3, v4, v5) -> List.of(100000)).filter((t1, t2, t3, t4, t5, t6) -> false).yield((t1, t2, t3, t4, t5, t6) -> t1 + t2 + t3 + t4 + t5 + t6))
                     .isEmpty();
             }
+
+            @Test
+            void shouldTestLazyIterableChainedFilter6() {
+                assertThat(ForComprehension.forc(List.of(1, 2), v1 -> List.of(10, 20), (v1, v2) -> List.of(100), (v1, v2, v3) -> List.of(1000), (v1, v2, v3, v4) -> List.of(10000), (v1, v2, v3, v4, v5) -> List.of(100000)).filter((t1, t2, t3, t4, t5, t6) -> t1 == 1).filter((t1, t2, t3, t4, t5, t6) -> t2 == 10).yield((t1, t2, t3, t4, t5, t6) -> t1 + t2 + t3 + t4 + t5 + t6))
+                    .containsExactly(111111);
+                assertThat(ForComprehension.forc(List.of(1, 2), v1 -> List.of(10, 20), (v1, v2) -> List.of(100), (v1, v2, v3) -> List.of(1000), (v1, v2, v3, v4) -> List.of(10000), (v1, v2, v3, v4, v5) -> List.of(100000)).filter((t1, t2, t3, t4, t5, t6) -> t1 == 1).filter((t1, t2, t3, t4, t5, t6) -> false).yield((t1, t2, t3, t4, t5, t6) -> t1 + t2 + t3 + t4 + t5 + t6))
+                    .isEmpty();
+            }
         }
 
         @Nested
@@ -1033,6 +1367,14 @@ class ForComprehensionTest {
                 assertThat(ForComprehension.forc(List.of(1, 2), v1 -> List.of(10, 20), (v1, v2) -> List.of(100), (v1, v2, v3) -> List.of(1000), (v1, v2, v3, v4) -> List.of(10000), (v1, v2, v3, v4, v5) -> List.of(100000), (v1, v2, v3, v4, v5, v6) -> List.of(1000000)).filter((t1, t2, t3, t4, t5, t6, t7) -> false).yield((t1, t2, t3, t4, t5, t6, t7) -> t1 + t2 + t3 + t4 + t5 + t6 + t7))
                     .isEmpty();
             }
+
+            @Test
+            void shouldTestLazyIterableChainedFilter7() {
+                assertThat(ForComprehension.forc(List.of(1, 2), v1 -> List.of(10, 20), (v1, v2) -> List.of(100), (v1, v2, v3) -> List.of(1000), (v1, v2, v3, v4) -> List.of(10000), (v1, v2, v3, v4, v5) -> List.of(100000), (v1, v2, v3, v4, v5, v6) -> List.of(1000000)).filter((t1, t2, t3, t4, t5, t6, t7) -> t1 == 1).filter((t1, t2, t3, t4, t5, t6, t7) -> t2 == 10).yield((t1, t2, t3, t4, t5, t6, t7) -> t1 + t2 + t3 + t4 + t5 + t6 + t7))
+                    .containsExactly(1111111);
+                assertThat(ForComprehension.forc(List.of(1, 2), v1 -> List.of(10, 20), (v1, v2) -> List.of(100), (v1, v2, v3) -> List.of(1000), (v1, v2, v3, v4) -> List.of(10000), (v1, v2, v3, v4, v5) -> List.of(100000), (v1, v2, v3, v4, v5, v6) -> List.of(1000000)).filter((t1, t2, t3, t4, t5, t6, t7) -> t1 == 1).filter((t1, t2, t3, t4, t5, t6, t7) -> false).yield((t1, t2, t3, t4, t5, t6, t7) -> t1 + t2 + t3 + t4 + t5 + t6 + t7))
+                    .isEmpty();
+            }
         }
 
         @Nested
@@ -1054,6 +1396,14 @@ class ForComprehensionTest {
                 assertThat(ForComprehension.forc(List.of(1, 2), v1 -> List.of(10, 20), (v1, v2) -> List.of(100), (v1, v2, v3) -> List.of(1000), (v1, v2, v3, v4) -> List.of(10000), (v1, v2, v3, v4, v5) -> List.of(100000), (v1, v2, v3, v4, v5, v6) -> List.of(1000000), (v1, v2, v3, v4, v5, v6, v7) -> List.of(10000000)).filter((t1, t2, t3, t4, t5, t6, t7, t8) -> t1 == 1).yield((t1, t2, t3, t4, t5, t6, t7, t8) -> t1 + t2 + t3 + t4 + t5 + t6 + t7 + t8))
                     .containsExactly(11111111, 11111121);
                 assertThat(ForComprehension.forc(List.of(1, 2), v1 -> List.of(10, 20), (v1, v2) -> List.of(100), (v1, v2, v3) -> List.of(1000), (v1, v2, v3, v4) -> List.of(10000), (v1, v2, v3, v4, v5) -> List.of(100000), (v1, v2, v3, v4, v5, v6) -> List.of(1000000), (v1, v2, v3, v4, v5, v6, v7) -> List.of(10000000)).filter((t1, t2, t3, t4, t5, t6, t7, t8) -> false).yield((t1, t2, t3, t4, t5, t6, t7, t8) -> t1 + t2 + t3 + t4 + t5 + t6 + t7 + t8))
+                    .isEmpty();
+            }
+
+            @Test
+            void shouldTestLazyIterableChainedFilter8() {
+                assertThat(ForComprehension.forc(List.of(1, 2), v1 -> List.of(10, 20), (v1, v2) -> List.of(100), (v1, v2, v3) -> List.of(1000), (v1, v2, v3, v4) -> List.of(10000), (v1, v2, v3, v4, v5) -> List.of(100000), (v1, v2, v3, v4, v5, v6) -> List.of(1000000), (v1, v2, v3, v4, v5, v6, v7) -> List.of(10000000)).filter((t1, t2, t3, t4, t5, t6, t7, t8) -> t1 == 1).filter((t1, t2, t3, t4, t5, t6, t7, t8) -> t2 == 10).yield((t1, t2, t3, t4, t5, t6, t7, t8) -> t1 + t2 + t3 + t4 + t5 + t6 + t7 + t8))
+                    .containsExactly(11111111);
+                assertThat(ForComprehension.forc(List.of(1, 2), v1 -> List.of(10, 20), (v1, v2) -> List.of(100), (v1, v2, v3) -> List.of(1000), (v1, v2, v3, v4) -> List.of(10000), (v1, v2, v3, v4, v5) -> List.of(100000), (v1, v2, v3, v4, v5, v6) -> List.of(1000000), (v1, v2, v3, v4, v5, v6, v7) -> List.of(10000000)).filter((t1, t2, t3, t4, t5, t6, t7, t8) -> t1 == 1).filter((t1, t2, t3, t4, t5, t6, t7, t8) -> false).yield((t1, t2, t3, t4, t5, t6, t7, t8) -> t1 + t2 + t3 + t4 + t5 + t6 + t7 + t8))
                     .isEmpty();
             }
         }
