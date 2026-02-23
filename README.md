@@ -2,6 +2,8 @@
 
 [![ci](https://github.com/pivovarit/for-comprehension4j/actions/workflows/ci.yml/badge.svg)](https://github.com/pivovarit/for-comprehension4j/actions/workflows/ci.yml)
 [![pitest](https://github.com/pivovarit/for-comprehension4j/actions/workflows/pitest.yml/badge.svg)](https://pivovarit.github.io/for-comprehension4j/pitest)
+[![Maven Central Version](https://img.shields.io/maven-central/v/com.pivovarit/for-comprehension4j)](https://central.sonatype.com/artifact/com.pivovarit/for-comprehension4j/versions)
+[![javadoc](https://javadoc.io/badge2/com.pivovarit/for-comprehension4j/0.0.1/javadoc.svg)](https://javadoc.io/doc/com.pivovarit/for-comprehension4j/0.0.1)
 
 A fluent for-comprehension API for Java, inspired by Scala's for-expressions. It allows the composition of multiple monadic
 or collection-like types in a type-safe and readable manner.
