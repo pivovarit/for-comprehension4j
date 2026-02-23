@@ -78,6 +78,15 @@ public final class ForComprehension {
             this.guard = guard;
         }
 
+        /**
+         * Adds a filter predicate to this for-comprehension.
+         * <p>
+         * Multiple calls to this method will combine predicates using logical AND.
+         *
+         * @param predicate the filter predicate
+         * @return a new for-comprehension with the filter applied
+         * @throws NullPointerException if the predicate is {@code null}
+         */
         public For2Optional<T1, T2> filter(Function2<T1, T2, Boolean> predicate) {
             Objects.requireNonNull(predicate, "predicate is null");
             Function2<T1, T2, Boolean> existingGuard = this.guard;
@@ -156,6 +165,15 @@ public final class ForComprehension {
             this.guard = guard;
         }
 
+        /**
+         * Adds a filter predicate to this for-comprehension.
+         * <p>
+         * Multiple calls to this method will combine predicates using logical AND.
+         *
+         * @param predicate the filter predicate
+         * @return a new for-comprehension with the filter applied
+         * @throws NullPointerException if the predicate is {@code null}
+         */
         public For3Optional<T1, T2, T3> filter(Function3<T1, T2, T3, Boolean> predicate) {
             Objects.requireNonNull(predicate, "predicate is null");
             Function3<T1, T2, T3, Boolean> existingGuard = this.guard;
@@ -242,6 +260,15 @@ public final class ForComprehension {
             this.guard = guard;
         }
 
+        /**
+         * Adds a filter predicate to this for-comprehension.
+         * <p>
+         * Multiple calls to this method will combine predicates using logical AND.
+         *
+         * @param predicate the filter predicate
+         * @return a new for-comprehension with the filter applied
+         * @throws NullPointerException if the predicate is {@code null}
+         */
         public For4Optional<T1, T2, T3, T4> filter(Function4<T1, T2, T3, T4, Boolean> predicate) {
             Objects.requireNonNull(predicate, "predicate is null");
             Function4<T1, T2, T3, T4, Boolean> existingGuard = this.guard;
@@ -336,6 +363,15 @@ public final class ForComprehension {
             this.guard = guard;
         }
 
+        /**
+         * Adds a filter predicate to this for-comprehension.
+         * <p>
+         * Multiple calls to this method will combine predicates using logical AND.
+         *
+         * @param predicate the filter predicate
+         * @return a new for-comprehension with the filter applied
+         * @throws NullPointerException if the predicate is {@code null}
+         */
         public For5Optional<T1, T2, T3, T4, T5> filter(Function5<T1, T2, T3, T4, T5, Boolean> predicate) {
             Objects.requireNonNull(predicate, "predicate is null");
             Function5<T1, T2, T3, T4, T5, Boolean> existingGuard = this.guard;
@@ -438,6 +474,15 @@ public final class ForComprehension {
             this.guard = guard;
         }
 
+        /**
+         * Adds a filter predicate to this for-comprehension.
+         * <p>
+         * Multiple calls to this method will combine predicates using logical AND.
+         *
+         * @param predicate the filter predicate
+         * @return a new for-comprehension with the filter applied
+         * @throws NullPointerException if the predicate is {@code null}
+         */
         public For6Optional<T1, T2, T3, T4, T5, T6> filter(Function6<T1, T2, T3, T4, T5, T6, Boolean> predicate) {
             Objects.requireNonNull(predicate, "predicate is null");
             Function6<T1, T2, T3, T4, T5, T6, Boolean> existingGuard = this.guard;
@@ -548,6 +593,15 @@ public final class ForComprehension {
             this.guard = guard;
         }
 
+        /**
+         * Adds a filter predicate to this for-comprehension.
+         * <p>
+         * Multiple calls to this method will combine predicates using logical AND.
+         *
+         * @param predicate the filter predicate
+         * @return a new for-comprehension with the filter applied
+         * @throws NullPointerException if the predicate is {@code null}
+         */
         public For7Optional<T1, T2, T3, T4, T5, T6, T7> filter(Function7<T1, T2, T3, T4, T5, T6, T7, Boolean> predicate) {
             Objects.requireNonNull(predicate, "predicate is null");
             Function7<T1, T2, T3, T4, T5, T6, T7, Boolean> existingGuard = this.guard;
@@ -666,6 +720,15 @@ public final class ForComprehension {
             this.guard = guard;
         }
 
+        /**
+         * Adds a filter predicate to this for-comprehension.
+         * <p>
+         * Multiple calls to this method will combine predicates using logical AND.
+         *
+         * @param predicate the filter predicate
+         * @return a new for-comprehension with the filter applied
+         * @throws NullPointerException if the predicate is {@code null}
+         */
         public For8Optional<T1, T2, T3, T4, T5, T6, T7, T8> filter(Function8<T1, T2, T3, T4, T5, T6, T7, T8, Boolean> predicate) {
             Objects.requireNonNull(predicate, "predicate is null");
             Function8<T1, T2, T3, T4, T5, T6, T7, T8, Boolean> existingGuard = this.guard;
@@ -743,6 +806,15 @@ public final class ForComprehension {
             this.guard = guard;
         }
 
+        /**
+         * Adds a filter predicate to this for-comprehension.
+         * <p>
+         * Multiple calls to this method will combine predicates using logical AND.
+         *
+         * @param predicate the filter predicate
+         * @return a new for-comprehension with the filter applied
+         * @throws NullPointerException if the predicate is {@code null}
+         */
         public For2Stream<T1, T2> filter(Function2<T1, T2, Boolean> predicate) {
             Objects.requireNonNull(predicate, "predicate is null");
             Function2<T1, T2, Boolean> existingGuard = this.guard;
@@ -819,6 +891,15 @@ public final class ForComprehension {
             this.guard = guard;
         }
 
+        /**
+         * Adds a filter predicate to this for-comprehension.
+         * <p>
+         * Multiple calls to this method will combine predicates using logical AND.
+         *
+         * @param predicate the filter predicate
+         * @return a new for-comprehension with the filter applied
+         * @throws NullPointerException if the predicate is {@code null}
+         */
         public For3Stream<T1, T2, T3> filter(Function3<T1, T2, T3, Boolean> predicate) {
             Objects.requireNonNull(predicate, "predicate is null");
             Function3<T1, T2, T3, Boolean> existingGuard = this.guard;
@@ -904,6 +985,15 @@ public final class ForComprehension {
             this.guard = guard;
         }
 
+        /**
+         * Adds a filter predicate to this for-comprehension.
+         * <p>
+         * Multiple calls to this method will combine predicates using logical AND.
+         *
+         * @param predicate the filter predicate
+         * @return a new for-comprehension with the filter applied
+         * @throws NullPointerException if the predicate is {@code null}
+         */
         public For4Stream<T1, T2, T3, T4> filter(Function4<T1, T2, T3, T4, Boolean> predicate) {
             Objects.requireNonNull(predicate, "predicate is null");
             Function4<T1, T2, T3, T4, Boolean> existingGuard = this.guard;
@@ -998,6 +1088,15 @@ public final class ForComprehension {
             this.guard = guard;
         }
 
+        /**
+         * Adds a filter predicate to this for-comprehension.
+         * <p>
+         * Multiple calls to this method will combine predicates using logical AND.
+         *
+         * @param predicate the filter predicate
+         * @return a new for-comprehension with the filter applied
+         * @throws NullPointerException if the predicate is {@code null}
+         */
         public For5Stream<T1, T2, T3, T4, T5> filter(Function5<T1, T2, T3, T4, T5, Boolean> predicate) {
             Objects.requireNonNull(predicate, "predicate is null");
             Function5<T1, T2, T3, T4, T5, Boolean> existingGuard = this.guard;
@@ -1101,6 +1200,15 @@ public final class ForComprehension {
             this.guard = guard;
         }
 
+        /**
+         * Adds a filter predicate to this for-comprehension.
+         * <p>
+         * Multiple calls to this method will combine predicates using logical AND.
+         *
+         * @param predicate the filter predicate
+         * @return a new for-comprehension with the filter applied
+         * @throws NullPointerException if the predicate is {@code null}
+         */
         public For6Stream<T1, T2, T3, T4, T5, T6> filter(Function6<T1, T2, T3, T4, T5, T6, Boolean> predicate) {
             Objects.requireNonNull(predicate, "predicate is null");
             Function6<T1, T2, T3, T4, T5, T6, Boolean> existingGuard = this.guard;
@@ -1213,6 +1321,15 @@ public final class ForComprehension {
             this.guard = guard;
         }
 
+        /**
+         * Adds a filter predicate to this for-comprehension.
+         * <p>
+         * Multiple calls to this method will combine predicates using logical AND.
+         *
+         * @param predicate the filter predicate
+         * @return a new for-comprehension with the filter applied
+         * @throws NullPointerException if the predicate is {@code null}
+         */
         public For7Stream<T1, T2, T3, T4, T5, T6, T7> filter(Function7<T1, T2, T3, T4, T5, T6, T7, Boolean> predicate) {
             Objects.requireNonNull(predicate, "predicate is null");
             Function7<T1, T2, T3, T4, T5, T6, T7, Boolean> existingGuard = this.guard;
@@ -1334,6 +1451,15 @@ public final class ForComprehension {
             this.guard = guard;
         }
 
+        /**
+         * Adds a filter predicate to this for-comprehension.
+         * <p>
+         * Multiple calls to this method will combine predicates using logical AND.
+         *
+         * @param predicate the filter predicate
+         * @return a new for-comprehension with the filter applied
+         * @throws NullPointerException if the predicate is {@code null}
+         */
         public For8Stream<T1, T2, T3, T4, T5, T6, T7, T8> filter(Function8<T1, T2, T3, T4, T5, T6, T7, T8, Boolean> predicate) {
             Objects.requireNonNull(predicate, "predicate is null");
             Function8<T1, T2, T3, T4, T5, T6, T7, T8, Boolean> existingGuard = this.guard;
@@ -1415,6 +1541,15 @@ public final class ForComprehension {
             this.guard = guard;
         }
 
+        /**
+         * Adds a filter predicate to this for-comprehension.
+         * <p>
+         * Multiple calls to this method will combine predicates using logical AND.
+         *
+         * @param predicate the filter predicate
+         * @return a new for-comprehension with the filter applied
+         * @throws NullPointerException if the predicate is {@code null}
+         */
         public For2Iterable<T1, T2> filter(Function2<T1, T2, Boolean> predicate) {
             Objects.requireNonNull(predicate, "predicate is null");
             Function2<T1, T2, Boolean> existingGuard = this.guard;
@@ -1496,6 +1631,15 @@ public final class ForComprehension {
             this.guard = guard;
         }
 
+        /**
+         * Adds a filter predicate to this for-comprehension.
+         * <p>
+         * Multiple calls to this method will combine predicates using logical AND.
+         *
+         * @param predicate the filter predicate
+         * @return a new for-comprehension with the filter applied
+         * @throws NullPointerException if the predicate is {@code null}
+         */
         public For3Iterable<T1, T2, T3> filter(Function3<T1, T2, T3, Boolean> predicate) {
             Objects.requireNonNull(predicate, "predicate is null");
             Function3<T1, T2, T3, Boolean> existingGuard = this.guard;
@@ -1586,6 +1730,15 @@ public final class ForComprehension {
             this.guard = guard;
         }
 
+        /**
+         * Adds a filter predicate to this for-comprehension.
+         * <p>
+         * Multiple calls to this method will combine predicates using logical AND.
+         *
+         * @param predicate the filter predicate
+         * @return a new for-comprehension with the filter applied
+         * @throws NullPointerException if the predicate is {@code null}
+         */
         public For4Iterable<T1, T2, T3, T4> filter(Function4<T1, T2, T3, T4, Boolean> predicate) {
             Objects.requireNonNull(predicate, "predicate is null");
             Function4<T1, T2, T3, T4, Boolean> existingGuard = this.guard;
@@ -1685,6 +1838,15 @@ public final class ForComprehension {
             this.guard = guard;
         }
 
+        /**
+         * Adds a filter predicate to this for-comprehension.
+         * <p>
+         * Multiple calls to this method will combine predicates using logical AND.
+         *
+         * @param predicate the filter predicate
+         * @return a new for-comprehension with the filter applied
+         * @throws NullPointerException if the predicate is {@code null}
+         */
         public For5Iterable<T1, T2, T3, T4, T5> filter(Function5<T1, T2, T3, T4, T5, Boolean> predicate) {
             Objects.requireNonNull(predicate, "predicate is null");
             Function5<T1, T2, T3, T4, T5, Boolean> existingGuard = this.guard;
@@ -1793,6 +1955,15 @@ public final class ForComprehension {
             this.guard = guard;
         }
 
+        /**
+         * Adds a filter predicate to this for-comprehension.
+         * <p>
+         * Multiple calls to this method will combine predicates using logical AND.
+         *
+         * @param predicate the filter predicate
+         * @return a new for-comprehension with the filter applied
+         * @throws NullPointerException if the predicate is {@code null}
+         */
         public For6Iterable<T1, T2, T3, T4, T5, T6> filter(Function6<T1, T2, T3, T4, T5, T6, Boolean> predicate) {
             Objects.requireNonNull(predicate, "predicate is null");
             Function6<T1, T2, T3, T4, T5, T6, Boolean> existingGuard = this.guard;
@@ -1910,6 +2081,15 @@ public final class ForComprehension {
             this.guard = guard;
         }
 
+        /**
+         * Adds a filter predicate to this for-comprehension.
+         * <p>
+         * Multiple calls to this method will combine predicates using logical AND.
+         *
+         * @param predicate the filter predicate
+         * @return a new for-comprehension with the filter applied
+         * @throws NullPointerException if the predicate is {@code null}
+         */
         public For7Iterable<T1, T2, T3, T4, T5, T6, T7> filter(Function7<T1, T2, T3, T4, T5, T6, T7, Boolean> predicate) {
             Objects.requireNonNull(predicate, "predicate is null");
             Function7<T1, T2, T3, T4, T5, T6, T7, Boolean> existingGuard = this.guard;
@@ -2036,6 +2216,15 @@ public final class ForComprehension {
             this.guard = guard;
         }
 
+        /**
+         * Adds a filter predicate to this for-comprehension.
+         * <p>
+         * Multiple calls to this method will combine predicates using logical AND.
+         *
+         * @param predicate the filter predicate
+         * @return a new for-comprehension with the filter applied
+         * @throws NullPointerException if the predicate is {@code null}
+         */
         public For8Iterable<T1, T2, T3, T4, T5, T6, T7, T8> filter(Function8<T1, T2, T3, T4, T5, T6, T7, T8, Boolean> predicate) {
             Objects.requireNonNull(predicate, "predicate is null");
             Function8<T1, T2, T3, T4, T5, T6, T7, T8, Boolean> existingGuard = this.guard;
@@ -2079,12 +2268,30 @@ public final class ForComprehension {
         }
     }
 
+    /**
+     * Creates a lazy for-comprehension over 2 {@link Optional} values.
+     * <p>
+     * Each subsequent optional is computed lazily as a function of the preceding values.
+     *
+     * @param o1 the initial optional value
+     * @param o2 a function producing the second optional value
+     * @param <T1> the type of the first optional value
+     * @param <T2> the type of the second optional value
+     * @return a lazy for-comprehension over 2 optional values
+     * @throws NullPointerException if any argument is {@code null}
+     */
     public static <T1, T2> ForLazy2Optional<T1, T2> forc(Optional<T1> o1, Function1<? super T1, Optional<T2>> o2) {
         Objects.requireNonNull(o1, "o1 is null");
         Objects.requireNonNull(o2, "o2 is null");
         return new ForLazy2Optional<>(o1, o2);
     }
 
+    /**
+     * Represents a for-comprehension over 2 lazily evaluated {@link Optional} values.
+     *
+     * @param <T1> the type of the first optional value
+     * @param <T2> the type of the second optional value
+     */
     public static final class ForLazy2Optional<T1, T2> {
 
         private final Optional<T1> o1;
@@ -2103,6 +2310,15 @@ public final class ForComprehension {
             this.guard = guard;
         }
 
+        /**
+         * Adds a filter predicate to this for-comprehension.
+         * <p>
+         * Multiple calls to this method will combine predicates using logical AND.
+         *
+         * @param predicate the filter predicate
+         * @return a new for-comprehension with the filter applied
+         * @throws NullPointerException if the predicate is {@code null}
+         */
         public ForLazy2Optional<T1, T2> filter(Function2<T1, T2, Boolean> predicate) {
             Objects.requireNonNull(predicate, "predicate is null");
             Function2<T1, T2, Boolean> existingGuard = this.guard;
@@ -2110,6 +2326,18 @@ public final class ForComprehension {
             return new ForLazy2Optional<>(o1, o2, newGuard);
         }
 
+        /**
+         * Produces the result of the for-comprehension by applying the given function
+         * to the contained values.
+         * <p>
+         * The function is invoked only if all optionals are present.
+         *
+         * @param f the combining function
+         * @param <R> the result type
+         * @return an optional containing the result of the function application,
+         *         or {@link Optional#empty()} if any input optional is empty
+         * @throws NullPointerException if the function is {@code null}
+         */
         public <R> Optional<R> yield(Function2<? super T1, ? super T2, ? extends R> f) {
             Objects.requireNonNull(f, "f is null");
 
@@ -2119,6 +2347,20 @@ public final class ForComprehension {
         }
     }
 
+    /**
+     * Creates a lazy for-comprehension over 3 {@link Optional} values.
+     * <p>
+     * Each subsequent optional is computed lazily as a function of the preceding values.
+     *
+     * @param o1 the initial optional value
+     * @param o2 a function producing the second optional value
+     * @param o3 a function producing the third optional value
+     * @param <T1> the type of the first optional value
+     * @param <T2> the type of the second optional value
+     * @param <T3> the type of the third optional value
+     * @return a lazy for-comprehension over 3 optional values
+     * @throws NullPointerException if any argument is {@code null}
+     */
     public static <T1, T2, T3> ForLazy3Optional<T1, T2, T3> forc(Optional<T1> o1, Function1<? super T1, Optional<T2>> o2, Function2<? super T1, ? super T2, Optional<T3>> o3) {
         Objects.requireNonNull(o1, "o1 is null");
         Objects.requireNonNull(o2, "o2 is null");
@@ -2126,6 +2368,13 @@ public final class ForComprehension {
         return new ForLazy3Optional<>(o1, o2, o3);
     }
 
+    /**
+     * Represents a for-comprehension over 3 lazily evaluated {@link Optional} values.
+     *
+     * @param <T1> the type of the first optional value
+     * @param <T2> the type of the second optional value
+     * @param <T3> the type of the third optional value
+     */
     public static final class ForLazy3Optional<T1, T2, T3> {
 
         private final Optional<T1> o1;
@@ -2147,6 +2396,15 @@ public final class ForComprehension {
             this.guard = guard;
         }
 
+        /**
+         * Adds a filter predicate to this for-comprehension.
+         * <p>
+         * Multiple calls to this method will combine predicates using logical AND.
+         *
+         * @param predicate the filter predicate
+         * @return a new for-comprehension with the filter applied
+         * @throws NullPointerException if the predicate is {@code null}
+         */
         public ForLazy3Optional<T1, T2, T3> filter(Function3<T1, T2, T3, Boolean> predicate) {
             Objects.requireNonNull(predicate, "predicate is null");
             Function3<T1, T2, T3, Boolean> existingGuard = this.guard;
@@ -2154,6 +2412,18 @@ public final class ForComprehension {
             return new ForLazy3Optional<>(o1, o2, o3, newGuard);
         }
 
+        /**
+         * Produces the result of the for-comprehension by applying the given function
+         * to the contained values.
+         * <p>
+         * The function is invoked only if all optionals are present.
+         *
+         * @param f the combining function
+         * @param <R> the result type
+         * @return an optional containing the result of the function application,
+         *         or {@link Optional#empty()} if any input optional is empty
+         * @throws NullPointerException if the function is {@code null}
+         */
         public <R> Optional<R> yield(Function3<? super T1, ? super T2, ? super T3, ? extends R> f) {
             Objects.requireNonNull(f, "f is null");
 
@@ -2164,6 +2434,22 @@ public final class ForComprehension {
         }
     }
 
+    /**
+     * Creates a lazy for-comprehension over 4 {@link Optional} values.
+     * <p>
+     * Each subsequent optional is computed lazily as a function of the preceding values.
+     *
+     * @param o1 the initial optional value
+     * @param o2 a function producing the second optional value
+     * @param o3 a function producing the third optional value
+     * @param o4 a function producing the 4th optional value
+     * @param <T1> the type of the first optional value
+     * @param <T2> the type of the second optional value
+     * @param <T3> the type of the third optional value
+     * @param <T4> the type of the 4th optional value
+     * @return a lazy for-comprehension over 4 optional values
+     * @throws NullPointerException if any argument is {@code null}
+     */
     public static <T1, T2, T3, T4> ForLazy4Optional<T1, T2, T3, T4> forc(Optional<T1> o1, Function1<? super T1, Optional<T2>> o2, Function2<? super T1, ? super T2, Optional<T3>> o3, Function3<? super T1, ? super T2, ? super T3, Optional<T4>> o4) {
         Objects.requireNonNull(o1, "o1 is null");
         Objects.requireNonNull(o2, "o2 is null");
@@ -2172,6 +2458,14 @@ public final class ForComprehension {
         return new ForLazy4Optional<>(o1, o2, o3, o4);
     }
 
+    /**
+     * Represents a for-comprehension over 4 lazily evaluated {@link Optional} values.
+     *
+     * @param <T1> the type of the first optional value
+     * @param <T2> the type of the second optional value
+     * @param <T3> the type of the third optional value
+     * @param <T4> the type of the 4th optional value
+     */
     public static final class ForLazy4Optional<T1, T2, T3, T4> {
 
         private final Optional<T1> o1;
@@ -2196,6 +2490,15 @@ public final class ForComprehension {
             this.guard = guard;
         }
 
+        /**
+         * Adds a filter predicate to this for-comprehension.
+         * <p>
+         * Multiple calls to this method will combine predicates using logical AND.
+         *
+         * @param predicate the filter predicate
+         * @return a new for-comprehension with the filter applied
+         * @throws NullPointerException if the predicate is {@code null}
+         */
         public ForLazy4Optional<T1, T2, T3, T4> filter(Function4<T1, T2, T3, T4, Boolean> predicate) {
             Objects.requireNonNull(predicate, "predicate is null");
             Function4<T1, T2, T3, T4, Boolean> existingGuard = this.guard;
@@ -2203,6 +2506,18 @@ public final class ForComprehension {
             return new ForLazy4Optional<>(o1, o2, o3, o4, newGuard);
         }
 
+        /**
+         * Produces the result of the for-comprehension by applying the given function
+         * to the contained values.
+         * <p>
+         * The function is invoked only if all optionals are present.
+         *
+         * @param f the combining function
+         * @param <R> the result type
+         * @return an optional containing the result of the function application,
+         *         or {@link Optional#empty()} if any input optional is empty
+         * @throws NullPointerException if the function is {@code null}
+         */
         public <R> Optional<R> yield(Function4<? super T1, ? super T2, ? super T3, ? super T4, ? extends R> f) {
             Objects.requireNonNull(f, "f is null");
 
@@ -2214,6 +2529,24 @@ public final class ForComprehension {
         }
     }
 
+    /**
+     * Creates a lazy for-comprehension over 5 {@link Optional} values.
+     * <p>
+     * Each subsequent optional is computed lazily as a function of the preceding values.
+     *
+     * @param o1 the initial optional value
+     * @param o2 a function producing the second optional value
+     * @param o3 a function producing the third optional value
+     * @param o4 a function producing the 4th optional value
+     * @param o5 a function producing the 5th optional value
+     * @param <T1> the type of the first optional value
+     * @param <T2> the type of the second optional value
+     * @param <T3> the type of the third optional value
+     * @param <T4> the type of the 4th optional value
+     * @param <T5> the type of the 5th optional value
+     * @return a lazy for-comprehension over 5 optional values
+     * @throws NullPointerException if any argument is {@code null}
+     */
     public static <T1, T2, T3, T4, T5> ForLazy5Optional<T1, T2, T3, T4, T5> forc(Optional<T1> o1, Function1<? super T1, Optional<T2>> o2, Function2<? super T1, ? super T2, Optional<T3>> o3, Function3<? super T1, ? super T2, ? super T3, Optional<T4>> o4, Function4<? super T1, ? super T2, ? super T3, ? super T4, Optional<T5>> o5) {
         Objects.requireNonNull(o1, "o1 is null");
         Objects.requireNonNull(o2, "o2 is null");
@@ -2223,6 +2556,15 @@ public final class ForComprehension {
         return new ForLazy5Optional<>(o1, o2, o3, o4, o5);
     }
 
+    /**
+     * Represents a for-comprehension over 5 lazily evaluated {@link Optional} values.
+     *
+     * @param <T1> the type of the first optional value
+     * @param <T2> the type of the second optional value
+     * @param <T3> the type of the third optional value
+     * @param <T4> the type of the 4th optional value
+     * @param <T5> the type of the 5th optional value
+     */
     public static final class ForLazy5Optional<T1, T2, T3, T4, T5> {
 
         private final Optional<T1> o1;
@@ -2250,6 +2592,15 @@ public final class ForComprehension {
             this.guard = guard;
         }
 
+        /**
+         * Adds a filter predicate to this for-comprehension.
+         * <p>
+         * Multiple calls to this method will combine predicates using logical AND.
+         *
+         * @param predicate the filter predicate
+         * @return a new for-comprehension with the filter applied
+         * @throws NullPointerException if the predicate is {@code null}
+         */
         public ForLazy5Optional<T1, T2, T3, T4, T5> filter(Function5<T1, T2, T3, T4, T5, Boolean> predicate) {
             Objects.requireNonNull(predicate, "predicate is null");
             Function5<T1, T2, T3, T4, T5, Boolean> existingGuard = this.guard;
@@ -2257,6 +2608,18 @@ public final class ForComprehension {
             return new ForLazy5Optional<>(o1, o2, o3, o4, o5, newGuard);
         }
 
+        /**
+         * Produces the result of the for-comprehension by applying the given function
+         * to the contained values.
+         * <p>
+         * The function is invoked only if all optionals are present.
+         *
+         * @param f the combining function
+         * @param <R> the result type
+         * @return an optional containing the result of the function application,
+         *         or {@link Optional#empty()} if any input optional is empty
+         * @throws NullPointerException if the function is {@code null}
+         */
         public <R> Optional<R> yield(Function5<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, ? extends R> f) {
             Objects.requireNonNull(f, "f is null");
 
@@ -2269,6 +2632,26 @@ public final class ForComprehension {
         }
     }
 
+    /**
+     * Creates a lazy for-comprehension over 6 {@link Optional} values.
+     * <p>
+     * Each subsequent optional is computed lazily as a function of the preceding values.
+     *
+     * @param o1 the initial optional value
+     * @param o2 a function producing the second optional value
+     * @param o3 a function producing the third optional value
+     * @param o4 a function producing the 4th optional value
+     * @param o5 a function producing the 5th optional value
+     * @param o6 a function producing the 6th optional value
+     * @param <T1> the type of the first optional value
+     * @param <T2> the type of the second optional value
+     * @param <T3> the type of the third optional value
+     * @param <T4> the type of the 4th optional value
+     * @param <T5> the type of the 5th optional value
+     * @param <T6> the type of the 6th optional value
+     * @return a lazy for-comprehension over 6 optional values
+     * @throws NullPointerException if any argument is {@code null}
+     */
     public static <T1, T2, T3, T4, T5, T6> ForLazy6Optional<T1, T2, T3, T4, T5, T6> forc(Optional<T1> o1, Function1<? super T1, Optional<T2>> o2, Function2<? super T1, ? super T2, Optional<T3>> o3, Function3<? super T1, ? super T2, ? super T3, Optional<T4>> o4, Function4<? super T1, ? super T2, ? super T3, ? super T4, Optional<T5>> o5, Function5<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, Optional<T6>> o6) {
         Objects.requireNonNull(o1, "o1 is null");
         Objects.requireNonNull(o2, "o2 is null");
@@ -2279,6 +2662,16 @@ public final class ForComprehension {
         return new ForLazy6Optional<>(o1, o2, o3, o4, o5, o6);
     }
 
+    /**
+     * Represents a for-comprehension over 6 lazily evaluated {@link Optional} values.
+     *
+     * @param <T1> the type of the first optional value
+     * @param <T2> the type of the second optional value
+     * @param <T3> the type of the third optional value
+     * @param <T4> the type of the 4th optional value
+     * @param <T5> the type of the 5th optional value
+     * @param <T6> the type of the 6th optional value
+     */
     public static final class ForLazy6Optional<T1, T2, T3, T4, T5, T6> {
 
         private final Optional<T1> o1;
@@ -2309,6 +2702,15 @@ public final class ForComprehension {
             this.guard = guard;
         }
 
+        /**
+         * Adds a filter predicate to this for-comprehension.
+         * <p>
+         * Multiple calls to this method will combine predicates using logical AND.
+         *
+         * @param predicate the filter predicate
+         * @return a new for-comprehension with the filter applied
+         * @throws NullPointerException if the predicate is {@code null}
+         */
         public ForLazy6Optional<T1, T2, T3, T4, T5, T6> filter(Function6<T1, T2, T3, T4, T5, T6, Boolean> predicate) {
             Objects.requireNonNull(predicate, "predicate is null");
             Function6<T1, T2, T3, T4, T5, T6, Boolean> existingGuard = this.guard;
@@ -2316,6 +2718,18 @@ public final class ForComprehension {
             return new ForLazy6Optional<>(o1, o2, o3, o4, o5, o6, newGuard);
         }
 
+        /**
+         * Produces the result of the for-comprehension by applying the given function
+         * to the contained values.
+         * <p>
+         * The function is invoked only if all optionals are present.
+         *
+         * @param f the combining function
+         * @param <R> the result type
+         * @return an optional containing the result of the function application,
+         *         or {@link Optional#empty()} if any input optional is empty
+         * @throws NullPointerException if the function is {@code null}
+         */
         public <R> Optional<R> yield(Function6<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, ? super T6, ? extends R> f) {
             Objects.requireNonNull(f, "f is null");
 
@@ -2329,6 +2743,28 @@ public final class ForComprehension {
         }
     }
 
+    /**
+     * Creates a lazy for-comprehension over 7 {@link Optional} values.
+     * <p>
+     * Each subsequent optional is computed lazily as a function of the preceding values.
+     *
+     * @param o1 the initial optional value
+     * @param o2 a function producing the second optional value
+     * @param o3 a function producing the third optional value
+     * @param o4 a function producing the 4th optional value
+     * @param o5 a function producing the 5th optional value
+     * @param o6 a function producing the 6th optional value
+     * @param o7 a function producing the 7th optional value
+     * @param <T1> the type of the first optional value
+     * @param <T2> the type of the second optional value
+     * @param <T3> the type of the third optional value
+     * @param <T4> the type of the 4th optional value
+     * @param <T5> the type of the 5th optional value
+     * @param <T6> the type of the 6th optional value
+     * @param <T7> the type of the 7th optional value
+     * @return a lazy for-comprehension over 7 optional values
+     * @throws NullPointerException if any argument is {@code null}
+     */
     public static <T1, T2, T3, T4, T5, T6, T7> ForLazy7Optional<T1, T2, T3, T4, T5, T6, T7> forc(Optional<T1> o1, Function1<? super T1, Optional<T2>> o2, Function2<? super T1, ? super T2, Optional<T3>> o3, Function3<? super T1, ? super T2, ? super T3, Optional<T4>> o4, Function4<? super T1, ? super T2, ? super T3, ? super T4, Optional<T5>> o5, Function5<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, Optional<T6>> o6, Function6<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, ? super T6, Optional<T7>> o7) {
         Objects.requireNonNull(o1, "o1 is null");
         Objects.requireNonNull(o2, "o2 is null");
@@ -2340,6 +2776,17 @@ public final class ForComprehension {
         return new ForLazy7Optional<>(o1, o2, o3, o4, o5, o6, o7);
     }
 
+    /**
+     * Represents a for-comprehension over 7 lazily evaluated {@link Optional} values.
+     *
+     * @param <T1> the type of the first optional value
+     * @param <T2> the type of the second optional value
+     * @param <T3> the type of the third optional value
+     * @param <T4> the type of the 4th optional value
+     * @param <T5> the type of the 5th optional value
+     * @param <T6> the type of the 6th optional value
+     * @param <T7> the type of the 7th optional value
+     */
     public static final class ForLazy7Optional<T1, T2, T3, T4, T5, T6, T7> {
 
         private final Optional<T1> o1;
@@ -2373,6 +2820,15 @@ public final class ForComprehension {
             this.guard = guard;
         }
 
+        /**
+         * Adds a filter predicate to this for-comprehension.
+         * <p>
+         * Multiple calls to this method will combine predicates using logical AND.
+         *
+         * @param predicate the filter predicate
+         * @return a new for-comprehension with the filter applied
+         * @throws NullPointerException if the predicate is {@code null}
+         */
         public ForLazy7Optional<T1, T2, T3, T4, T5, T6, T7> filter(Function7<T1, T2, T3, T4, T5, T6, T7, Boolean> predicate) {
             Objects.requireNonNull(predicate, "predicate is null");
             Function7<T1, T2, T3, T4, T5, T6, T7, Boolean> existingGuard = this.guard;
@@ -2380,6 +2836,18 @@ public final class ForComprehension {
             return new ForLazy7Optional<>(o1, o2, o3, o4, o5, o6, o7, newGuard);
         }
 
+        /**
+         * Produces the result of the for-comprehension by applying the given function
+         * to the contained values.
+         * <p>
+         * The function is invoked only if all optionals are present.
+         *
+         * @param f the combining function
+         * @param <R> the result type
+         * @return an optional containing the result of the function application,
+         *         or {@link Optional#empty()} if any input optional is empty
+         * @throws NullPointerException if the function is {@code null}
+         */
         public <R> Optional<R> yield(Function7<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, ? super T6, ? super T7, ? extends R> f) {
             Objects.requireNonNull(f, "f is null");
 
@@ -2394,6 +2862,30 @@ public final class ForComprehension {
         }
     }
 
+    /**
+     * Creates a lazy for-comprehension over 8 {@link Optional} values.
+     * <p>
+     * Each subsequent optional is computed lazily as a function of the preceding values.
+     *
+     * @param o1 the initial optional value
+     * @param o2 a function producing the second optional value
+     * @param o3 a function producing the third optional value
+     * @param o4 a function producing the 4th optional value
+     * @param o5 a function producing the 5th optional value
+     * @param o6 a function producing the 6th optional value
+     * @param o7 a function producing the 7th optional value
+     * @param o8 a function producing the 8th optional value
+     * @param <T1> the type of the first optional value
+     * @param <T2> the type of the second optional value
+     * @param <T3> the type of the third optional value
+     * @param <T4> the type of the 4th optional value
+     * @param <T5> the type of the 5th optional value
+     * @param <T6> the type of the 6th optional value
+     * @param <T7> the type of the 7th optional value
+     * @param <T8> the type of the 8th optional value
+     * @return a lazy for-comprehension over 8 optional values
+     * @throws NullPointerException if any argument is {@code null}
+     */
     public static <T1, T2, T3, T4, T5, T6, T7, T8> ForLazy8Optional<T1, T2, T3, T4, T5, T6, T7, T8> forc(Optional<T1> o1, Function1<? super T1, Optional<T2>> o2, Function2<? super T1, ? super T2, Optional<T3>> o3, Function3<? super T1, ? super T2, ? super T3, Optional<T4>> o4, Function4<? super T1, ? super T2, ? super T3, ? super T4, Optional<T5>> o5, Function5<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, Optional<T6>> o6, Function6<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, ? super T6, Optional<T7>> o7, Function7<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, ? super T6, ? super T7, Optional<T8>> o8) {
         Objects.requireNonNull(o1, "o1 is null");
         Objects.requireNonNull(o2, "o2 is null");
@@ -2406,6 +2898,18 @@ public final class ForComprehension {
         return new ForLazy8Optional<>(o1, o2, o3, o4, o5, o6, o7, o8);
     }
 
+    /**
+     * Represents a for-comprehension over 8 lazily evaluated {@link Optional} values.
+     *
+     * @param <T1> the type of the first optional value
+     * @param <T2> the type of the second optional value
+     * @param <T3> the type of the third optional value
+     * @param <T4> the type of the 4th optional value
+     * @param <T5> the type of the 5th optional value
+     * @param <T6> the type of the 6th optional value
+     * @param <T7> the type of the 7th optional value
+     * @param <T8> the type of the 8th optional value
+     */
     public static final class ForLazy8Optional<T1, T2, T3, T4, T5, T6, T7, T8> {
 
         private final Optional<T1> o1;
@@ -2442,6 +2946,15 @@ public final class ForComprehension {
             this.guard = guard;
         }
 
+        /**
+         * Adds a filter predicate to this for-comprehension.
+         * <p>
+         * Multiple calls to this method will combine predicates using logical AND.
+         *
+         * @param predicate the filter predicate
+         * @return a new for-comprehension with the filter applied
+         * @throws NullPointerException if the predicate is {@code null}
+         */
         public ForLazy8Optional<T1, T2, T3, T4, T5, T6, T7, T8> filter(Function8<T1, T2, T3, T4, T5, T6, T7, T8, Boolean> predicate) {
             Objects.requireNonNull(predicate, "predicate is null");
             Function8<T1, T2, T3, T4, T5, T6, T7, T8, Boolean> existingGuard = this.guard;
@@ -2449,6 +2962,18 @@ public final class ForComprehension {
             return new ForLazy8Optional<>(o1, o2, o3, o4, o5, o6, o7, o8, newGuard);
         }
 
+        /**
+         * Produces the result of the for-comprehension by applying the given function
+         * to the contained values.
+         * <p>
+         * The function is invoked only if all optionals are present.
+         *
+         * @param f the combining function
+         * @param <R> the result type
+         * @return an optional containing the result of the function application,
+         *         or {@link Optional#empty()} if any input optional is empty
+         * @throws NullPointerException if the function is {@code null}
+         */
         public <R> Optional<R> yield(Function8<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, ? super T6, ? super T7, ? super T8, ? extends R> f) {
             Objects.requireNonNull(f, "f is null");
 
@@ -2464,12 +2989,30 @@ public final class ForComprehension {
         }
     }
 
+    /**
+     * Creates a lazy for-comprehension over 2 {@link Stream} values.
+     * <p>
+     * Each subsequent stream is computed lazily as a function of the preceding values.
+     *
+     * @param s1 the initial stream
+     * @param s2 a function producing the second stream
+     * @param <T1> the type of the first stream
+     * @param <T2> the type of the second stream
+     * @return a lazy for-comprehension over 2 stream values
+     * @throws NullPointerException if any argument is {@code null}
+     */
     public static <T1, T2> ForLazy2Stream<T1, T2> forc(Stream<T1> s1, Function1<? super T1, Stream<T2>> s2) {
         Objects.requireNonNull(s1, "s1 is null");
         Objects.requireNonNull(s2, "s2 is null");
         return new ForLazy2Stream<>(s1, s2);
     }
 
+    /**
+     * Represents a for-comprehension over 2 lazily evaluated {@link Stream} values.
+     *
+     * @param <T1> the type of the first stream
+     * @param <T2> the type of the second stream
+     */
     public static final class ForLazy2Stream<T1, T2> {
 
         private final Stream<T1> s1;
@@ -2488,6 +3031,15 @@ public final class ForComprehension {
             this.guard = guard;
         }
 
+        /**
+         * Adds a filter predicate to this for-comprehension.
+         * <p>
+         * Multiple calls to this method will combine predicates using logical AND.
+         *
+         * @param predicate the filter predicate
+         * @return a new for-comprehension with the filter applied
+         * @throws NullPointerException if the predicate is {@code null}
+         */
         public ForLazy2Stream<T1, T2> filter(Function2<T1, T2, Boolean> predicate) {
             Objects.requireNonNull(predicate, "predicate is null");
             Function2<T1, T2, Boolean> existingGuard = this.guard;
@@ -2495,6 +3047,15 @@ public final class ForComprehension {
             return new ForLazy2Stream<>(s1, s2, newGuard);
         }
 
+        /**
+         * Produces the result of the for-comprehension by applying the given function
+         * to the cartesian product of the stream elements.
+         *
+         * @param f the combining function
+         * @param <R> the result type
+         * @return a stream containing the results of applying the function to all combinations
+         * @throws NullPointerException if the function is {@code null}
+         */
         public <R> Stream<R> yield(Function2<? super T1, ? super T2, ? extends R> f) {
             Objects.requireNonNull(f, "f is null");
 
@@ -2503,6 +3064,20 @@ public final class ForComprehension {
         }
     }
 
+    /**
+     * Creates a lazy for-comprehension over 3 {@link Stream} values.
+     * <p>
+     * Each subsequent stream is computed lazily as a function of the preceding values.
+     *
+     * @param s1 the initial stream
+     * @param s2 a function producing the second stream
+     * @param s3 a function producing the third stream
+     * @param <T1> the type of the first stream
+     * @param <T2> the type of the second stream
+     * @param <T3> the type of the third stream
+     * @return a lazy for-comprehension over 3 stream values
+     * @throws NullPointerException if any argument is {@code null}
+     */
     public static <T1, T2, T3> ForLazy3Stream<T1, T2, T3> forc(Stream<T1> s1, Function1<? super T1, Stream<T2>> s2, Function2<? super T1, ? super T2, Stream<T3>> s3) {
         Objects.requireNonNull(s1, "s1 is null");
         Objects.requireNonNull(s2, "s2 is null");
@@ -2510,6 +3085,13 @@ public final class ForComprehension {
         return new ForLazy3Stream<>(s1, s2, s3);
     }
 
+    /**
+     * Represents a for-comprehension over 3 lazily evaluated {@link Stream} values.
+     *
+     * @param <T1> the type of the first stream
+     * @param <T2> the type of the second stream
+     * @param <T3> the type of the third stream
+     */
     public static final class ForLazy3Stream<T1, T2, T3> {
 
         private final Stream<T1> s1;
@@ -2531,6 +3113,15 @@ public final class ForComprehension {
             this.guard = guard;
         }
 
+        /**
+         * Adds a filter predicate to this for-comprehension.
+         * <p>
+         * Multiple calls to this method will combine predicates using logical AND.
+         *
+         * @param predicate the filter predicate
+         * @return a new for-comprehension with the filter applied
+         * @throws NullPointerException if the predicate is {@code null}
+         */
         public ForLazy3Stream<T1, T2, T3> filter(Function3<T1, T2, T3, Boolean> predicate) {
             Objects.requireNonNull(predicate, "predicate is null");
             Function3<T1, T2, T3, Boolean> existingGuard = this.guard;
@@ -2538,6 +3129,15 @@ public final class ForComprehension {
             return new ForLazy3Stream<>(s1, s2, s3, newGuard);
         }
 
+        /**
+         * Produces the result of the for-comprehension by applying the given function
+         * to the cartesian product of the stream elements.
+         *
+         * @param f the combining function
+         * @param <R> the result type
+         * @return a stream containing the results of applying the function to all combinations
+         * @throws NullPointerException if the function is {@code null}
+         */
         public <R> Stream<R> yield(Function3<? super T1, ? super T2, ? super T3, ? extends R> f) {
             Objects.requireNonNull(f, "f is null");
 
@@ -2547,6 +3147,22 @@ public final class ForComprehension {
         }
     }
 
+    /**
+     * Creates a lazy for-comprehension over 4 {@link Stream} values.
+     * <p>
+     * Each subsequent stream is computed lazily as a function of the preceding values.
+     *
+     * @param s1 the initial stream
+     * @param s2 a function producing the second stream
+     * @param s3 a function producing the third stream
+     * @param s4 a function producing the 4th stream
+     * @param <T1> the type of the first stream
+     * @param <T2> the type of the second stream
+     * @param <T3> the type of the third stream
+     * @param <T4> the type of the 4th stream
+     * @return a lazy for-comprehension over 4 stream values
+     * @throws NullPointerException if any argument is {@code null}
+     */
     public static <T1, T2, T3, T4> ForLazy4Stream<T1, T2, T3, T4> forc(Stream<T1> s1, Function1<? super T1, Stream<T2>> s2, Function2<? super T1, ? super T2, Stream<T3>> s3, Function3<? super T1, ? super T2, ? super T3, Stream<T4>> s4) {
         Objects.requireNonNull(s1, "s1 is null");
         Objects.requireNonNull(s2, "s2 is null");
@@ -2555,6 +3171,14 @@ public final class ForComprehension {
         return new ForLazy4Stream<>(s1, s2, s3, s4);
     }
 
+    /**
+     * Represents a for-comprehension over 4 lazily evaluated {@link Stream} values.
+     *
+     * @param <T1> the type of the first stream
+     * @param <T2> the type of the second stream
+     * @param <T3> the type of the third stream
+     * @param <T4> the type of the 4th stream
+     */
     public static final class ForLazy4Stream<T1, T2, T3, T4> {
 
         private final Stream<T1> s1;
@@ -2579,6 +3203,15 @@ public final class ForComprehension {
             this.guard = guard;
         }
 
+        /**
+         * Adds a filter predicate to this for-comprehension.
+         * <p>
+         * Multiple calls to this method will combine predicates using logical AND.
+         *
+         * @param predicate the filter predicate
+         * @return a new for-comprehension with the filter applied
+         * @throws NullPointerException if the predicate is {@code null}
+         */
         public ForLazy4Stream<T1, T2, T3, T4> filter(Function4<T1, T2, T3, T4, Boolean> predicate) {
             Objects.requireNonNull(predicate, "predicate is null");
             Function4<T1, T2, T3, T4, Boolean> existingGuard = this.guard;
@@ -2586,6 +3219,15 @@ public final class ForComprehension {
             return new ForLazy4Stream<>(s1, s2, s3, s4, newGuard);
         }
 
+        /**
+         * Produces the result of the for-comprehension by applying the given function
+         * to the cartesian product of the stream elements.
+         *
+         * @param f the combining function
+         * @param <R> the result type
+         * @return a stream containing the results of applying the function to all combinations
+         * @throws NullPointerException if the function is {@code null}
+         */
         public <R> Stream<R> yield(Function4<? super T1, ? super T2, ? super T3, ? super T4, ? extends R> f) {
             Objects.requireNonNull(f, "f is null");
 
@@ -2596,6 +3238,24 @@ public final class ForComprehension {
         }
     }
 
+    /**
+     * Creates a lazy for-comprehension over 5 {@link Stream} values.
+     * <p>
+     * Each subsequent stream is computed lazily as a function of the preceding values.
+     *
+     * @param s1 the initial stream
+     * @param s2 a function producing the second stream
+     * @param s3 a function producing the third stream
+     * @param s4 a function producing the 4th stream
+     * @param s5 a function producing the 5th stream
+     * @param <T1> the type of the first stream
+     * @param <T2> the type of the second stream
+     * @param <T3> the type of the third stream
+     * @param <T4> the type of the 4th stream
+     * @param <T5> the type of the 5th stream
+     * @return a lazy for-comprehension over 5 stream values
+     * @throws NullPointerException if any argument is {@code null}
+     */
     public static <T1, T2, T3, T4, T5> ForLazy5Stream<T1, T2, T3, T4, T5> forc(Stream<T1> s1, Function1<? super T1, Stream<T2>> s2, Function2<? super T1, ? super T2, Stream<T3>> s3, Function3<? super T1, ? super T2, ? super T3, Stream<T4>> s4, Function4<? super T1, ? super T2, ? super T3, ? super T4, Stream<T5>> s5) {
         Objects.requireNonNull(s1, "s1 is null");
         Objects.requireNonNull(s2, "s2 is null");
@@ -2605,6 +3265,15 @@ public final class ForComprehension {
         return new ForLazy5Stream<>(s1, s2, s3, s4, s5);
     }
 
+    /**
+     * Represents a for-comprehension over 5 lazily evaluated {@link Stream} values.
+     *
+     * @param <T1> the type of the first stream
+     * @param <T2> the type of the second stream
+     * @param <T3> the type of the third stream
+     * @param <T4> the type of the 4th stream
+     * @param <T5> the type of the 5th stream
+     */
     public static final class ForLazy5Stream<T1, T2, T3, T4, T5> {
 
         private final Stream<T1> s1;
@@ -2632,6 +3301,15 @@ public final class ForComprehension {
             this.guard = guard;
         }
 
+        /**
+         * Adds a filter predicate to this for-comprehension.
+         * <p>
+         * Multiple calls to this method will combine predicates using logical AND.
+         *
+         * @param predicate the filter predicate
+         * @return a new for-comprehension with the filter applied
+         * @throws NullPointerException if the predicate is {@code null}
+         */
         public ForLazy5Stream<T1, T2, T3, T4, T5> filter(Function5<T1, T2, T3, T4, T5, Boolean> predicate) {
             Objects.requireNonNull(predicate, "predicate is null");
             Function5<T1, T2, T3, T4, T5, Boolean> existingGuard = this.guard;
@@ -2639,6 +3317,15 @@ public final class ForComprehension {
             return new ForLazy5Stream<>(s1, s2, s3, s4, s5, newGuard);
         }
 
+        /**
+         * Produces the result of the for-comprehension by applying the given function
+         * to the cartesian product of the stream elements.
+         *
+         * @param f the combining function
+         * @param <R> the result type
+         * @return a stream containing the results of applying the function to all combinations
+         * @throws NullPointerException if the function is {@code null}
+         */
         public <R> Stream<R> yield(Function5<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, ? extends R> f) {
             Objects.requireNonNull(f, "f is null");
 
@@ -2650,6 +3337,26 @@ public final class ForComprehension {
         }
     }
 
+    /**
+     * Creates a lazy for-comprehension over 6 {@link Stream} values.
+     * <p>
+     * Each subsequent stream is computed lazily as a function of the preceding values.
+     *
+     * @param s1 the initial stream
+     * @param s2 a function producing the second stream
+     * @param s3 a function producing the third stream
+     * @param s4 a function producing the 4th stream
+     * @param s5 a function producing the 5th stream
+     * @param s6 a function producing the 6th stream
+     * @param <T1> the type of the first stream
+     * @param <T2> the type of the second stream
+     * @param <T3> the type of the third stream
+     * @param <T4> the type of the 4th stream
+     * @param <T5> the type of the 5th stream
+     * @param <T6> the type of the 6th stream
+     * @return a lazy for-comprehension over 6 stream values
+     * @throws NullPointerException if any argument is {@code null}
+     */
     public static <T1, T2, T3, T4, T5, T6> ForLazy6Stream<T1, T2, T3, T4, T5, T6> forc(Stream<T1> s1, Function1<? super T1, Stream<T2>> s2, Function2<? super T1, ? super T2, Stream<T3>> s3, Function3<? super T1, ? super T2, ? super T3, Stream<T4>> s4, Function4<? super T1, ? super T2, ? super T3, ? super T4, Stream<T5>> s5, Function5<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, Stream<T6>> s6) {
         Objects.requireNonNull(s1, "s1 is null");
         Objects.requireNonNull(s2, "s2 is null");
@@ -2660,6 +3367,16 @@ public final class ForComprehension {
         return new ForLazy6Stream<>(s1, s2, s3, s4, s5, s6);
     }
 
+    /**
+     * Represents a for-comprehension over 6 lazily evaluated {@link Stream} values.
+     *
+     * @param <T1> the type of the first stream
+     * @param <T2> the type of the second stream
+     * @param <T3> the type of the third stream
+     * @param <T4> the type of the 4th stream
+     * @param <T5> the type of the 5th stream
+     * @param <T6> the type of the 6th stream
+     */
     public static final class ForLazy6Stream<T1, T2, T3, T4, T5, T6> {
 
         private final Stream<T1> s1;
@@ -2690,6 +3407,15 @@ public final class ForComprehension {
             this.guard = guard;
         }
 
+        /**
+         * Adds a filter predicate to this for-comprehension.
+         * <p>
+         * Multiple calls to this method will combine predicates using logical AND.
+         *
+         * @param predicate the filter predicate
+         * @return a new for-comprehension with the filter applied
+         * @throws NullPointerException if the predicate is {@code null}
+         */
         public ForLazy6Stream<T1, T2, T3, T4, T5, T6> filter(Function6<T1, T2, T3, T4, T5, T6, Boolean> predicate) {
             Objects.requireNonNull(predicate, "predicate is null");
             Function6<T1, T2, T3, T4, T5, T6, Boolean> existingGuard = this.guard;
@@ -2697,6 +3423,15 @@ public final class ForComprehension {
             return new ForLazy6Stream<>(s1, s2, s3, s4, s5, s6, newGuard);
         }
 
+        /**
+         * Produces the result of the for-comprehension by applying the given function
+         * to the cartesian product of the stream elements.
+         *
+         * @param f the combining function
+         * @param <R> the result type
+         * @return a stream containing the results of applying the function to all combinations
+         * @throws NullPointerException if the function is {@code null}
+         */
         public <R> Stream<R> yield(Function6<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, ? super T6, ? extends R> f) {
             Objects.requireNonNull(f, "f is null");
 
@@ -2709,6 +3444,28 @@ public final class ForComprehension {
         }
     }
 
+    /**
+     * Creates a lazy for-comprehension over 7 {@link Stream} values.
+     * <p>
+     * Each subsequent stream is computed lazily as a function of the preceding values.
+     *
+     * @param s1 the initial stream
+     * @param s2 a function producing the second stream
+     * @param s3 a function producing the third stream
+     * @param s4 a function producing the 4th stream
+     * @param s5 a function producing the 5th stream
+     * @param s6 a function producing the 6th stream
+     * @param s7 a function producing the 7th stream
+     * @param <T1> the type of the first stream
+     * @param <T2> the type of the second stream
+     * @param <T3> the type of the third stream
+     * @param <T4> the type of the 4th stream
+     * @param <T5> the type of the 5th stream
+     * @param <T6> the type of the 6th stream
+     * @param <T7> the type of the 7th stream
+     * @return a lazy for-comprehension over 7 stream values
+     * @throws NullPointerException if any argument is {@code null}
+     */
     public static <T1, T2, T3, T4, T5, T6, T7> ForLazy7Stream<T1, T2, T3, T4, T5, T6, T7> forc(Stream<T1> s1, Function1<? super T1, Stream<T2>> s2, Function2<? super T1, ? super T2, Stream<T3>> s3, Function3<? super T1, ? super T2, ? super T3, Stream<T4>> s4, Function4<? super T1, ? super T2, ? super T3, ? super T4, Stream<T5>> s5, Function5<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, Stream<T6>> s6, Function6<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, ? super T6, Stream<T7>> s7) {
         Objects.requireNonNull(s1, "s1 is null");
         Objects.requireNonNull(s2, "s2 is null");
@@ -2720,6 +3477,17 @@ public final class ForComprehension {
         return new ForLazy7Stream<>(s1, s2, s3, s4, s5, s6, s7);
     }
 
+    /**
+     * Represents a for-comprehension over 7 lazily evaluated {@link Stream} values.
+     *
+     * @param <T1> the type of the first stream
+     * @param <T2> the type of the second stream
+     * @param <T3> the type of the third stream
+     * @param <T4> the type of the 4th stream
+     * @param <T5> the type of the 5th stream
+     * @param <T6> the type of the 6th stream
+     * @param <T7> the type of the 7th stream
+     */
     public static final class ForLazy7Stream<T1, T2, T3, T4, T5, T6, T7> {
 
         private final Stream<T1> s1;
@@ -2753,6 +3521,15 @@ public final class ForComprehension {
             this.guard = guard;
         }
 
+        /**
+         * Adds a filter predicate to this for-comprehension.
+         * <p>
+         * Multiple calls to this method will combine predicates using logical AND.
+         *
+         * @param predicate the filter predicate
+         * @return a new for-comprehension with the filter applied
+         * @throws NullPointerException if the predicate is {@code null}
+         */
         public ForLazy7Stream<T1, T2, T3, T4, T5, T6, T7> filter(Function7<T1, T2, T3, T4, T5, T6, T7, Boolean> predicate) {
             Objects.requireNonNull(predicate, "predicate is null");
             Function7<T1, T2, T3, T4, T5, T6, T7, Boolean> existingGuard = this.guard;
@@ -2760,6 +3537,15 @@ public final class ForComprehension {
             return new ForLazy7Stream<>(s1, s2, s3, s4, s5, s6, s7, newGuard);
         }
 
+        /**
+         * Produces the result of the for-comprehension by applying the given function
+         * to the cartesian product of the stream elements.
+         *
+         * @param f the combining function
+         * @param <R> the result type
+         * @return a stream containing the results of applying the function to all combinations
+         * @throws NullPointerException if the function is {@code null}
+         */
         public <R> Stream<R> yield(Function7<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, ? super T6, ? super T7, ? extends R> f) {
             Objects.requireNonNull(f, "f is null");
 
@@ -2773,6 +3559,30 @@ public final class ForComprehension {
         }
     }
 
+    /**
+     * Creates a lazy for-comprehension over 8 {@link Stream} values.
+     * <p>
+     * Each subsequent stream is computed lazily as a function of the preceding values.
+     *
+     * @param s1 the initial stream
+     * @param s2 a function producing the second stream
+     * @param s3 a function producing the third stream
+     * @param s4 a function producing the 4th stream
+     * @param s5 a function producing the 5th stream
+     * @param s6 a function producing the 6th stream
+     * @param s7 a function producing the 7th stream
+     * @param s8 a function producing the 8th stream
+     * @param <T1> the type of the first stream
+     * @param <T2> the type of the second stream
+     * @param <T3> the type of the third stream
+     * @param <T4> the type of the 4th stream
+     * @param <T5> the type of the 5th stream
+     * @param <T6> the type of the 6th stream
+     * @param <T7> the type of the 7th stream
+     * @param <T8> the type of the 8th stream
+     * @return a lazy for-comprehension over 8 stream values
+     * @throws NullPointerException if any argument is {@code null}
+     */
     public static <T1, T2, T3, T4, T5, T6, T7, T8> ForLazy8Stream<T1, T2, T3, T4, T5, T6, T7, T8> forc(Stream<T1> s1, Function1<? super T1, Stream<T2>> s2, Function2<? super T1, ? super T2, Stream<T3>> s3, Function3<? super T1, ? super T2, ? super T3, Stream<T4>> s4, Function4<? super T1, ? super T2, ? super T3, ? super T4, Stream<T5>> s5, Function5<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, Stream<T6>> s6, Function6<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, ? super T6, Stream<T7>> s7, Function7<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, ? super T6, ? super T7, Stream<T8>> s8) {
         Objects.requireNonNull(s1, "s1 is null");
         Objects.requireNonNull(s2, "s2 is null");
@@ -2785,6 +3595,18 @@ public final class ForComprehension {
         return new ForLazy8Stream<>(s1, s2, s3, s4, s5, s6, s7, s8);
     }
 
+    /**
+     * Represents a for-comprehension over 8 lazily evaluated {@link Stream} values.
+     *
+     * @param <T1> the type of the first stream
+     * @param <T2> the type of the second stream
+     * @param <T3> the type of the third stream
+     * @param <T4> the type of the 4th stream
+     * @param <T5> the type of the 5th stream
+     * @param <T6> the type of the 6th stream
+     * @param <T7> the type of the 7th stream
+     * @param <T8> the type of the 8th stream
+     */
     public static final class ForLazy8Stream<T1, T2, T3, T4, T5, T6, T7, T8> {
 
         private final Stream<T1> s1;
@@ -2821,6 +3643,15 @@ public final class ForComprehension {
             this.guard = guard;
         }
 
+        /**
+         * Adds a filter predicate to this for-comprehension.
+         * <p>
+         * Multiple calls to this method will combine predicates using logical AND.
+         *
+         * @param predicate the filter predicate
+         * @return a new for-comprehension with the filter applied
+         * @throws NullPointerException if the predicate is {@code null}
+         */
         public ForLazy8Stream<T1, T2, T3, T4, T5, T6, T7, T8> filter(Function8<T1, T2, T3, T4, T5, T6, T7, T8, Boolean> predicate) {
             Objects.requireNonNull(predicate, "predicate is null");
             Function8<T1, T2, T3, T4, T5, T6, T7, T8, Boolean> existingGuard = this.guard;
@@ -2828,6 +3659,15 @@ public final class ForComprehension {
             return new ForLazy8Stream<>(s1, s2, s3, s4, s5, s6, s7, s8, newGuard);
         }
 
+        /**
+         * Produces the result of the for-comprehension by applying the given function
+         * to the cartesian product of the stream elements.
+         *
+         * @param f the combining function
+         * @param <R> the result type
+         * @return a stream containing the results of applying the function to all combinations
+         * @throws NullPointerException if the function is {@code null}
+         */
         public <R> Stream<R> yield(Function8<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, ? super T6, ? super T7, ? super T8, ? extends R> f) {
             Objects.requireNonNull(f, "f is null");
 
@@ -2842,12 +3682,30 @@ public final class ForComprehension {
         }
     }
 
+    /**
+     * Creates a lazy for-comprehension over 2 {@link Iterable} values.
+     * <p>
+     * Each subsequent iterable is computed lazily as a function of the preceding values.
+     *
+     * @param i1 the initial iterable
+     * @param i2 a function producing the second iterable
+     * @param <T1> the type of the first iterable
+     * @param <T2> the type of the second iterable
+     * @return a lazy for-comprehension over 2 iterable values
+     * @throws NullPointerException if any argument is {@code null}
+     */
     public static <T1, T2> ForLazy2Iterable<T1, T2> forc(Iterable<T1> i1, Function1<? super T1, Iterable<T2>> i2) {
         Objects.requireNonNull(i1, "i1 is null");
         Objects.requireNonNull(i2, "i2 is null");
         return new ForLazy2Iterable<>(i1, i2);
     }
 
+    /**
+     * Represents a for-comprehension over 2 lazily evaluated {@link Iterable} values.
+     *
+     * @param <T1> the type of the first iterable
+     * @param <T2> the type of the second iterable
+     */
     public static final class ForLazy2Iterable<T1, T2> {
 
         private final Iterable<T1> i1;
@@ -2866,6 +3724,15 @@ public final class ForComprehension {
             this.guard = guard;
         }
 
+        /**
+         * Adds a filter predicate to this for-comprehension.
+         * <p>
+         * Multiple calls to this method will combine predicates using logical AND.
+         *
+         * @param predicate the filter predicate
+         * @return a new for-comprehension with the filter applied
+         * @throws NullPointerException if the predicate is {@code null}
+         */
         public ForLazy2Iterable<T1, T2> filter(Function2<T1, T2, Boolean> predicate) {
             Objects.requireNonNull(predicate, "predicate is null");
             Function2<T1, T2, Boolean> existingGuard = this.guard;
@@ -2873,6 +3740,15 @@ public final class ForComprehension {
             return new ForLazy2Iterable<>(i1, i2, newGuard);
         }
 
+        /**
+         * Produces the result of the for-comprehension by applying the given function
+         * to the cartesian product of the iterable elements.
+         *
+         * @param f the combining function
+         * @param <R> the result type
+         * @return a list containing the results of applying the function to all combinations
+         * @throws NullPointerException if the function is {@code null}
+         */
         public <R> List<R> yield(Function2<? super T1, ? super T2, ? extends R> f) {
             Objects.requireNonNull(f, "f is null");
 
@@ -2888,6 +3764,20 @@ public final class ForComprehension {
         }
     }
 
+    /**
+     * Creates a lazy for-comprehension over 3 {@link Iterable} values.
+     * <p>
+     * Each subsequent iterable is computed lazily as a function of the preceding values.
+     *
+     * @param i1 the initial iterable
+     * @param i2 a function producing the second iterable
+     * @param i3 a function producing the third iterable
+     * @param <T1> the type of the first iterable
+     * @param <T2> the type of the second iterable
+     * @param <T3> the type of the third iterable
+     * @return a lazy for-comprehension over 3 iterable values
+     * @throws NullPointerException if any argument is {@code null}
+     */
     public static <T1, T2, T3> ForLazy3Iterable<T1, T2, T3> forc(Iterable<T1> i1, Function1<? super T1, Iterable<T2>> i2, Function2<? super T1, ? super T2, Iterable<T3>> i3) {
         Objects.requireNonNull(i1, "i1 is null");
         Objects.requireNonNull(i2, "i2 is null");
@@ -2895,6 +3785,13 @@ public final class ForComprehension {
         return new ForLazy3Iterable<>(i1, i2, i3);
     }
 
+    /**
+     * Represents a for-comprehension over 3 lazily evaluated {@link Iterable} values.
+     *
+     * @param <T1> the type of the first iterable
+     * @param <T2> the type of the second iterable
+     * @param <T3> the type of the third iterable
+     */
     public static final class ForLazy3Iterable<T1, T2, T3> {
 
         private final Iterable<T1> i1;
@@ -2916,6 +3813,15 @@ public final class ForComprehension {
             this.guard = guard;
         }
 
+        /**
+         * Adds a filter predicate to this for-comprehension.
+         * <p>
+         * Multiple calls to this method will combine predicates using logical AND.
+         *
+         * @param predicate the filter predicate
+         * @return a new for-comprehension with the filter applied
+         * @throws NullPointerException if the predicate is {@code null}
+         */
         public ForLazy3Iterable<T1, T2, T3> filter(Function3<T1, T2, T3, Boolean> predicate) {
             Objects.requireNonNull(predicate, "predicate is null");
             Function3<T1, T2, T3, Boolean> existingGuard = this.guard;
@@ -2923,6 +3829,15 @@ public final class ForComprehension {
             return new ForLazy3Iterable<>(i1, i2, i3, newGuard);
         }
 
+        /**
+         * Produces the result of the for-comprehension by applying the given function
+         * to the cartesian product of the iterable elements.
+         *
+         * @param f the combining function
+         * @param <R> the result type
+         * @return a list containing the results of applying the function to all combinations
+         * @throws NullPointerException if the function is {@code null}
+         */
         public <R> List<R> yield(Function3<? super T1, ? super T2, ? super T3, ? extends R> f) {
             Objects.requireNonNull(f, "f is null");
 
@@ -2940,6 +3855,22 @@ public final class ForComprehension {
         }
     }
 
+    /**
+     * Creates a lazy for-comprehension over 4 {@link Iterable} values.
+     * <p>
+     * Each subsequent iterable is computed lazily as a function of the preceding values.
+     *
+     * @param i1 the initial iterable
+     * @param i2 a function producing the second iterable
+     * @param i3 a function producing the third iterable
+     * @param i4 a function producing the 4th iterable
+     * @param <T1> the type of the first iterable
+     * @param <T2> the type of the second iterable
+     * @param <T3> the type of the third iterable
+     * @param <T4> the type of the 4th iterable
+     * @return a lazy for-comprehension over 4 iterable values
+     * @throws NullPointerException if any argument is {@code null}
+     */
     public static <T1, T2, T3, T4> ForLazy4Iterable<T1, T2, T3, T4> forc(Iterable<T1> i1, Function1<? super T1, Iterable<T2>> i2, Function2<? super T1, ? super T2, Iterable<T3>> i3, Function3<? super T1, ? super T2, ? super T3, Iterable<T4>> i4) {
         Objects.requireNonNull(i1, "i1 is null");
         Objects.requireNonNull(i2, "i2 is null");
@@ -2948,6 +3879,14 @@ public final class ForComprehension {
         return new ForLazy4Iterable<>(i1, i2, i3, i4);
     }
 
+    /**
+     * Represents a for-comprehension over 4 lazily evaluated {@link Iterable} values.
+     *
+     * @param <T1> the type of the first iterable
+     * @param <T2> the type of the second iterable
+     * @param <T3> the type of the third iterable
+     * @param <T4> the type of the 4th iterable
+     */
     public static final class ForLazy4Iterable<T1, T2, T3, T4> {
 
         private final Iterable<T1> i1;
@@ -2972,6 +3911,15 @@ public final class ForComprehension {
             this.guard = guard;
         }
 
+        /**
+         * Adds a filter predicate to this for-comprehension.
+         * <p>
+         * Multiple calls to this method will combine predicates using logical AND.
+         *
+         * @param predicate the filter predicate
+         * @return a new for-comprehension with the filter applied
+         * @throws NullPointerException if the predicate is {@code null}
+         */
         public ForLazy4Iterable<T1, T2, T3, T4> filter(Function4<T1, T2, T3, T4, Boolean> predicate) {
             Objects.requireNonNull(predicate, "predicate is null");
             Function4<T1, T2, T3, T4, Boolean> existingGuard = this.guard;
@@ -2979,6 +3927,15 @@ public final class ForComprehension {
             return new ForLazy4Iterable<>(i1, i2, i3, i4, newGuard);
         }
 
+        /**
+         * Produces the result of the for-comprehension by applying the given function
+         * to the cartesian product of the iterable elements.
+         *
+         * @param f the combining function
+         * @param <R> the result type
+         * @return a list containing the results of applying the function to all combinations
+         * @throws NullPointerException if the function is {@code null}
+         */
         public <R> List<R> yield(Function4<? super T1, ? super T2, ? super T3, ? super T4, ? extends R> f) {
             Objects.requireNonNull(f, "f is null");
 
@@ -2998,6 +3955,24 @@ public final class ForComprehension {
         }
     }
 
+    /**
+     * Creates a lazy for-comprehension over 5 {@link Iterable} values.
+     * <p>
+     * Each subsequent iterable is computed lazily as a function of the preceding values.
+     *
+     * @param i1 the initial iterable
+     * @param i2 a function producing the second iterable
+     * @param i3 a function producing the third iterable
+     * @param i4 a function producing the 4th iterable
+     * @param i5 a function producing the 5th iterable
+     * @param <T1> the type of the first iterable
+     * @param <T2> the type of the second iterable
+     * @param <T3> the type of the third iterable
+     * @param <T4> the type of the 4th iterable
+     * @param <T5> the type of the 5th iterable
+     * @return a lazy for-comprehension over 5 iterable values
+     * @throws NullPointerException if any argument is {@code null}
+     */
     public static <T1, T2, T3, T4, T5> ForLazy5Iterable<T1, T2, T3, T4, T5> forc(Iterable<T1> i1, Function1<? super T1, Iterable<T2>> i2, Function2<? super T1, ? super T2, Iterable<T3>> i3, Function3<? super T1, ? super T2, ? super T3, Iterable<T4>> i4, Function4<? super T1, ? super T2, ? super T3, ? super T4, Iterable<T5>> i5) {
         Objects.requireNonNull(i1, "i1 is null");
         Objects.requireNonNull(i2, "i2 is null");
@@ -3007,6 +3982,15 @@ public final class ForComprehension {
         return new ForLazy5Iterable<>(i1, i2, i3, i4, i5);
     }
 
+    /**
+     * Represents a for-comprehension over 5 lazily evaluated {@link Iterable} values.
+     *
+     * @param <T1> the type of the first iterable
+     * @param <T2> the type of the second iterable
+     * @param <T3> the type of the third iterable
+     * @param <T4> the type of the 4th iterable
+     * @param <T5> the type of the 5th iterable
+     */
     public static final class ForLazy5Iterable<T1, T2, T3, T4, T5> {
 
         private final Iterable<T1> i1;
@@ -3034,6 +4018,15 @@ public final class ForComprehension {
             this.guard = guard;
         }
 
+        /**
+         * Adds a filter predicate to this for-comprehension.
+         * <p>
+         * Multiple calls to this method will combine predicates using logical AND.
+         *
+         * @param predicate the filter predicate
+         * @return a new for-comprehension with the filter applied
+         * @throws NullPointerException if the predicate is {@code null}
+         */
         public ForLazy5Iterable<T1, T2, T3, T4, T5> filter(Function5<T1, T2, T3, T4, T5, Boolean> predicate) {
             Objects.requireNonNull(predicate, "predicate is null");
             Function5<T1, T2, T3, T4, T5, Boolean> existingGuard = this.guard;
@@ -3041,6 +4034,15 @@ public final class ForComprehension {
             return new ForLazy5Iterable<>(i1, i2, i3, i4, i5, newGuard);
         }
 
+        /**
+         * Produces the result of the for-comprehension by applying the given function
+         * to the cartesian product of the iterable elements.
+         *
+         * @param f the combining function
+         * @param <R> the result type
+         * @return a list containing the results of applying the function to all combinations
+         * @throws NullPointerException if the function is {@code null}
+         */
         public <R> List<R> yield(Function5<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, ? extends R> f) {
             Objects.requireNonNull(f, "f is null");
 
@@ -3062,6 +4064,26 @@ public final class ForComprehension {
         }
     }
 
+    /**
+     * Creates a lazy for-comprehension over 6 {@link Iterable} values.
+     * <p>
+     * Each subsequent iterable is computed lazily as a function of the preceding values.
+     *
+     * @param i1 the initial iterable
+     * @param i2 a function producing the second iterable
+     * @param i3 a function producing the third iterable
+     * @param i4 a function producing the 4th iterable
+     * @param i5 a function producing the 5th iterable
+     * @param i6 a function producing the 6th iterable
+     * @param <T1> the type of the first iterable
+     * @param <T2> the type of the second iterable
+     * @param <T3> the type of the third iterable
+     * @param <T4> the type of the 4th iterable
+     * @param <T5> the type of the 5th iterable
+     * @param <T6> the type of the 6th iterable
+     * @return a lazy for-comprehension over 6 iterable values
+     * @throws NullPointerException if any argument is {@code null}
+     */
     public static <T1, T2, T3, T4, T5, T6> ForLazy6Iterable<T1, T2, T3, T4, T5, T6> forc(Iterable<T1> i1, Function1<? super T1, Iterable<T2>> i2, Function2<? super T1, ? super T2, Iterable<T3>> i3, Function3<? super T1, ? super T2, ? super T3, Iterable<T4>> i4, Function4<? super T1, ? super T2, ? super T3, ? super T4, Iterable<T5>> i5, Function5<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, Iterable<T6>> i6) {
         Objects.requireNonNull(i1, "i1 is null");
         Objects.requireNonNull(i2, "i2 is null");
@@ -3072,6 +4094,16 @@ public final class ForComprehension {
         return new ForLazy6Iterable<>(i1, i2, i3, i4, i5, i6);
     }
 
+    /**
+     * Represents a for-comprehension over 6 lazily evaluated {@link Iterable} values.
+     *
+     * @param <T1> the type of the first iterable
+     * @param <T2> the type of the second iterable
+     * @param <T3> the type of the third iterable
+     * @param <T4> the type of the 4th iterable
+     * @param <T5> the type of the 5th iterable
+     * @param <T6> the type of the 6th iterable
+     */
     public static final class ForLazy6Iterable<T1, T2, T3, T4, T5, T6> {
 
         private final Iterable<T1> i1;
@@ -3102,6 +4134,15 @@ public final class ForComprehension {
             this.guard = guard;
         }
 
+        /**
+         * Adds a filter predicate to this for-comprehension.
+         * <p>
+         * Multiple calls to this method will combine predicates using logical AND.
+         *
+         * @param predicate the filter predicate
+         * @return a new for-comprehension with the filter applied
+         * @throws NullPointerException if the predicate is {@code null}
+         */
         public ForLazy6Iterable<T1, T2, T3, T4, T5, T6> filter(Function6<T1, T2, T3, T4, T5, T6, Boolean> predicate) {
             Objects.requireNonNull(predicate, "predicate is null");
             Function6<T1, T2, T3, T4, T5, T6, Boolean> existingGuard = this.guard;
@@ -3109,6 +4150,15 @@ public final class ForComprehension {
             return new ForLazy6Iterable<>(i1, i2, i3, i4, i5, i6, newGuard);
         }
 
+        /**
+         * Produces the result of the for-comprehension by applying the given function
+         * to the cartesian product of the iterable elements.
+         *
+         * @param f the combining function
+         * @param <R> the result type
+         * @return a list containing the results of applying the function to all combinations
+         * @throws NullPointerException if the function is {@code null}
+         */
         public <R> List<R> yield(Function6<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, ? super T6, ? extends R> f) {
             Objects.requireNonNull(f, "f is null");
 
@@ -3132,6 +4182,28 @@ public final class ForComprehension {
         }
     }
 
+    /**
+     * Creates a lazy for-comprehension over 7 {@link Iterable} values.
+     * <p>
+     * Each subsequent iterable is computed lazily as a function of the preceding values.
+     *
+     * @param i1 the initial iterable
+     * @param i2 a function producing the second iterable
+     * @param i3 a function producing the third iterable
+     * @param i4 a function producing the 4th iterable
+     * @param i5 a function producing the 5th iterable
+     * @param i6 a function producing the 6th iterable
+     * @param i7 a function producing the 7th iterable
+     * @param <T1> the type of the first iterable
+     * @param <T2> the type of the second iterable
+     * @param <T3> the type of the third iterable
+     * @param <T4> the type of the 4th iterable
+     * @param <T5> the type of the 5th iterable
+     * @param <T6> the type of the 6th iterable
+     * @param <T7> the type of the 7th iterable
+     * @return a lazy for-comprehension over 7 iterable values
+     * @throws NullPointerException if any argument is {@code null}
+     */
     public static <T1, T2, T3, T4, T5, T6, T7> ForLazy7Iterable<T1, T2, T3, T4, T5, T6, T7> forc(Iterable<T1> i1, Function1<? super T1, Iterable<T2>> i2, Function2<? super T1, ? super T2, Iterable<T3>> i3, Function3<? super T1, ? super T2, ? super T3, Iterable<T4>> i4, Function4<? super T1, ? super T2, ? super T3, ? super T4, Iterable<T5>> i5, Function5<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, Iterable<T6>> i6, Function6<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, ? super T6, Iterable<T7>> i7) {
         Objects.requireNonNull(i1, "i1 is null");
         Objects.requireNonNull(i2, "i2 is null");
@@ -3143,6 +4215,17 @@ public final class ForComprehension {
         return new ForLazy7Iterable<>(i1, i2, i3, i4, i5, i6, i7);
     }
 
+    /**
+     * Represents a for-comprehension over 7 lazily evaluated {@link Iterable} values.
+     *
+     * @param <T1> the type of the first iterable
+     * @param <T2> the type of the second iterable
+     * @param <T3> the type of the third iterable
+     * @param <T4> the type of the 4th iterable
+     * @param <T5> the type of the 5th iterable
+     * @param <T6> the type of the 6th iterable
+     * @param <T7> the type of the 7th iterable
+     */
     public static final class ForLazy7Iterable<T1, T2, T3, T4, T5, T6, T7> {
 
         private final Iterable<T1> i1;
@@ -3176,6 +4259,15 @@ public final class ForComprehension {
             this.guard = guard;
         }
 
+        /**
+         * Adds a filter predicate to this for-comprehension.
+         * <p>
+         * Multiple calls to this method will combine predicates using logical AND.
+         *
+         * @param predicate the filter predicate
+         * @return a new for-comprehension with the filter applied
+         * @throws NullPointerException if the predicate is {@code null}
+         */
         public ForLazy7Iterable<T1, T2, T3, T4, T5, T6, T7> filter(Function7<T1, T2, T3, T4, T5, T6, T7, Boolean> predicate) {
             Objects.requireNonNull(predicate, "predicate is null");
             Function7<T1, T2, T3, T4, T5, T6, T7, Boolean> existingGuard = this.guard;
@@ -3183,6 +4275,15 @@ public final class ForComprehension {
             return new ForLazy7Iterable<>(i1, i2, i3, i4, i5, i6, i7, newGuard);
         }
 
+        /**
+         * Produces the result of the for-comprehension by applying the given function
+         * to the cartesian product of the iterable elements.
+         *
+         * @param f the combining function
+         * @param <R> the result type
+         * @return a list containing the results of applying the function to all combinations
+         * @throws NullPointerException if the function is {@code null}
+         */
         public <R> List<R> yield(Function7<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, ? super T6, ? super T7, ? extends R> f) {
             Objects.requireNonNull(f, "f is null");
 
@@ -3208,6 +4309,30 @@ public final class ForComprehension {
         }
     }
 
+    /**
+     * Creates a lazy for-comprehension over 8 {@link Iterable} values.
+     * <p>
+     * Each subsequent iterable is computed lazily as a function of the preceding values.
+     *
+     * @param i1 the initial iterable
+     * @param i2 a function producing the second iterable
+     * @param i3 a function producing the third iterable
+     * @param i4 a function producing the 4th iterable
+     * @param i5 a function producing the 5th iterable
+     * @param i6 a function producing the 6th iterable
+     * @param i7 a function producing the 7th iterable
+     * @param i8 a function producing the 8th iterable
+     * @param <T1> the type of the first iterable
+     * @param <T2> the type of the second iterable
+     * @param <T3> the type of the third iterable
+     * @param <T4> the type of the 4th iterable
+     * @param <T5> the type of the 5th iterable
+     * @param <T6> the type of the 6th iterable
+     * @param <T7> the type of the 7th iterable
+     * @param <T8> the type of the 8th iterable
+     * @return a lazy for-comprehension over 8 iterable values
+     * @throws NullPointerException if any argument is {@code null}
+     */
     public static <T1, T2, T3, T4, T5, T6, T7, T8> ForLazy8Iterable<T1, T2, T3, T4, T5, T6, T7, T8> forc(Iterable<T1> i1, Function1<? super T1, Iterable<T2>> i2, Function2<? super T1, ? super T2, Iterable<T3>> i3, Function3<? super T1, ? super T2, ? super T3, Iterable<T4>> i4, Function4<? super T1, ? super T2, ? super T3, ? super T4, Iterable<T5>> i5, Function5<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, Iterable<T6>> i6, Function6<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, ? super T6, Iterable<T7>> i7, Function7<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, ? super T6, ? super T7, Iterable<T8>> i8) {
         Objects.requireNonNull(i1, "i1 is null");
         Objects.requireNonNull(i2, "i2 is null");
@@ -3220,6 +4345,18 @@ public final class ForComprehension {
         return new ForLazy8Iterable<>(i1, i2, i3, i4, i5, i6, i7, i8);
     }
 
+    /**
+     * Represents a for-comprehension over 8 lazily evaluated {@link Iterable} values.
+     *
+     * @param <T1> the type of the first iterable
+     * @param <T2> the type of the second iterable
+     * @param <T3> the type of the third iterable
+     * @param <T4> the type of the 4th iterable
+     * @param <T5> the type of the 5th iterable
+     * @param <T6> the type of the 6th iterable
+     * @param <T7> the type of the 7th iterable
+     * @param <T8> the type of the 8th iterable
+     */
     public static final class ForLazy8Iterable<T1, T2, T3, T4, T5, T6, T7, T8> {
 
         private final Iterable<T1> i1;
@@ -3256,6 +4393,15 @@ public final class ForComprehension {
             this.guard = guard;
         }
 
+        /**
+         * Adds a filter predicate to this for-comprehension.
+         * <p>
+         * Multiple calls to this method will combine predicates using logical AND.
+         *
+         * @param predicate the filter predicate
+         * @return a new for-comprehension with the filter applied
+         * @throws NullPointerException if the predicate is {@code null}
+         */
         public ForLazy8Iterable<T1, T2, T3, T4, T5, T6, T7, T8> filter(Function8<T1, T2, T3, T4, T5, T6, T7, T8, Boolean> predicate) {
             Objects.requireNonNull(predicate, "predicate is null");
             Function8<T1, T2, T3, T4, T5, T6, T7, T8, Boolean> existingGuard = this.guard;
@@ -3263,6 +4409,15 @@ public final class ForComprehension {
             return new ForLazy8Iterable<>(i1, i2, i3, i4, i5, i6, i7, i8, newGuard);
         }
 
+        /**
+         * Produces the result of the for-comprehension by applying the given function
+         * to the cartesian product of the iterable elements.
+         *
+         * @param f the combining function
+         * @param <R> the result type
+         * @return a list containing the results of applying the function to all combinations
+         * @throws NullPointerException if the function is {@code null}
+         */
         public <R> List<R> yield(Function8<? super T1, ? super T2, ? super T3, ? super T4, ? super T5, ? super T6, ? super T7, ? super T8, ? extends R> f) {
             Objects.requireNonNull(f, "f is null");
 
