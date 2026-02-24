@@ -8,6 +8,30 @@
 A fluent for-comprehension API for Java, inspired by Scala's for-expressions. It allows the composition of multiple monadic
 or collection-like types in a type-safe and readable manner.
 
+## Getting Started
+
+**Maven**:
+
+```xml
+<dependency>
+    <groupId>com.pivovarit</groupId>
+    <artifactId>for-comprehension4j</artifactId>
+    <version>0.0.1</version>
+</dependency>
+```
+
+**Gradle (Kotlin DSL)**:
+
+```kotlin
+implementation("com.pivovarit:for-comprehension4j:0.0.1")
+```
+
+**Gradle (Groovy DSL)**:
+
+```groovy
+implementation 'com.pivovarit:for-comprehension4j:0.0.1'
+```
+
 ## Usage
 
 All examples assume:
