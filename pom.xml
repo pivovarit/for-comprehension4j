@@ -46,26 +46,33 @@
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.15.0</version>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>3.1.0</version>
                 <executions>
                     <execution>
                         <id>compile-codegen</id>
                         <phase>generate-sources</phase>
                         <goals>
-                            <goal>compile</goal>
+                            <goal>run</goal>
                         </goals>
                         <configuration>
-                            <release>25</release>
-                            <compileSourceRoots>
-                                <compileSourceRoot>${project.basedir}/src/codegen/java</compileSourceRoot>
-                            </compileSourceRoots>
-                            <outputDirectory>${project.build.directory}/codegen-classes</outputDirectory>
-                            <includes>
-                                <include>com/generator/**</include>
-                            </includes>
+                            <target>
+                                <mkdir dir="${project.build.directory}/codegen-classes"/>
+                                <javac srcdir="${project.basedir}/src/codegen/java"
+                                       destdir="${project.build.directory}/codegen-classes"
+                                       release="25"
+                                       includeantruntime="false"/>
+                            </target>
                         </configuration>
                     </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.15.0</version>
+                <executions>
                     <execution>
                         <id>default-compile</id>
                         <phase>compile</phase>
@@ -159,19 +166,6 @@
                 <artifactId>build-helper-maven-plugin</artifactId>
                 <version>3.6.1</version>
                 <executions>
-                    <execution>
-                        <id>add-codegen</id>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>add-source</goal>
-                        </goals>
-                        <configuration>
-                            <sources>
-                                <source>${project.basedir}/src/codegen/java</source>
-                            </sources>
-                        </configuration>
-                    </execution>
-
                     <execution>
                         <id>add-generated</id>
                         <phase>generate-sources</phase>
